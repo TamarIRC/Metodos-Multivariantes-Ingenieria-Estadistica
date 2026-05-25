@@ -16,7 +16,7 @@ Se tiene como objetivo explorar visualmente la base de datos considerando múlti
 ### Funciones y librerías utilizadas
 
 |  |  |  |
-|------------------------|------------------------|------------------------|
+|----|----|----|
 | **Función** | **Origen** | **Descripción** |
 | View() | Nativa de R (utils) | Abre una pestaña en RStudio para visualizar la base de datos en formato de tabla (similar a Excel). |
 | library() | Nativa de R (base) | Carga los paquetes necesarios para usar sus funciones. |
@@ -53,6 +53,17 @@ Otros argumentos importantes de `faces()` son:
 
 - `nrow.plot` y `ncol.plot`: controlan cuántas filas y columnas de caras aparecen en el gráfico.
 
+  ``` r
+  library(aplpack)
+
+  faces(xy = "Matriz o data.frame numérico",
+        face.type = "Especificar Estilo Visual" - 0, 1, 2,
+        main = "Título del Gráfico/NULL",
+        labels = "Vector de Etiquetas de Observaciones/NULL",
+        print.info = "Imprimir Mapeo en Consola" - TRUE, FALSE,
+        scale = "Estandarizar Datos" - TRUE, FALSE)
+  ```
+
   **Caras de Chernoff**, si ves una cara que está muy enojada, con ojos gigantes o cabello muy extraño en comparación al resto, acabas de encontrar un paciente con valores extremos (quizás obesidad severa o presión altísima).
 
 ![](images/clipboard-1793761400.png)
@@ -70,6 +81,14 @@ Otros argumentos importantes de `faces()` son:
 - labels: Las etiquetas que irán debajo de cada estrella. Al usar rownames(datos_num), le pone el número de fila de cada paciente.
 
 - key.loc: Define las coordenadas c(x, y) donde se dibujará la leyenda explicativa. En tu caso, en la posición c(14, 1.7).
+
+  ``` r
+  stars(x = "Matriz o data.frame numérico",
+        draw.segments = "Tipo de Representación" - TRUE, FALSE,
+        main = "Título del Gráfico/NULL",
+        labels = "Vector de Etiquetas de Observaciones/NULL",
+        key.loc = "Coordenadas de la Leyenda" - c(x, y)/NULL)
+  ```
 
   **Estrellas**, buscas formas similares. Si dos estrellas tienen los mismos colores grandes, son pacientes con perfiles de salud parecidos.
 
@@ -105,6 +124,15 @@ andrews(df,            #data frame que se va a graficar
 
 si `ymax` no se define, se usa un rango aproximado de `ylim = c(-10, 10)`, y que también puede usarse `ymax = NA` para calcular automáticamente el límite a partir de las curvas.
 
+``` r
+library(andrews)
+
+andrews(df = "Data.frame numérico/mixto",
+        clr = "Índice o Nombre de Variable de Agrupación/NULL",
+        ymax = "Límite Superior del Eje Y" - Numérico, NA,
+        main = "Título del Gráfico/NULL")
+```
+
 **Curvas de Andrews**, cada paciente es un "hilo". Si ves que los hilos azules (hombres) siguen un camino distinto a los rojos (mujeres), significa que el sexo influye en sus variables de salud. Si un hilo se dispara hacia arriba o abajo lejos del resto, es un outlier.
 
 `colores <- ifelse(Base_Multi$Sexo == "HOMBRE", "blue", "red")` Este bloque crea un vector de colores para usarlo después en el gráfico.
@@ -126,6 +154,13 @@ si `ymax` no se define, se usa un rango aproximado de `ylim = c(-10, 10)`, y que
 - pch: Define el tipo de símbolo (punto) a dibujar. El valor 21 corresponde a un círculo que tiene un borde y que puede ser rellenado con color.
 
 - bg: Define el color de relleno (background) de los puntos. Aquí recibe el vector de colores que creamos con ifelse().
+
+  ``` r
+  pairs(x = "Matriz o data.frame numérico",
+        pch = "Símbolo de Ploteo" - Entero (0-25),
+        bg = "Color de Relleno del Símbolo" - Vector de colores/NULL,
+        main = "Título del Gráfico/NULL")
+  ```
 
   **Matriz de correlación** te permite ver si, por ejemplo, a mayor peso hay mayor presión arterial, y si esa tendencia es igual para hombres (puntos azules) y mujeres (puntos rojos).
 

@@ -19,7 +19,6 @@ faces(datos_num, face.type = 1, main = "Caras de Chernoff: Pacientes")
 
 
 ##GRÁFICOS DE ESTRELLAS (Y RAYOS)----
-
 stars(datos_num, draw.segments = TRUE, 
       main = "Gráfico de Estrellas", 
       labels = rownames(datos_num), 
@@ -32,6 +31,8 @@ stars(datos_num, draw.segments = TRUE,
 # Curvas similares = pacientes similares. Curvas fuera del patrón = outliers.
 # Agregaremos la columna 6 (Sexo) y le diremos a la función que coloree (clr = 6) en base a eso.
 # ymax = NA calcular automáticamente el límite a partir de las curvas.
+
+##CURVAS DE ANDREWS
 datos_andrews <- Base_Multi[, c(1:5, 6)] 
 andrews(datos_andrews, clr = 6, ymax = NA, main = "Curvas de Andrews (Color por Sexo)")
  
