@@ -9,6 +9,126 @@ output: pdf_document
 
 <https://aistudio.google.com/prompts/1GR1JJ_Dm9x-o4ClISB5aYIxyPlRjK_pw>
 
+# Gráficos Multivariantes
+
+Se tiene como objetivo explorar visualmente la base de datos considerando múltiples variables al mismo tiempo (Edad, Peso, IMC, Nivel de Glucosa y Presión Arterial). En lugar de ver gráficos aburridos de una sola variable, utiliza técnicas avanzadas (Caras de Chernoff, Estrellas y Curvas de Andrews) para representar a cada paciente como un "todo". Esto es sumamente útil para identificar rápidamente patrones, agrupar visualmente a pacientes similares y detectar valores atípicos (outliers), es decir, pacientes que se salen de lo normal. Finalmente, cierra con una matriz de correlación para ver cómo se relacionan las variables numéricas entre sí, separando a hombres y mujeres por color.
+
+### Funciones y librerías utilizadas
+
+|  |  |  |
+|------------------------|------------------------|------------------------|
+| **Función** | **Origen** | **Descripción** |
+| View() | Nativa de R (utils) | Abre una pestaña en RStudio para visualizar la base de datos en formato de tabla (similar a Excel). |
+| library() | Nativa de R (base) | Carga los paquetes necesarios para usar sus funciones. |
+| faces() | Librería aplpack | Genera las "Caras de Chernoff", asignando cada variable numérica a un rasgo facial (ojos, boca, cabello, etc.). |
+| stars() | Nativa de R (graphics) | Crea gráficos de estrellas o diagramas de radar para representar datos multivariados. |
+| rownames() | Nativa de R (base) | Extrae los nombres de las filas de un conjunto de datos (por defecto, los números de índice de cada paciente). |
+| andrews() | Librería andrews | Transforma los datos de cada paciente en una función matemática y la dibuja como una onda continua. |
+| ifelse() | Nativa de R (base) | Evalúa una condición y devuelve un valor si es verdadera, y otro si es falsa. |
+| pairs() | Nativa de R (graphics) | Crea una matriz de gráficos de dispersión cruzando todas las variables entre sí. |
+
+: **Base_Multi[, 1:5]:** Sintaxis de R para filtrar [filas, columnas]. Al dejar el espacio de las filas en blanco y poner 1:5, le decimos a R: "Tráeme todas las filas, pero solo las columnas de la 1 a la 5" (que son las numéricas).
+
+**Función faces():**
+
+- xy (primer argumento): Los datos numéricos que se van a graficar (datos_num).
+
+- face.type: Define el estilo del dibujo de la cara.
+
+  - 0: Caras de líneas simples (sin color).
+
+  - 1: Caras pintadas con colores (valor por defecto en tu código).
+
+  - 2: Estilo de caras de Papá Noel.
+
+- main: Título principal del gráfico.
+
+Otros argumentos importantes de `faces()` son:
+
+- `scale`: por defecto es `TRUE`. Esto normaliza las variables antes de graficarlas. Es útil porque tus variables están en escalas distintas, por ejemplo edad, peso, IMC y glucosa.
+
+- `labels`: permite cambiar las etiquetas de cada cara. Si no se especifica, se usan números como `1`, `2`, `3`, etc.
+
+- `print.info`: por defecto es `TRUE`. Por eso en la consola aparece la tabla `effect of variables`, que muestra qué variable controla cada parte de la cara.
+
+- `nrow.plot` y `ncol.plot`: controlan cuántas filas y columnas de caras aparecen en el gráfico.
+
+  **Caras de Chernoff**, si ves una cara que está muy enojada, con ojos gigantes o cabello muy extraño en comparación al resto, acabas de encontrar un paciente con valores extremos (quizás obesidad severa o presión altísima).
+
+![](images/clipboard-1793761400.png)
+
+**Función stars():**
+
+- x (primer argumento): Los datos numéricos.
+
+- draw.segments: Argumento lógico (TRUE o FALSE).
+
+  - Si es TRUE, dibuja un gráfico circular dividido en segmentos (tipo "quesito" o diagrama de sectores) donde el radio de cada segmento representa el valor de la variable.
+
+  - Si es FALSE (por defecto), dibuja un polígono uniendo las puntas de la estrella (gráfico de radar clásico).
+
+- labels: Las etiquetas que irán debajo de cada estrella. Al usar rownames(datos_num), le pone el número de fila de cada paciente.
+
+- key.loc: Define las coordenadas c(x, y) donde se dibujará la leyenda explicativa. En tu caso, en la posición c(14, 1.7).
+
+  **Estrellas**, buscas formas similares. Si dos estrellas tienen los mismos colores grandes, son pacientes con perfiles de salud parecidos.
+
+`datos_andrews <- Base_Multi[, c(1:5, 6)]`
+
+- Este código selecciona columnas específicas de `Base_Multi`.
+
+- c(1:5, 6) significa que se seleccionan las columnas.
+
+- 1, 2, 3, 4, 5, 6 Las columnas `1:5` serían variables numéricas como edad, peso, IMC, glucosa y presión arterial. La columna `6` corresponde a `Sexo`, que se usará para colorear las curvas.
+
+`andrews(datos_andrews, clr = 6, ymax = NA, main = "Curvas de Andrews (Color por Sexo)")`
+
+``` r
+andrews(df,            #data frame que se va a graficar
+        type = 1,      #define el tipo de curva
+        clr = NULL,    #indica la columna usada para colorear
+        step = 100,    #controla la suavidad
+        ymax = 10,     #define el máximo del eje Y, ymax = 10 valor por defecto
+        alpha = NULL,  
+        palcol = NULL,
+        lwd = 1,       #controla el grosor de línea
+        lty = "solid", #tipo de línea
+        ...)
+```
+
+`clr = 6` columna corresponde a `Sexo`. Por eso, las curvas se colorean según el sexo del paciente.
+
+`ymax = 3` estás haciendo que el gráfico tenga un rango vertical más pequeño. Esto puede ayudar a visualizar mejor las curvas si sus valores no son muy altos.
+
+- Si `ymax` aumenta, las curvas se verán más comprimidas verticalmente.\
+  Si `ymax` disminuye demasiado, algunas curvas podrían quedar cortadas o salirse del área visible.
+
+si `ymax` no se define, se usa un rango aproximado de `ylim = c(-10, 10)`, y que también puede usarse `ymax = NA` para calcular automáticamente el límite a partir de las curvas.
+
+**Curvas de Andrews**, cada paciente es un "hilo". Si ves que los hilos azules (hombres) siguen un camino distinto a los rojos (mujeres), significa que el sexo influye en sus variables de salud. Si un hilo se dispara hacia arriba o abajo lejos del resto, es un outlier.
+
+`colores <- ifelse(Base_Multi$Sexo == "HOMBRE", "blue", "red")` Este bloque crea un vector de colores para usarlo después en el gráfico.
+
+`Base_Multi$Sexo`: extrae la columna `Sexo` desde la base de datos `Base_Multi`.
+
+`Base_Multi$Sexo == "HOMBRE"`: evalúa si cada paciente pertenece al grupo `"HOMBRE"`.
+
+- `"blue"`: valor que se asigna cuando la condición es verdadera.
+
+- `"red"`: valor que se asigna cuando la condición es falsa.
+
+  Una observación importante: este código asume que todos los valores distintos de `"HOMBRE"` corresponden a mujeres. Si existieran valores perdidos, errores de escritura u otras categorías, también serían coloreados en rojo.
+
+**función pairs():**
+
+- x (primer argumento): Los datos numéricos a cruzar.
+
+- pch: Define el tipo de símbolo (punto) a dibujar. El valor 21 corresponde a un círculo que tiene un borde y que puede ser rellenado con color.
+
+- bg: Define el color de relleno (background) de los puntos. Aquí recibe el vector de colores que creamos con ifelse().
+
+  **Matriz de correlación** te permite ver si, por ejemplo, a mayor peso hay mayor presión arterial, y si esa tendencia es igual para hombres (puntos azules) y mujeres (puntos rojos).
+
 ## Pruebas de Normalidad
 
 - **mvnTest** (o mvn_test): Define qué algoritmo usar para probar la normalidad multivariada conjunta. Las opciones son[[**5**](https://www.google.com/url?sa=E&q=https%3A%2F%2Fvertexaisearch.cloud.google.com%2Fgrounding-api-redirect%2FAUZIYQFavQjMEd9gskIifrulPfgncXHDbIIVNrurIIxlwnGQedjTaZ4CguIR0hV3CGSYbXxugbk9rfipTBXVy29Pnk4tguT6mCsznOofChJYkd1D_DWiQWxoXpuXVjHNEg%3D%3D)]:

@@ -23,7 +23,7 @@ faces(datos_num, face.type = 1, main = "Caras de Chernoff: Pacientes")
 stars(datos_num, draw.segments = TRUE, 
       main = "Gráfico de Estrellas", 
       labels = rownames(datos_num), 
-      key.loc = c(15, 2)) # Agrega una leyenda explicativa
+      key.loc = c(14, 1.7)) # Agrega una leyenda explicativa
 
 
 ##CURVAS DE ANDREWS----
@@ -31,9 +31,10 @@ stars(datos_num, draw.segments = TRUE,
 # Transforma los datos de cada paciente en una "onda" (Serie de Fourier).
 # Curvas similares = pacientes similares. Curvas fuera del patrón = outliers.
 # Agregaremos la columna 6 (Sexo) y le diremos a la función que coloree (clr = 6) en base a eso.
+# ymax = NA calcular automáticamente el límite a partir de las curvas.
 datos_andrews <- Base_Multi[, c(1:5, 6)] 
-andrews(datos_andrews, clr = 6, ymax = 3, main = "Curvas de Andrews (Color por Sexo)")
-
+andrews(datos_andrews, clr = 6, ymax = NA, main = "Curvas de Andrews (Color por Sexo)")
+ 
 
 #GRÁFICA DE DISPERSIÓN LADO A LADO (MATRIZ DE CORRELACIÓN)
 
@@ -347,3 +348,4 @@ pred_entrenamiento <- ifelse(predict(modelo_rna_real, datos_entrenamiento) > 0.5
 exactitud_entrenamiento <- sum(pred_entrenamiento == datos_entrenamiento$fuma_bin) / nrow(datos_entrenamiento)
 Sobreajuste = exactitud_entrenamiento - Exactitud
 Sobreajuste #El valor 0.206 significa que el rendimiento de la Red Neuronal cayó un 20.6% al pasar de (Entrenamiento) a (Testeo).
+
