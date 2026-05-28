@@ -36,8 +36,55 @@ stars(datos_num, draw.segments = TRUE,
 datos_andrews <- Base_Multi[, c(1:5, 6)] 
 andrews(datos_andrews, clr = 6, ymax = NA, main = "Curvas de Andrews (Color por Sexo)")
  
+##andrews:curva por curva  ----
+library(andrews)
 
-#GRÁFICA DE DISPERSIÓN LADO A LADO (MATRIZ DE CORRELACIÓN)
+# Datos para Andrews
+datos_andrews <- Base_Multi[, c(1:5, 6)]
+
+# Asegurar que las primeras 5 variables sean numéricas
+datos_andrews[, 1:5] <- lapply(datos_andrews[, 1:5], function(x) as.numeric(as.character(x)))
+
+# Eliminar filas con NA
+datos_andrews <- na.omit(datos_andrews)
+
+# Escalar solo variables numéricas
+datos_num_esc <- as.data.frame(scale(datos_andrews[, 1:5]))
+
+# Volver a agregar Sexo
+datos_andrews_esc <- data.frame(datos_num_esc, Sexo = datos_andrews[, 6])
+
+# Ahora calcula un ymax fijo:
+# Función de Andrews para 5 variables
+t <- seq(-pi, pi, length.out = 200)
+
+f_andrews <- function(x, t) {
+  x[1] / sqrt(2) +
+    x[2] * sin(t) +
+    x[3] * cos(t) +
+    x[4] * sin(2 * t) +
+    x[5] * cos(2 * t)
+}
+
+Y <- t(apply(datos_andrews_esc[, 1:5], 1, f_andrews, t = t))
+
+ymax_fijo <- max(abs(Y), na.rm = TRUE)
+
+##CURVAS DE ANDREWS: Verlas acumuladas una por una
+for(i in 1:nrow(datos_andrews_esc)) {
+  
+  andrews(datos_andrews_esc[1:i, , drop = FALSE],
+          clr = 6,
+          ymax = ymax_fijo,
+          main = paste("Curvas de Andrews hasta la observación", i))
+  
+  Sys.sleep(0.7)
+}
+
+
+
+
+##GRÁFICA DE DISPERSIÓN LADO A LADO (MATRIZ DE CORRELACIÓN) ----
 
 # Creamos un vector de colores: Azul para Hombres, Rojo para Mujeres
 colores <- ifelse(Base_Multi$Sexo == "HOMBRE", "blue", "red")
@@ -47,6 +94,34 @@ pairs(datos_num,
       pch = 21,         # Tipo de punto (círculo relleno)
       bg = colores,     # Color de relleno
       main = "Gráficos de Correlación: Variables Numéricas")
+
+##matriz de dispersión con histogramas, correlaciones y colores por grupo.----
+# install.packages("GGally")
+library(GGally)
+library(ggplot2)
+
+# Base con variables numéricas + Sexo
+datos_pair <- Base_Multi[, c(1:5, 6)]
+
+# Asegurar que Sexo sea factor
+datos_pair$Sexo <- as.factor(datos_pair$Sexo)
+
+# Asegurar que las primeras 5 columnas sean numéricas
+datos_pair[, 1:5] <- lapply(datos_pair[, 1:5], function(x) as.numeric(as.character(x)))
+
+# Eliminar filas con datos faltantes
+datos_pair <- na.omit(datos_pair)
+
+# Gráfico tipo matriz de correlación
+ggpairs(datos_pair,
+        columns = 1:5,
+        mapping = aes(color = Sexo, fill = Sexo),
+        upper = list(continuous = wrap("cor", size = 4)),
+        lower = list(continuous = wrap("points", alpha = 0.8, size = 2)),
+        diag  = list(continuous = wrap("barDiag", bins = 10, alpha = 0.6))) +
+  theme_bw() +
+  theme(strip.text = element_text(size = 10),
+        axis.text = element_text(size = 8))
 
 
 
