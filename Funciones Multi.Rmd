@@ -16,7 +16,7 @@ Se tiene como objetivo explorar visualmente la base de datos considerando múlti
 ### Funciones y librerías utilizadas
 
 |  |  |  |
-|----|----|----|
+|------------------------|------------------------|------------------------|
 | **Función** | **Origen** | **Descripción** |
 | View() | Nativa de R (utils) | Abre una pestaña en RStudio para visualizar la base de datos en formato de tabla (similar a Excel). |
 | library() | Nativa de R (base) | Carga los paquetes necesarios para usar sus funciones. |
@@ -164,7 +164,25 @@ andrews(df = "Data.frame numérico/mixto",
 
   **Matriz de correlación** te permite ver si, por ejemplo, a mayor peso hay mayor presión arterial, y si esa tendencia es igual para hombres (puntos azules) y mujeres (puntos rojos).
 
+# Inferencia Multivariada
+
 ## Pruebas de Normalidad
+
+Este bloque evalúa si las variables numéricas de `Base_Multi` siguen una **distribución normal multivariada**.
+
+Esto es importante porque varios métodos de inferencia multivariada, como MANOVA, análisis discriminante o algunos procedimientos basados en matrices de covarianza, suelen asumir normalidad multivariada.
+
+Aquí se usa la función `mvn()` del paquete `MVN`.
+
+``` r
+library(MVN)
+
+mvn(data = "Matriz o data.frame numérico",
+    mvn_test = "Prueba de Normalidad Multivariada" - 
+             "mardia", "hz", "royston", "dh", "energy",
+    univariate_test = "Prueba de Normalidad Univariada" - 
+             "SW", "Lillie", "AD", "CVM", "SF", NULL)
+```
 
 - **mvnTest** (o mvn_test): Define qué algoritmo usar para probar la normalidad multivariada conjunta. Las opciones son[[**5**](https://www.google.com/url?sa=E&q=https%3A%2F%2Fvertexaisearch.cloud.google.com%2Fgrounding-api-redirect%2FAUZIYQFavQjMEd9gskIifrulPfgncXHDbIIVNrurIIxlwnGQedjTaZ4CguIR0hV3CGSYbXxugbk9rfipTBXVy29Pnk4tguT6mCsznOofChJYkd1D_DWiQWxoXpuXVjHNEg%3D%3D)]:
 
@@ -190,7 +208,74 @@ andrews(df = "Data.frame numérico/mixto",
 
   - "SF": Shapiro-Francia.
 
-## Argumentos de la función manova()
+## Otros argumentos importantes de `mvn()`
+
+Aunque no los usas directamente en este bloque, conviene conocerlos:
+
+| Argumento | Valor por defecto | ¿Qué controla? |
+|-------------------------|-------------------|----------------------------|
+| `scale` | `FALSE` | Si `TRUE`, estandariza las variables antes del análisis |
+| `descriptives` | `TRUE` | Calcula media, desviación estándar, asimetría y curtosis |
+| `transform` | `"none"` | Permite aplicar transformaciones como logaritmo, raíz o cuadrado |
+| `impute` | `"none"` | Define cómo tratar datos perdidos |
+| `bootstrap` | `FALSE` | Si `TRUE`, calcula p-valores mediante remuestreo bootstrap |
+| `B` | `1000` | Número de réplicas bootstrap |
+| `multivariate_outlier_method` | `"none"` | Permite activar detección de outliers multivariados |
+| `tidy` | `TRUE` | Entrega resultados en formato ordenado |
+
+## DOS MUESTRAS ALEATORIAS HOMOGÉNEAS E INDEPENDIENTES
+
+Comparación de medias mediante T² de Hotelling.
+
+### Prueba T² de Hotelling para dos muestras independientes
+
+Esta prueba permite comparar si dos grupos independientes presentan diferencias significativas en sus medias multivariadas. En este caso, se comparan los pacientes según la variable Sexo: HOMBRE vs MUJER.
+
+- `Base_Multi[, 1:5]` Selecciona las primeras cinco variables numéricas de la base de datos.
+
+- `Sexo <- Base_Multi$Sexo` Guarda la variable categórica Sexo para separar los grupos.
+
+- `vec[Sexo == "HOMBRE", ]` Selecciona únicamente las observaciones correspondientes a hombres.
+
+- `vec[Sexo == "MUJER", ]` Selecciona únicamente las observaciones correspondientes a mujeres.
+
+- `HotellingsT2Test()`Ejecuta la prueba T² de Hotelling para comparar las medias multivariadas entre ambos grupos.
+
+- Interpretación general:
+
+  **Hipótesis nula H0**: No existen diferencias significativas entre las medias multivariadas de hombres y mujeres.\
+  \
+  **Hipótesis alternativa H1**: Sí existen diferencias significativas entre las medias multivariadas de hombres y mujeres.\
+  \
+  *Si p-value \< 0.05: Se rechaza H0, por lo tanto, hay diferencias significativas.\
+  Si p-value \>= 0.05: No se rechaza H0, por lo tanto, no hay evidencia suficiente de diferencias significativas.*
+
+``` r
+library(DescTools)
+
+HotellingsT2Test(x = "Matriz o data.frame numérico (Muestra 1)",
+                 y = "Matriz o data.frame numérico (Muestra 2)/NULL",
+                 test = "Distribución de referencia" - "f", "chi")
+```
+
+- **x**: Matriz o data frame numérico de dimensiones $n_1 \times p$ . Representa el conjunto de observaciones multivariadas para la primera muestra independiente (en tu código, el subconjunto de datos filtrado mediante indexación lógica para Sexo == "HOMBRE").
+
+- **y**: Matriz o data frame numérico de dimensiones $n_2 \times p$ . Representa el conjunto de observaciones multivariadas para la segunda muestra independiente (en tu código, el subconjunto filtrado para Sexo == "MUJER"). Si se omite (NULL), la función asume una prueba de una sola muestra para comparar contra un vector de medias poblacionales hipotético.
+
+- **test** (implícito en tu código): Cadena de caracteres (character) que define el estadístico de contraste a utilizar. Por defecto es "f", el cual utiliza la distribución F de Fisher (exacta bajo el supuesto de normalidad multivariada). La opción "chi" utiliza una aproximación asintótica basada en la distribución Chi-cuadrado (útil para muestras grandes).
+
+## K (3) muestras aleatorias homogéneas e independientes(Comparación de medias MANOVA)
+
+``` r
+manova(formula = "Fórmula del Modelo Multivariado",
+       data = "Data.frame de Origen")
+
+summary(object = "Objeto MANOVA",
+        test = "Estadístico de Contraste" - 
+                 "Pillai", "Wilks", "Hotelling-Lawley", "Roy")
+```
+
+### Argumentos de la función manova()
 
 Esta función se encarga estrictamente de calcular y ajustar el modelo matemático.
 
@@ -232,11 +317,26 @@ En estadística **multivariada** (cuando analizas varias variables al mismo tiem
 
 ### Argumentos de la función boxM()
 
+``` r
+library(biotools)
+
+boxM(data = "Matriz o data.frame numérico",
+     grouping = "Vector o Factor de Agrupación")
+```
+
 La sintaxis de la función es muy sencilla y directa: boxM(data, grouping)
 
 - **data** (Obligatorio): Un data.frame o matriz que contenga **únicamente las variables numéricas** que deseas evaluar (en tu caso, tu variable vec con Edad, Peso, IMC, etc.).
 
 - **grouping** (Obligatorio): Un vector categórico (factor) que indica a qué grupo pertenece cada fila de tus datos (en tu caso, la variable Sexo o Estado_Nutricional). Debe tener la misma longitud que la cantidad de filas en tus datos numéricos.
+
+Esta prueba permite evaluar si las matrices de varianza-covarianza son iguales entre dos o más grupos. Es útil antes de aplicar pruebas multivariadas, ya que muchas de ellas asumen que los grupos comparados tienen matrices de covarianza homogéneas.
+
+- **Hipótesis nula H0**: Las matrices de varianza-covarianza son iguales entre los grupos.\
+  **Hipótesis alternativa H1**: Al menos una matriz de varianza-covarianza es diferente.
+
+- *Si p-value \< 0.05: Se rechaza H0, por lo tanto, no hay homogeneidad de matrices.\
+  Si p-value \>= 0.05: No se rechaza H0, por lo tanto, se asume homogeneidad de matrices de varianza-covarianza.*
 
 # Reducción de Dimensionalidad
 
