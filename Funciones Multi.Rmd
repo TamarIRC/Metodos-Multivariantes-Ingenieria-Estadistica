@@ -166,6 +166,18 @@ andrews(df = "Data.frame numérico/mixto",
 
 # Inferencia Multivariada
 
+### Funciones y librerías utilizadas
+
+|  |  |  |
+|-----------------|-----------------|---------------------------------------|
+| **Función** | **Origen** | **Descripción** |
+| mvn() | Librería MVN | Realiza pruebas de normalidad tanto multivariadas (todas las variables juntas) como univariadas (variable por variable). |
+| HotellingsT2Test() | Librería DescTools | Ejecuta la prueba T-cuadrado de Hotelling. Es la versión multivariada de la prueba T de Student; sirve para comparar las medias de dos grupos usando múltiples variables a la vez. |
+| manova() | Nativa de R (stats) | Crea un modelo de Análisis de Varianza Multivariado (MANOVA). Sirve para comparar las medias de tres o más grupos usando múltiples variables. |
+| cbind() | Nativa de R (base) | Une vectores o columnas para formar una matriz. En este caso, agrupa las variables dependientes para el MANOVA. |
+| summary() | Nativa de R (base) | Muestra un resumen de los resultados de un modelo estadístico. |
+| boxM() | Librería biotools | Realiza la prueba M de Box para evaluar si las matrices de varianza-covarianza son iguales entre distintos grupos. |
+
 ## Pruebas de Normalidad
 
 Este bloque evalúa si las variables numéricas de `Base_Multi` siguen una **distribución normal multivariada**.
@@ -340,6 +352,19 @@ Esta prueba permite evaluar si las matrices de varianza-covarianza son iguales e
 
 # Reducción de Dimensionalidad
 
+### Funciones y librerías utilizadas
+
+|  |  |  |
+|-----------------|-----------------|---------------------------------------|
+| **Función** | **Origen** | **Descripción** |
+| cor() | Nativa de R (stats) | Calcula la matriz de correlación entre variables numéricas. |
+| KMO() | Librería psych | Calcula el índice Kaiser-Meyer-Olkin para evaluar si los datos son aptos para hacer un Análisis Factorial o PCA. |
+| prcomp() | Nativa de R (stats) | Ejecuta el Análisis de Componentes Principales (PCA). |
+| principal() | Librería psych | Ejecuta el Análisis Factorial (o PCA) permitiendo extraer un número específico de factores y aplicar rotaciones. |
+| getBurt() | Librería cabootcrs | Crea una Matriz de Burt, que es una tabla cruzada gigante de todas las variables categóricas contra sí mismas. |
+| MCA() | Librería FactoMineR | Ejecuta el Análisis de Correspondencias Múltiples (ACM) para variables categóricas. |
+| fviz_mca_var() | Librería factoextra | Genera un gráfico elegante y moderno para visualizar los resultados del ACM. |
+
 ### ¿Qué hace este código y cómo se interpreta?
 
 Cuando queremos aplicar técnicas de **Reducción de Dimensionalidad** (como el Análisis de Componentes Principales - PCA, o el Análisis Factorial), el primer paso es comprobar si tiene sentido hacerlo. Si tus variables no tienen relación entre sí, no podrás reducirlas ni agruparlas.
@@ -348,9 +373,17 @@ Para eso usamos la prueba **KMO (Kaiser-Meyer-Olkin)**:
 
 ## KMO:
 
+``` r
+library(psych)
+
+KMO(cor(vec) = "Matriz de Correlación o Matriz de Datos")
+```
+
 - **La función cor(vec)**: Calcula la matriz de correlación de tus variables (cómo se relaciona la Edad con el Peso, el IMC con la Glucosa, etc.).
 
-- **La función KMO()**: Toma esa matriz y evalúa si las correlaciones conjuntas son lo suficientemente fuertes como para justificar el análisis.
+  Se utiliza la función base cor() para generar y pasar directamente la matriz de correlaciones de Pearson. El estadístico evalúa la magnitud de los coeficientes de correlación parcial frente a los coeficientes de correlación observados.
+
+- **La función KMO()**: Toma esa matriz y evalúa si las correlaciones conjuntas son lo suficientemente fuertes como para justificar el análisis. Indicando si el conjunto de datos es idóneo para técnicas de reducción de dimensionalidad como PCA o Análisis Factorial (valores \>0.6 o cercanos a 1 indican alta adecuación).
 
 **Cómo leer el resultado (Overall MSA - Measure of Sampling Adequacy):**\
 El test arroja un valor global que va del 0 al 1. La regla general de Kaiser para interpretarlo es:
@@ -375,13 +408,33 @@ Nota en el resultado: R también te mostrará los valores KMO individuales para 
 
 El Análisis de Componentes Principales (PCA) intenta reducir tus 4 variables a un número menor de "Componentes" que resuman la mayor cantidad de información posible.
 
+``` r
+prcomp(x = "Matriz o data.frame numérico",
+       center = "Centrado de Variables" - TRUE, FALSE,
+       scale. = "Escalado de Variables" - TRUE, FALSE)
+```
+
 - **center = TRUE, scale. = TRUE (Estandarización):** Esto es vital. Tus variables tienen unidades y tamaños totalmente distintos (la edad va de 20 a 60 años, el peso en kilos, la presión pasa de los 100 mmHg). Si no estandarizas, R pensará que la Presión Arterial es la variable "más importante" solo porque sus números son más grandes. Al estandarizar, todas las variables pasan a jugar en "cancha pareja" (media 0 y desviación estándar 1).
+
+``` r
+summary(object = "Objeto de clase prcomp")
+```
 
 - **summary(pca):** R te mostrará una tabla con los componentes (PC1, PC2, PC3, PC4). Fíjate en la fila que dice **Cumulative Proportion** (Proporción Acumulada). Ahí verás qué porcentaje de tus datos originales logras explicar si te quedas con 1, 2 o 3 componentes.
 
+``` r
+plot(x = "Objeto de clase prcomp",
+     type = "Tipo de Representación" - "lines", "p", "b", etc.)
+```
+
 - **plot(pca, type = "lines"):** Te genera un gráfico de líneas ("Scree plot"). Se usa para la regla del codo: buscas el punto donde la línea deja de caer en picada y se vuelve una llanura suave. Ese "codo" te indica visualmente cuántos componentes principales vale la pena conservar en tu estudio.
 
+  Al usar "lines", dibuja un "Gráfico de sedimentación" (Scree plot). Muestra una línea que cae, indicando cuánta varianza (información) explica cada componente. Ayuda a decidir con cuántos componentes quedarse.
+
 ## Análisis Factorial
+
+El análisis factorial permite identificar factores latentes que explican la relación entre varias variables observadas.\
+En este caso se utilizan las variables guardadas en vecst: Edad, Peso, IMC y Presión Arterial Sistólica.
 
 ### ¿Qué hace este código y cómo se interpretan los resultados?
 
@@ -404,3 +457,79 @@ La función principal() toma tus 4 variables y las agrupa matemáticamente en 2 
 - **Columna u2 (Unicidad):** Es lo opuesto a la comunalidad (1 - h2). Es la cantidad de información que se "perdió" o que es única de esa variable y no encaja en los factores.
 
 - **Cumulative Var:** Al final de la tabla verás la varianza acumulada. En tu imagen sale 0.81, lo que significa que estos 2 factores en conjunto logran explicar el **81% de toda la información** de las 4 variables originales. ¡Es un modelo muy exitoso!
+
+``` r
+library(psych)
+
+principal(r = "Matriz de Correlación o Matriz de Datos",
+          nfactors = "Número de Factores a Extraer" - Entero,
+          rotate = "Método de Rotación" - "none", "varimax", "quartimax", "bentlerT", "equamax", "varimin", "geominT", "bifactor", "promax", "oblimin", "simplimax", "bentlerQ", "geominQ", "biquartimin", "cluster", "target")
+```
+
+- **r** (en tu código vecst): Matriz o data frame numérico de dimensiones $n \times p$ , o en su defecto, una matriz de correlación cuadrada. Representa los datos de entrada sobre los cuales se ejecutará el modelo de extracción (basado en componentes principales).
+
+- **nfactors**: Valor numérico entero. Define la cantidad de componentes o factores latentes que se forzará a extraer y retener en el modelo (en el código, se especifica 2).
+
+- **rotate**:
+
+  El argumento rotate acepta una cadena de caracteres (character) que define el algoritmo geométrico para transformar la matriz de cargas factoriales.
+
+  Su objetivo es redistribuir la varianza explicada para lograr una "estructura simple" que facilite la interpretación de las cargas factoriales (loadings).
+
+  Las opciones se dividen en tres categorías principales (la mayoría ejecutadas internamente a través del paquete GPArotation):
+
+  **1. Sin Rotación:**
+
+  - "none": Mantiene la solución original extraída. El primer componente maximiza la varianza total explicada, el segundo maximiza la varianza residual, y así sucesivamente.
+
+  **2. Rotaciones Ortogonales (Mantienen los factores incorrelacionados, ejes a 90°):**
+
+  - "**varimax**": Maximiza la varianza de las cargas al cuadrado por factor (columnas). Es la más utilizada; tiende a asociar cada variable a un solo factor. Mantiene los factores incorrelacionados (ejes a 90 grados) y maximiza la varianza de las cargas al cuadrado dentro de cada factor, polarizando los coeficientes hacia valores altos o cercanos a cero.
+
+  - "**quartimax**": Maximiza la varianza de las cargas al cuadrado por variable (filas). Tiende a generar un factor general dominante.
+
+  - "equamax": Compromiso matemático entre Varimax y Quartimax.
+
+  - "bentlerT": Rotación ortogonal basada en el criterio de Bentler para simplificar la estructura.
+
+  - "geominT": Rotación ortogonal basada en el criterio Geomin, útil cuando las variables tienen cargas moderadas en múltiples factores.
+
+  - "varimin": Minimiza la varianza de las cargas al cuadrado (raramente utilizada en la práctica).
+
+  - "bifactor": Fuerza la extracción de un factor general global ortogonal a los factores de grupo (específicos).
+
+  **3. Rotaciones Oblicuas (Permiten correlación entre factores,** $\text{ejes} \neq 90^\circ$ **:**
+
+  - "**promax**": Rotación oblicua rápida basada en elevar a una potencia (usualmente k=4) las cargas de una rotación Varimax previa. Muy eficiente en muestras grandes.
+
+  - "**oblimin**": Minimiza la covarianza cruzada entre factores. Es el estándar de facto para rotaciones oblicuas. Permite que los factores resultantes estén correlacionados entre sí (ejes a ángulos distintos de 90 grados). Suele representar mejor constructos reales donde las dimensiones latentes interactúan.
+
+  - "simplimax": Busca minimizar el número de cargas cruzadas (cargas altas en más de un factor) utilizando un parámetro de penalización.
+
+  - "bentlerQ": Versión oblicua del criterio de Bentler.
+
+  - "geominQ": Versión oblicua del criterio Geomin.
+
+  - "biquartimin": Caso especial de Oblimin donde el parámetro δ (delta) es igual a cero.
+
+  - "cluster": Rotación dirigida hacia una estructura de conglomerados (clusters) definida a partir de una solución Varimax previa.
+
+  **4. Rotación Dirigida:**
+
+  - "target": Permite rotar la matriz hacia una matriz objetivo (ideal) especificada por el usuario mediante el argumento adicional keys.
+
+**Sobre el elemento extraído (\$communality):**
+
+- **communality**: Es un vector numérico almacenado dentro del objeto resultante (fa1, fa2, fa3). Representa las **comunalidades** ($h^2$), es decir, la proporción de la varianza total de cada variable original que logra ser explicada por los factores retenidos en el modelo (valores entre 0 y 1).
+
+Interpretación:
+
+- Las cargas factoriales indican la relación entre cada variable y cada factor extraído.\
+  Cargas altas, positivas o negativas, indican que la variable tiene una fuerte relación con ese factor.\
+  Las comunalidades muestran qué proporción de la variabilidad de cada variable es explicada por los factores.
+
+- Comunalidades cercanas a 1 indican que la variable está bien representada por el modelo factorial.\
+  Comunalidades bajas indican que la variable no está siendo explicada adecuadamente por los factores seleccionados.
+
+- Si la rotación Varimax mejora la interpretación, se pueden interpretar los factores como independientes.\
+  Si la rotación Promax ofrece una estructura más clara, se puede asumir que los factores pueden estar correlacionados.

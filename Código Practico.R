@@ -177,6 +177,8 @@ boxM(vec, Base_Multi$Sexo)
 boxM(vec, Base_Multi$Estado_Nutricional)
 
 
+
+
 #REDUCCIÓN DE LA DIMENSIONALIDAD----
 
 #install.packages("psych")
@@ -185,16 +187,19 @@ library(psych)
 # Calculamos la matriz de correlación y aplicamos el test KMO
 KMO(cor(vec))
 
+
 ##Componentes principales----
 
 vecst <- Base_Multi[, c("Edad", "Peso", "IMC", "Presión_Arterial_Sistólica")] 
 
 #Ejecutamos Componentes Principales y estandarizamos
-pca <- prcomp(vecst, center = TRUE, scale. = TRUE) #Se hace una Estandarización dentro
+pca <- prcomp(vecst, center = TRUE, scale. = TRUE)  #Se hace una Estandarización dentro
+pca                                                 # Muestra los coeficientes (cargas) de cada componente
 
-pca                  # Muestra los coeficientes (cargas) de cada componente
 summary(pca)         # Resumen de la varianza explicada - Con dos variables se explica el 81,44%
+
 plot(pca, type = "lines") #Gráfico de sedimentación (Scree plot)
+
 
 ##Análisis Factorial----
 
@@ -202,7 +207,7 @@ plot(pca, type = "lines") #Gráfico de sedimentación (Scree plot)
 fa1 <- principal(vecst, nfactors = 2, rotate = "none")
 fa1
 
-fa1$communality #valor de las comunalidades
+fa1$communality     #valor de las comunalidades
 
 ###Rotación ortogonal----
 fa2 <- principal(vecst, nfactors = 2, rotate = "varimax")
@@ -214,6 +219,7 @@ fa2$communality
 fa3 <- principal(vecst, nfactors = 2, rotate = "promax")
 fa3
 fa3$communality
+
 
 ##ANÁLISIS DE CORRESPONDENCIA MULTIPLE----
 #install.packages("cabootcrs")
