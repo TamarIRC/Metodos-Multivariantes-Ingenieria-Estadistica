@@ -231,6 +231,7 @@ library(cabootcrs)
 
 #Seleccionamos solo las variables categóricas de la base
 muestra_cat <- Base_Multi[, c("Sexo", "Estado_Nutricional", "fuma")]
+
 #Calculamos la matriz de Burt
 m_burt <- getBurt(muestra_cat)
 m_burt
@@ -244,10 +245,13 @@ library(ggplot2)
 library(FactoMineR)
 library(factoextra) # Requerida para el gráfico fviz_mca_var
 library(rlang)
+
 #Ejecutamos el modelo ACM 
 acm <- MCA(muestra_cat, graph = FALSE)
+
 #Mostramos los valores propios (varianza explicada)
 acm$eig
+
 #Generamos el gráfico bidimensional de las categorías
 fviz_mca_var(acm,
              repel = TRUE,

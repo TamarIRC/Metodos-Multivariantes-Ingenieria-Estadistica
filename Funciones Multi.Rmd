@@ -352,6 +352,10 @@ Esta prueba permite evaluar si las matrices de varianza-covarianza son iguales e
 
 # Reducción de Dimensionalidad
 
+El objetivo de este bloque es **simplificar la información**. Cuando tienes muchas variables, es difícil analizarlas todas a la vez.\
+Primero, para las **variables numéricas**, se utiliza el Análisis de Componentes Principales (PCA) y el Análisis Factorial para "comprimir" variables correlacionadas (como Peso e IMC) en unas pocas "súper-variables" (llamadas componentes o factores) perdiendo la menor cantidad de información posible. Las "rotaciones" se usan para que estos factores sean más fáciles de interpretar.\
+Segundo, para las **variables categóricas** (texto), se utiliza el Análisis de Correspondencias Múltiples (ACM). Esto permite crear un "mapa" bidimensional donde las categorías que suelen aparecer juntas en los pacientes (por ejemplo, "Fumador" y "Obesidad") se dibujan cerca unas de otras.
+
 ### Funciones y librerías utilizadas
 
 |  |  |  |
@@ -533,3 +537,176 @@ Interpretación:
 
 - Si la rotación Varimax mejora la interpretación, se pueden interpretar los factores como independientes.\
   Si la rotación Promax ofrece una estructura más clara, se puede asumir que los factores pueden estar correlacionados.
+
+## Análisis de Correspondencia Múltiple
+
+Para las **variables categóricas** (texto), se utiliza el Análisis de Correspondencias Múltiples (ACM). Esto permite crear un "mapa" bidimensional donde las categorías que suelen aparecer juntas en los pacientes (por ejemplo, "Fumador" y "Obesidad") se dibujan cerca unas de otras.
+
+El Análisis de Correspondencia Múltiple se utiliza para estudiar la relación entre varias variables categóricas.\
+En este caso se analizan las variables: Sexo, Estado_Nutricional y fuma.
+
+``` r
+library(cabootcrs)
+
+getBurt(X = "Data.frame categórico")
+
+library(FactoMineR)
+
+MCA(X = "Data.frame categórico",
+    graph = "Generar Gráfico por Defecto" - TRUE, FALSE)
+
+library(factoextra)
+
+fviz_mca_var(X = "Objeto de clase MCA",
+             repel = "Evitar Solapamiento de Texto" - TRUE, FALSE,
+             col.var = "Criterio de Coloración" - "contrib", "cos2", "coord", 
+                         color estático,
+             gradient.cols = "Vector de Colores para Gradiente" - c("color1",                                     "color2", ...)/NULL)
+```
+
+**Para getBurt():**
+
+- **X** (en tu código muestra_cat): Data frame de dimensiones $n \times p$ que contiene exclusivamente variables categóricas (factores). La función calcula y devuelve la matriz de Burt, una matriz simétrica de bloques que contiene todas las tablas de contingencia cruzadas bidimensionales posibles entre las variables.
+
+**Para MCA():**
+
+- **X** (en tu código muestra_cat): Data frame con las variables categóricas sobre las cuales se ejecutará el Análisis de Correspondencias Múltiples (ACM).
+
+- **graph**: Valor lógico (TRUE/FALSE). Si es FALSE (como en tu código), suprime la generación automática de los gráficos base de R. Esto es una práctica recomendada cuando se planea utilizar el paquete factoextra para generar visualizaciones más estéticas posteriormente.
+
+- (Nota sobre acm\$eig): Extrae los valores propios (eigenvalues), los cuales representan la cantidad de inercia (varianza) explicada por cada dimensión extraída.
+
+**Para fviz_mca_var():**
+
+- **X** (en tu código acm): Objeto de clase MCA (el modelo previamente ajustado). Esta función extrae y grafica específicamente las coordenadas de las categorías de las variables en un plano bidimensional.
+
+- **repel**: Valor lógico (TRUE/FALSE). Si es TRUE, implementa un algoritmo de repulsión (vía el paquete ggrepel) para desplazar automáticamente las etiquetas de texto y evitar que se superpongan entre sí o con los puntos, mejorando la legibilidad.
+
+- **col.var**: Cadena de caracteres (character) que define el mapeo estético del color de las categorías. El valor "contrib" colorea los puntos según su contribución porcentual a la definición de las dimensiones graficadas. Otras opciones analíticas incluyen "cos2" (calidad de representación en el mapa) o simplemente asignar un color estático (ej. "blue").
+
+- **gradient.cols**: Vector de caracteres (códigos hexadecimales o nombres de colores). Define la paleta de colores continua que se utilizará cuando col.var dependa de una métrica numérica (como "contrib"). Genera un gradiente visual que interpola desde valores bajos (primer color) hasta valores altos (último color).
+
+**Interpretación:**\
+
+- La matriz de Burt permite observar la frecuencia conjunta entre las categorías de las variables cualitativas.
+
+- En acm\$eig se revisa cuánta variabilidad explica cada dimensión.
+
+-  Las dos primeras dimensiones suelen utilizarse para representar gráficamente la relación entre categorías.
+
+- En el gráfico, las categorías cercanas entre sí tienen mayor asociación.
+
+- Las categorías alejadas del origen suelen tener mayor aporte a la explicación de las dimensiones.
+
+- Los colores indican la contribución de cada categoría:\
+  categorías con mayor contribución tienen mayor importancia en la construcción del plano factorial.
+
+# Agrupación y Clasificación
+
+### Análisis de Conglomerados
+
+El objetivo de este bloque es **agrupar a los pacientes** basándose en sus similitudes físicas y de salud (Edad, Peso, IMC, Presión). Como no sabemos de antemano cuántos grupos hay ni quién pertenece a cuál, le pedimos a la computadora que mida la "distancia" entre cada paciente y los agrupe.\
+Primero, se calcula la distancia matemática entre todos los pacientes. Luego, se usa un algoritmo jerárquico para ir uniendo a los pacientes más parecidos paso a paso, formando un "árbol genealógico" llamado **Dendrograma**. En tu código pruebas dos criterios para armar estos grupos: el método de "Vecinos lejanos" (Complete) y el método de "Ward" (que suele crear grupos más equilibrados). Finalmente, "cortas" el árbol para definir un número fijo de grupos y los dibujas en un mapa 2D.
+
+### Funciones y librerías utilizadas
+
+|  |  |  |
+|--------------|---------------------|-------------------------------------|
+| **Función** | **Origen** | **Descripción** |
+| get_dist() | Librería factoextra | Calcula la matriz de distancias entre todas las filas (pacientes). |
+| hclust() | Nativa de R (stats) | Ejecuta el algoritmo de agrupamiento jerárquico (crea la estructura del árbol). |
+| fviz_dend() | Librería factoextra | Dibuja el dendrograma (el gráfico de árbol) de forma elegante. |
+| geom_hline() | Librería ggplot2 | Añade una línea horizontal recta a un gráfico (útil para mostrar dónde se corta el árbol). |
+| cutree() | Nativa de R (stats) | "Corta" el árbol jerárquico a una altura específica para devolver a qué grupo pertenece cada paciente. |
+| fviz_cluster() | Librería factoextra | Genera un gráfico de dispersión en 2D mostrando los grupos formados (usa PCA por debajo para poder graficar múltiples variables en solo dos ejes). |
+
+: Nota: En el código también se usa un bucle for con funciones como seq_along() e inherits(). Estas son funciones nativas avanzadas que se está usando como un "truco" para modificar internamente el grosor de las líneas del gráfico generado por ggplot2.
+
+**Análisis de Conglomerados o Clustering Jerárquico**\
+Este análisis permite agrupar observaciones similares entre sí. En este caso, se agrupan los pacientes usando las variables numéricas guardadas previamente en vecst.\
+Se utiliza la distancia Euclidiana para medir qué tan diferentes son los pacientes entre sí.\
+Luego se aplican dos métodos jerárquicos:\
+1. Método Complete: También llamado método de vecinos lejanos. Calcula la distancia entre grupos usando los elementos más alejados.\
+2. Método Ward: Forma grupos buscando minimizar la variabilidad interna dentro de cada conglomerado.
+
+``` r
+library(factoextra)
+
+get_dist(x = "Matriz o data.frame numérico",
+         method = "Métrica de Distancia" - "euclidean", "manhattan", "pearson", "spearman", etc.)
+
+hclust(d = "Objeto de clase dist",
+       method = "Criterio de Aglomeración" - "complete", "ward.D2", "single", "average", "centroid", etc.)
+
+fviz_dend(x = "Objeto de clase hclust",
+          k = "Número de Clústeres (Corte)" - Entero/NULL,
+          cex = "Tamaño de Texto de Etiquetas" - Numérico,
+          lwd = "Grosor de Líneas del Árbol" - Numérico,
+          show_labels = "Mostrar Etiquetas de Observaciones" - TRUE, FALSE,
+          color_labels_by_k = "Colorear Etiquetas por Clúster" - TRUE, FALSE)
+
+cutree(tree = "Objeto de clase hclust",
+       k = "Número de Grupos a Extraer" - Entero)
+
+fviz_cluster(object = "Lista con datos y vector de clústeres (o modelo particional)",
+             show.clust.cent = "Mostrar Centroides" - TRUE, FALSE,
+             main = "Título del Gráfico/NULL")
+```
+
+**Para get_dist():**
+
+- **x** (en tu código vecst): Matriz o data frame numérico. Contiene los datos sobre los cuales se calculará la matriz de distancias o disimilitudes.
+
+- **method**: Cadena de caracteres (character). Define la métrica matemática para calcular la distancia entre pares de observaciones. "euclidean" calcula la distancia en línea recta en un espacio multidimensional.
+
+**Para hclust():**
+
+- **d** (en tu código Dist_Eucl): Objeto de clase dist (matriz de distancias generada previamente).
+
+- **method**: Cadena de caracteres (character). Define el algoritmo de enlace (aglomeración) para construir el dendrograma jerárquico.
+
+  - "complete" (Vecinos lejanos): Define la distancia entre dos clústeres como la distancia máxima entre sus puntos. Tiende a formar clústeres compactos y esféricos.
+
+  - "ward.D2": Minimiza la varianza intra-clúster (suma de cuadrados de las desviaciones respecto al centroide). Utiliza las distancias euclidianas al cuadrado.
+
+**Para fviz_dend():**
+
+- **x** (en tu código VLEucl o ward_clusters): Objeto resultante del agrupamiento jerárquico (hclust).
+
+- **k**: Valor entero. Especifica el número de grupos en los que se dividirá visualmente el árbol, asignando un color distinto a cada rama principal.
+
+- **cex** / **lwd**: Valores numéricos que escalan el tamaño de la fuente de las etiquetas y el grosor de las líneas del dendrograma, respectivamente.
+
+- **show_labels** / **color_labels_by_k**: Valores lógicos. Controlan la visibilidad de los nombres de las observaciones en las hojas del árbol y si el texto hereda el color de su respectivo clúster.
+
+**Para cutree():**
+
+- **tree**: Objeto de clase hclust.
+
+- **k**: Valor entero. Corta matemáticamente el árbol jerárquico a una altura específica para generar exactamente k grupos, devolviendo un vector con la asignación de clúster (1, 2, 3...) para cada observación.
+
+**Para fviz_cluster():**
+
+- **object**: Requiere un objeto de modelo de clúster (como kmeans) o, en el caso de agrupamiento jerárquico, una lista explícita que contenga los datos originales (data = vecst) y el vector de asignaciones generado por cutree (cluster = VlEucl_Clusters).
+
+- **show.clust.cent**: Valor lógico. Si es TRUE, calcula y grafica el centroide (punto medio multivariado) de cada clúster en el plano bidimensional de los componentes principales.
+
+(Nota sobre funciones de ggplot2 utilizadas para personalizar):
+
+- **geom_hline(yintercept, linetype, linewidth)**: Traza una línea horizontal de referencia en el eje Y (altura del dendrograma) indicando dónde se realiza el corte matemático.
+
+- **labs(title, subtitle, x, y)**: Modifica las etiquetas de texto de los ejes y títulos.
+
+- **theme(plot.title = element_text(hjust = 0.5))**: Ajusta parámetros estéticos del tema; hjust = 0.5 centra el texto del título horizontalmente.
+
+**Interpretación sencilla:**
+
+Imagina que tienes a todos tus pacientes en una habitación y les pides que se tomen de las manos con la persona que tenga la salud más parecida a la suya.
+
+- El **Dendrograma** es una foto desde arriba de cómo se van formando esos grupos. Las ramas más bajas unen a "gemelos" casi idénticos. A medida que subes por el árbol, se unen grupos más grandes.
+
+- La **línea punteada** es tu decisión como investigador: "Voy a cortar el árbol a esta altura porque quiero dividir a mi clínica en exactamente 3 tipos de pacientes (o 2)".
+
+- El método de **Ward** suele ser el favorito porque actúa como un buen organizador de fiestas: se asegura de que los grupos que se formen sean lo más homogéneos posible por dentro.
+
+- Finalmente, el gráfico de **fviz_cluster** toma esa decisión y te la dibuja como "burbujas" o territorios en un mapa. Si las burbujas no se cruzan mucho, significa que lograste encontrar perfiles de pacientes muy bien diferenciados (por ejemplo: el grupo de los "sanos", el grupo de "riesgo moderado" y el grupo de "riesgo alto").
