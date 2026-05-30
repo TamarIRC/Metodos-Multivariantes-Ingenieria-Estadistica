@@ -221,6 +221,10 @@ fa3
 fa3$communality
 
 
+
+
+
+
 ##ANÁLISIS DE CORRESPONDENCIA MULTIPLE----
 #install.packages("cabootcrs")
 library(cabootcrs)
@@ -245,8 +249,11 @@ acm <- MCA(muestra_cat, graph = FALSE)
 #Mostramos los valores propios (varianza explicada)
 acm$eig
 #Generamos el gráfico bidimensional de las categorías
-fviz_mca_var(acm, repel = TRUE, col.var = "contrib",
-             gradient.cols = c("#d45394", "#d938e1", "#d93"))
+fviz_mca_var(acm,
+             repel = TRUE,
+             col.var = "contrib",
+             gradient.cols = c("#2C7BB6", "#41AB5D", "#F28E2B", "#B2182B"))
+
 
 ## ANALISIS DE CONGLOMERADOS----
 library(factoextra)
@@ -370,8 +377,6 @@ pROC::plot.roc(ROC, print.thres = "best", print.auc = TRUE, main = "Curva ROC QD
 
 #Generamos la Matriz de Confusión
 table(Base_Multi$fuma_bin, qda_pred$class, dnn = c("reales", "predichos"))
-
-
 
 
 
