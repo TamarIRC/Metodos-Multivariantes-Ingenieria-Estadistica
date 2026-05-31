@@ -299,7 +299,7 @@ fviz_cluster(list(data = vecst, cluster = VlEucl_Clusters),
              main = "Clusters distancia vecinos Lejanos Euclidiana")
 
 
-###Método de Wald----
+###Método de Ward----
 
 #Creamos el modelo usando el criterio de Ward
 ward_clusters <- hclust(Dist_Eucl, method = "ward.D2")
@@ -325,13 +325,14 @@ p_ward +
   theme(plot.title = element_text(hjust = 0.5), 
         plot.subtitle = element_text(hjust = 0.5))
 
-#Cortamos el árbol para extraer los 2 grupos (¡Paso que faltaba en tu imagen!)
+#Cortamos el árbol para extraer los 2 grupos  (¡Paso que faltaba en tu imagen!)
 Ward_Clusters <- cutree(ward_clusters, 2)
 
 #Generamos el mapa bidimensional de los clústeres
 fviz_cluster(list(data = vecst, cluster = Ward_Clusters),
              show.clust.cent = TRUE, 
              main = "Clusters con Método de Ward")
+
 
 
 
@@ -359,10 +360,11 @@ coords(ROC, "best", ret = c("threshold", "specificity", "sensitivity"))
 #Graficamos la Curva ROC
 plot.roc(ROC, print.thres = "best", print.auc = TRUE, main = "Curva ROC LDA",
          auc.polygon = FALSE, max.auc.polygon = FALSE, auc.polygon.col = "#458B74",
-         col = "blue", grid = TRUE, xlab = "1-Especificidad", ylab = "Sensibilidad")
+         col = "#00a499", grid = TRUE, xlab = "1-Especificidad", ylab = "Sensibilidad")
 
 #Generamos la Matriz de Confusión
 table(Base_Multi$fuma_bin, predict(object = FLD)$class, dnn = c("reales", "predichos"))
+
 
 ##Función discriminante de razón de verosimilitud----
 
@@ -388,7 +390,7 @@ pROC::coords(ROC, "best", ret = c("threshold", "specificity", "sensitivity"))
 #Graficamos la Curva ROC para el QDA
 pROC::plot.roc(ROC, print.thres = "best", print.auc = TRUE, main = "Curva ROC QDA",
                auc.polygon = FALSE, max.auc.polygon = FALSE, auc.polygon.col = "#458B74",
-               col = "blue", grid = TRUE, xlab = "1-Especificidad", ylab = "Sensibilidad")
+               col = "#00a499", grid = TRUE, xlab = "1-Especificidad", ylab = "Sensibilidad")
 
 #Generamos la Matriz de Confusión
 table(Base_Multi$fuma_bin, qda_pred$class, dnn = c("reales", "predichos"))
@@ -429,8 +431,10 @@ plot(modelo_rna_real, rep = "best", main = "Red Neuronal (Entrenada con el 70%)"
 
 #Le pedimos a la máquina que prediga sobre los 18 pacientes que no conoce
 probabilidades_prueba <- predict(modelo_rna_real, datos_prueba)
+
 #Clasificamos usando el umbral del 50%
 prediccion_prueba <- ifelse(probabilidades_prueba > 0.5, 1, 0)
+
 #Mostramos la Matriz de Confusión REAL
 table(Real = datos_prueba$fuma_bin, Predicho = prediccion_prueba)
 
@@ -456,5 +460,5 @@ Especificidad
 pred_entrenamiento <- ifelse(predict(modelo_rna_real, datos_entrenamiento) > 0.5, 1, 0)
 exactitud_entrenamiento <- sum(pred_entrenamiento == datos_entrenamiento$fuma_bin) / nrow(datos_entrenamiento)
 Sobreajuste = exactitud_entrenamiento - Exactitud
-Sobreajuste #El valor 0.206 significa que el rendimiento de la Red Neuronal cayó un 20.6% al pasar de (Entrenamiento) a (Testeo).
+Sobreajuste  #El valor 0.206 significa que el rendimiento de la Red Neuronal cayó un 20.6% al pasar de (Entrenamiento) a (Testeo).
 
