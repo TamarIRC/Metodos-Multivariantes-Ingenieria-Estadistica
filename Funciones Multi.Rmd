@@ -754,3 +754,42 @@ Imagina que tienes a todos tus pacientes en una habitación y les pides que se t
 - El método de **Ward** suele ser el favorito porque actúa como un buen organizador de fiestas: se asegura de que los grupos que se formen sean lo más homogéneos posible por dentro.
 
 - Finalmente, el gráfico de **fviz_cluster** toma esa decisión y te la dibuja como "burbujas" o territorios en un mapa. Si las burbujas no se cruzan mucho, significa que lograste encontrar perfiles de pacientes muy bien diferenciados (por ejemplo: el grupo de los "sanos", el grupo de "riesgo moderado" y el grupo de "riesgo alto").
+
+El **método de Ward sí puede tener dendrograma** porque pertenece al **clustering jerárquico aglomerativo**. Es decir, empieza con cada observación como un grupo separado y va uniendo grupos paso a paso hasta formar un solo grupo.
+
+Lo que cambia es el **criterio de unión**.
+
+En métodos como:
+
+| Método | ¿Cómo decide unir clusters? |
+|----|----|
+| `single` | Une según la menor distancia entre puntos. |
+| `complete` | Une según la mayor distancia entre puntos. |
+| `average` | Une según la distancia promedio. |
+| **`ward.D2`** | **Une los clusters que menos aumentan la variabilidad interna.** |
+
+Entonces Ward **no es “basado en distancia” en el mismo sentido que complete/single/average**, porque no dice simplemente “busco la distancia mínima/máxima/promedio entre clusters”. En cambio, usa un criterio de **mínimo aumento de suma de cuadrados dentro de los grupos**.
+
+Pero para calcular ese criterio necesita una noción de cercanía entre observaciones. Por eso le pasas: `Dist_Eucl`, es decir, la línea: `ward_clusters <- hclust(Dist_Eucl, method = "ward.D2")`
+
+### ¿Por qué tiene dendrograma?
+
+Porque Ward sigue siendo un método de **clustering jerárquico aglomerativo**.
+
+Eso significa que hace esto:
+
+1.   Comienza con cada observación como su propio cluster.
+
+2.   Evalúa qué dos clusters conviene fusionar.
+
+3.   Fusiona los dos que menos aumentan la variabilidad interna.
+
+4.   Repite el proceso hasta que todo queda en un solo cluster.
+
+5.   Esa historia de fusiones se dibuja como **dendrograma**.
+
+El dendrograma no significa “este método es solo distancia entre puntos”. Significa:
+
+> “Estas fueron las fusiones sucesivas que hizo el algoritmo”.
+
+Esto no contradice la teoría. La distancia Euclidiana se usa como entrada para medir disimilitud inicial entre observaciones, pero el método Ward no une grupos por “vecino más cercano” o “vecino más lejano”, sino por el aumento mínimo de varianza dentro de los grupos.
