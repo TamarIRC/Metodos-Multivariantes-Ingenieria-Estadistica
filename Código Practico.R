@@ -319,9 +319,9 @@ for(i in seq_along(p_ward$layers)){
 p_ward + 
   geom_hline(yintercept = 13, linetype = "dashed", linewidth = 0.2) + 
   labs(title = "Clusters con Ward", 
-       subtitle = "Distancia Euclidiana",
+       subtitle = "Ward.D2 usando distancia euclidiana",
        x = "Observaciones", 
-       y = "Altura") + 
+       y = "Altura / aumento de variabilidad") + 
   theme(plot.title = element_text(hjust = 0.5), 
         plot.subtitle = element_text(hjust = 0.5))
 
