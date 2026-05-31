@@ -793,3 +793,107 @@ El dendrograma no significa “este método es solo distancia entre puntos”. S
 > “Estas fueron las fusiones sucesivas que hizo el algoritmo”.
 
 Esto no contradice la teoría. La distancia Euclidiana se usa como entrada para medir disimilitud inicial entre observaciones, pero el método Ward no une grupos por “vecino más cercano” o “vecino más lejano”, sino por el aumento mínimo de varianza dentro de los grupos.
+
+### Análisis Discriminante
+
+A diferencia de los clústeres (donde la máquina agrupaba a ciegas), aquí **sí sabemos la respuesta**: sabemos quién fuma y quién no. El objetivo de este bloque es entrenar a un modelo matemático para que aprenda a diferenciar (discriminar) a los fumadores de los no fumadores basándose en su Edad, Peso, IMC y Presión Arterial.\
+Se prueban dos modelos: el **Lineal (LDA)**, que intenta separar a los grupos con una línea recta, y el **Cuadrático (QDA)**, que usa curvas, permitiendo mayor flexibilidad. Para evaluar qué tan buenos son estos modelos, se utilizan dos herramientas clave: la **Matriz de Confusión** (que cuenta cuántos aciertos y errores tuvo el modelo) y la **Curva ROC** (un gráfico que evalúa la capacidad del modelo para detectar correctamente a los fumadores sin dar falsas alarmas).
+
+### Funciones y librerías utilizadas
+
+|  |  |  |
+|----|----|----|
+| **Función** | **Origen** | **Descripción** |
+| factor() | Nativa de R (base) | Convierte una variable de texto o numérica en una variable categórica formal (factor) con "niveles" definidos. |
+| lda() | Librería MASS | Ejecuta el Análisis Discriminante Lineal (Linear Discriminant Analysis). |
+| qda() | Librería MASS | Ejecuta el Análisis Discriminante Cuadrático (Quadratic Discriminant Analysis). |
+| predict() | Nativa de R (stats) | Toma un modelo previamente entrenado y le pide que genere predicciones sobre los datos. |
+| roc() | Librería pROC | Calcula los datos matemáticos necesarios para construir una Curva ROC y calcular el AUC (Área Bajo la Curva). |
+| coords() | Librería pROC | Extrae coordenadas específicas de la Curva ROC (como el mejor punto de corte). |
+| plot.roc() | Librería pROC | Dibuja visualmente la Curva ROC. |
+| table() | Nativa de R (base) | Crea tablas de contingencia cruzando datos. Aquí se usa para crear la Matriz de Confusión. |
+
+``` r
+library(MASS)
+
+lda(formula = "Fórmula del Modelo",
+    data = "Data.frame de Origen",
+    prior = "Probabilidades a Priori" - Vector numérico/NULL,
+    tol = "Tolerancia para Inversión de Matriz" - Numérico,
+    method = "Método de Estimación" - "moment", "mle", "mve", "t",
+    CV = "Validación Cruzada Leave-One-Out" - TRUE, FALSE,
+    nu = "Grados de Libertad (si method='t')" - Numérico,
+    na.action = "Tratamiento de Valores Nulos" - na.omit, na.fail, na.exclude, na.pass)
+```
+
+**Para lda() (paquete MASS):**
+
+- **formula**: Objeto de clase formula. Define la variable categórica dependiente (izquierda de \~) y las variables continuas predictoras (derecha de \~).
+
+- **data**: Data frame que contiene las variables del modelo.
+
+- **prior**: Vector numérico que define las probabilidades previas de pertenencia a cada clase. Si se omite, se estiman a partir de las proporciones muestrales.
+
+- **tol**: Tolerancia numérica para determinar el rango de la matriz de covarianza y realizar su inversión.
+
+- **method**: Algoritmo para estimar las medias y varianzas. "moment" (por defecto) usa estimadores estándar de momentos; "mle" usa máxima verosimilitud; "mve" y "t" son estimadores robustos.
+
+- **CV**: Si es TRUE, ejecuta validación cruzada Leave-One-Out (LOOCV) y devuelve directamente las clasificaciones en lugar del modelo ajustado.
+
+- **nu**: Grados de libertad utilizados exclusivamente si method = "t".
+
+- **na.action**: Función que indica cómo manejar los valores perdidos (NA).
+
+``` r
+library(pROC)
+
+roc(response = "Variable Respuesta (Real)" - Vector/Factor binario,
+    predictor = "Variable Predictora (Probabilidades/Scores)" - Vector numérico,
+    levels = "Niveles de la Respuesta" - Vector de caracteres c("Control", "Caso")/NULL,
+    direction = "Dirección de la Comparación" - "auto", "<", ">",
+    smooth = "Suavizar Curva ROC" - TRUE, FALSE,
+    auc = "Calcular Área Bajo la Curva" - TRUE, FALSE,
+    ci = "Calcular Intervalos de Confianza" - TRUE, FALSE,
+    plot = "Graficar Automáticamente" - TRUE, FALSE,
+    quiet = "Suprimir Mensajes en Consola" - TRUE, FALSE,
+    na.rm = "Omitir Valores Nulos" - TRUE, FALSE)
+
+coords(roc = "Objeto de clase roc",
+       x = "Criterio de Coordenadas" - "best", "all", "local maximas", valor numérico,
+       ret = "Métricas a Retornar" - "threshold", "specificity", "sensitivity", "accuracy", "tn", "tp", "fn", "fp", "npv", "ppv", "precision", "recall", "1-specificity", "1-sensitivity", "1-accuracy", "fdr", "fpr", "all",
+       best.method = "Método para 'best'" - "youden", "closest.topleft",
+       best.weights = "Pesos para 'best' c(costo, prevalencia)" - Vector numérico/NULL,
+       transpose = "Transponer Matriz de Salida" - TRUE, FALSE,
+       as.list = "Retornar como Lista" - TRUE, FALSE,
+       drop = "Eliminar Dimensiones Innecesarias" - TRUE, FALSE)
+```
+
+**Para roc() (paquete pROC):**
+
+- **response**: Vector o factor que contiene las clasificaciones reales (observadas) de los datos. Debe ser estrictamente binario.
+
+- **predictor**: Vector numérico continuo con el criterio de decisión (probabilidades a posteriori).
+
+  (las probabilidades a posteriori extraídas con \$posterior[, 2] o \$posterior[, "Fumador"]).
+
+- **levels**: Vector de caracteres de longitud 2 que define explícitamente la dirección de la clasificación c("Control", "Caso").
+
+  c("Clase Negativa/Control", "Clase Positiva/Caso"). Si se omite, la función intenta inferirlos automáticamente.
+
+- **direction**: Define qué dirección del predictor indica un evento positivo. "auto" lo infiere matemáticamente; "\<" asume que valores menores indican control; "\>" asume que valores mayores indican control.
+
+- **smooth**: Si es TRUE, ajusta una curva ROC suavizada en lugar de la empírica escalonada.
+
+- **auc** / **ci**: Valores lógicos para calcular automáticamente el Área Bajo la Curva y sus Intervalos de Confianza, respectivamente.
+
+**Para coords() (paquete pROC):**
+
+- **x**: Define qué puntos evaluar. "best" busca el umbral óptimo; "all" devuelve todos los umbrales observados; "local maximas" devuelve picos locales.
+
+- **ret**: Vector de caracteres que especifica las métricas a extraer para el punto de corte seleccionado.
+
+  (ej. "threshold", "specificity", "sensitivity", "accuracy", "ppv" [Valor Predictivo Positivo], etc.).
+
+- **best.method**: Si x = "best", define el criterio de optimización. "youden" maximiza (Sensibilidad + Especificidad - 1); "closest.topleft" minimiza la distancia euclidiana al punto ideal (0,1).
+
+- **best.weights**: Vector numérico c(costo, prevalencia) para ponderar el cálculo del mejor umbral si los falsos positivos/negativos tienen impactos asimétricos.

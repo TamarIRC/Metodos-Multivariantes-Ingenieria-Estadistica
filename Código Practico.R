@@ -337,6 +337,8 @@ fviz_cluster(list(data = vecst, cluster = Ward_Clusters),
 
 
 
+
+
 #ANÁLISIS DISCRIMINANTE----
 
 ##Función lineal discriminante----
@@ -351,8 +353,40 @@ Base_Multi$fuma_bin <- ifelse(Base_Multi$fuma == "No fumador", 0, 1)
 #Función Lineal Discriminante (FLD) usando el paquete MASS
 FLD <- MASS::lda(fuma_bin ~ Edad + Peso + IMC + Presión_Arterial_Sistólica, data = Base_Multi)
 
+library(MASS)
+
+lda(formula = "Fórmula del Modelo",
+    data = "Data.frame de Origen")
+
+library(pROC)
+
+roc(response = "Variable Respuesta (Real)" - Vector/Factor binario,
+    predictor = "Variable Predictora (Probabilidades/Scores)" - Vector numérico,
+    levels = "Niveles de la Respuesta" - Vector de caracteres c("Control", "Caso")/NULL,
+    direction = "Dirección de la Comparación" - "auto", "<", ">",
+    smooth = "Suavizar Curva ROC" - TRUE, FALSE,
+    auc = "Calcular Área Bajo la Curva" - TRUE, FALSE,
+    ci = "Calcular Intervalos de Confianza" - TRUE, FALSE,
+    plot = "Graficar Automáticamente" - TRUE, FALSE,
+    quiet = "Suprimir Mensajes en Consola" - TRUE, FALSE,
+    na.rm = "Omitir Valores Nulos" - TRUE, FALSE)
+
+coords(roc = "Objeto de clase roc",
+       x = "Criterio de Coordenadas" - "best", "all", "local maximas", valor numérico,
+       ret = "Métricas a Retornar" - "threshold", "specificity", "sensitivity", "accuracy", "tn", "tp", "fn", "fp", "npv", "ppv", "precision", "recall", "1-specificity", "1-sensitivity", "1-accuracy", "fdr", "fpr", "all",
+       best.method = "Método para 'best'" - "youden", "closest.topleft",
+       best.weights = "Pesos para 'best' c(costo, prevalencia)" - Vector numérico/NULL,
+       transpose = "Transponer Matriz de Salida" - TRUE, FALSE,
+       as.list = "Retornar como Lista" - TRUE, FALSE,
+       drop = "Eliminar Dimensiones Innecesarias" - TRUE, FALSE)
+
+
+
+
 #Curva ROC 
 ROC <- roc(Base_Multi$fuma_bin, predict(object = FLD)$posterior[, 2])
+
+
 
 #coordenadas del mejor punto de corte (Umbral, Especificidad y Sensibilidad)
 coords(ROC, "best", ret = c("threshold", "specificity", "sensitivity"))
@@ -364,6 +398,8 @@ plot.roc(ROC, print.thres = "best", print.auc = TRUE, main = "Curva ROC LDA",
 
 #Generamos la Matriz de Confusión
 table(Base_Multi$fuma_bin, predict(object = FLD)$class, dnn = c("reales", "predichos"))
+
+
 
 
 ##Función discriminante de razón de verosimilitud----
