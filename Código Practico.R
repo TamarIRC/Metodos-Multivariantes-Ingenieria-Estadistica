@@ -234,6 +234,7 @@ muestra_cat <- Base_Multi[, c("Sexo", "Estado_Nutricional", "fuma")]
 
 #Calculamos la matriz de Burt
 m_burt <- getBurt(muestra_cat)
+
 m_burt
 
 ##Representación bidimensional----
@@ -259,6 +260,10 @@ fviz_mca_var(acm,
              gradient.cols = c("#2C7BB6", "#41AB5D", "#F28E2B", "#B2182B"))
 
 
+
+
+
+
 ## ANALISIS DE CONGLOMERADOS----
 library(factoextra)
 library(ggplot2)
@@ -280,7 +285,9 @@ for(i in seq_along(p$layers)){
   }
 }
 
-p +geom_hline(yintercept = 70, linetype = "dashed",linewidth = 0.2) + labs(title = "Clusters distancia vecinos Lejanos", subtitle = "Distancia Euclidiana")
+p +geom_hline(yintercept = 70, linetype = "dashed",linewidth = 0.2) + 
+  labs(title = "Clusters distancia vecinos Lejanos", 
+       subtitle = "Distancia Euclidiana")
 
 
 #Cortamos el árbol para asignar los 3 clústeres a los pacientes
@@ -290,6 +297,7 @@ VlEucl_Clusters <- cutree(VLEucl, 3)
 fviz_cluster(list(data = vecst, cluster = VlEucl_Clusters), 
              show.clust.cent = TRUE, 
              main = "Clusters distancia vecinos Lejanos Euclidiana")
+
 
 ###Método de Wald----
 
@@ -324,6 +332,9 @@ Ward_Clusters <- cutree(ward_clusters, 2)
 fviz_cluster(list(data = vecst, cluster = Ward_Clusters),
              show.clust.cent = TRUE, 
              main = "Clusters con Método de Ward")
+
+
+
 
 #ANÁLISIS DISCRIMINANTE----
 
@@ -381,6 +392,8 @@ pROC::plot.roc(ROC, print.thres = "best", print.auc = TRUE, main = "Curva ROC QD
 
 #Generamos la Matriz de Confusión
 table(Base_Multi$fuma_bin, qda_pred$class, dnn = c("reales", "predichos"))
+
+
 
 
 

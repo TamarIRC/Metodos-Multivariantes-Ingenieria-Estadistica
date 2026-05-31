@@ -633,20 +633,24 @@ Luego se aplican dos métodos jerárquicos:\
 library(factoextra)
 
 get_dist(x = "Matriz o data.frame numérico",
-         method = "Métrica de Distancia" - "euclidean", "manhattan", "pearson", "spearman", etc.)
+         method = "Métrica de Distancia" - "euclidean", "maximum", "manhattan", "canberra", "binary", "minkowski", "pearson", "spearman", "kendall",
+         stand = "Estandarizar Datos" - TRUE, FALSE)
 
 hclust(d = "Objeto de clase dist",
-       method = "Criterio de Aglomeración" - "complete", "ward.D2", "single", "average", "centroid", etc.)
+       method = "Criterio de Aglomeración" - "ward.D", "ward.D2", "single", "complete", "average", "mcquitty", "median", "centroid")
 
 fviz_dend(x = "Objeto de clase hclust",
           k = "Número de Clústeres (Corte)" - Entero/NULL,
+          h = "Altura de Corte" - Numérico/NULL,
+          type = "Tipo de Árbol" - "rectangle", "circular", "phylogram",
           cex = "Tamaño de Texto de Etiquetas" - Numérico,
           lwd = "Grosor de Líneas del Árbol" - Numérico,
           show_labels = "Mostrar Etiquetas de Observaciones" - TRUE, FALSE,
           color_labels_by_k = "Colorear Etiquetas por Clúster" - TRUE, FALSE)
 
 cutree(tree = "Objeto de clase hclust",
-       k = "Número de Grupos a Extraer" - Entero)
+       k = "Número de Grupos a Extraer" - Entero/NULL,
+       h = "Altura de Corte" - Numérico/NULL)
 
 fviz_cluster(object = "Lista con datos y vector de clústeres (o modelo particional)",
              show.clust.cent = "Mostrar Centroides" - TRUE, FALSE,
@@ -659,21 +663,59 @@ fviz_cluster(object = "Lista con datos y vector de clústeres (o modelo particio
 
 - **method**: Cadena de caracteres (character). Define la métrica matemática para calcular la distancia entre pares de observaciones. "euclidean" calcula la distancia en línea recta en un espacio multidimensional.
 
+  Define la métrica matemática para calcular la matriz de disimilitud.
+
+  - "euclidean": Distancia geométrica estándar en línea recta.
+
+  - "maximum": Distancia de Chebyshev (máxima diferencia absoluta en cualquier dimensión).
+
+  - "manhattan": Distancia del taxista (suma de diferencias absolutas).
+
+  - "canberra": Versión ponderada de Manhattan, muy sensible a valores cercanos a cero.
+
+  - "binary": Distancia asimétrica para datos binarios (proporción de bits diferentes).
+
+  - "minkowski": Generalización de la distancia Euclidiana y Manhattan (requiere parámetro p).
+
+  - "pearson", "spearman", "kendall": Distancias basadas en correlación (1-r). Agrupa observaciones con perfiles/tendencias similares, sin importar su magnitud absoluta.
+
+- **stand**: Si es TRUE, estandariza automáticamente los datos (media 0, varianza 1) antes de calcular las distancias.
+
 **Para hclust():**
 
 - **d** (en tu código Dist_Eucl): Objeto de clase dist (matriz de distancias generada previamente).
 
 - **method**: Cadena de caracteres (character). Define el algoritmo de enlace (aglomeración) para construir el dendrograma jerárquico.
 
-  - "complete" (Vecinos lejanos): Define la distancia entre dos clústeres como la distancia máxima entre sus puntos. Tiende a formar clústeres compactos y esféricos.
+  - **"complete"** (Vecinos lejanos): Define la distancia entre dos clústeres como la distancia máxima entre sus puntos. Tiende a formar clústeres compactos y esféricos.
 
-  - "ward.D2": Minimiza la varianza intra-clúster (suma de cuadrados de las desviaciones respecto al centroide). Utiliza las distancias euclidianas al cuadrado.
+  - **"ward.D2"**: Minimiza la varianza intra-clúster (suma de cuadrados de las desviaciones respecto al centroide). Utiliza las distancias euclidianas al cuadrado.
+
+  - "single": Enlace simple (vecino más cercano). Tiende a formar cadenas largas (efecto chaining).
+
+  - "average": UPGMA (promedio de todas las distancias entre pares de los dos clústeres).
+
+  - "mcquitty": WPGMA (promedio ponderado, útil cuando los tamaños de los clústeres son muy desiguales).
+
+  - "median": WPGMC (distancia entre las medianas de los clústeres).
+
+  - "centroid": UPGMC (distancia geométrica entre los centroides de los clústeres).
+
+  - "ward.D": Minimiza la varianza intra-clúster usando distancias no cuadradas.
 
 **Para fviz_dend():**
 
 - **x** (en tu código VLEucl o ward_clusters): Objeto resultante del agrupamiento jerárquico (hclust).
 
 - **k**: Valor entero. Especifica el número de grupos en los que se dividirá visualmente el árbol, asignando un color distinto a cada rama principal.
+
+- **type**: Estilo visual del dendrograma.
+
+  - "rectangle": Árbol jerárquico estándar con ramas ortogonales.
+
+  - "circular": Árbol proyectado en coordenadas polares (útil para muchos datos).
+
+  - "phylogram": Árbol tipo filogenético (ramas sin ángulos rectos).
 
 - **cex** / **lwd**: Valores numéricos que escalan el tamaño de la fuente de las etiquetas y el grosor de las líneas del dendrograma, respectivamente.
 
@@ -684,6 +726,8 @@ fviz_cluster(object = "Lista con datos y vector de clústeres (o modelo particio
 - **tree**: Objeto de clase hclust.
 
 - **k**: Valor entero. Corta matemáticamente el árbol jerárquico a una altura específica para generar exactamente k grupos, devolviendo un vector con la asignación de clúster (1, 2, 3...) para cada observación.
+
+- **h**: Corta el árbol en una altura numérica específica h del eje Y (distancia de aglomeración), dejando que el número de grupos se determine automáticamente según esa altura. (Nota: Se debe usar k o h, no ambos a la vez).
 
 **Para fviz_cluster():**
 
