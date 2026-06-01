@@ -69,7 +69,7 @@ mapa_IPS <- ggplot(data = IPS_RM) +
   labs(
     title = "Índice de Prioridad Social 2024",
     subtitle = "Comunas de la Región Metropolitana",
-    caption = "Fuente: capa SHP IPS_RM_2024_con_IPS",
+    caption = "Fuente: capa SHP IPS_RM_2024_Tetrametrics",
     x = "Longitud",
     y = "Latitud"
   ) +
