@@ -845,6 +845,48 @@ lda(formula = "Fórmula del Modelo",
 - **na.action**: Función que indica cómo manejar los valores perdidos (NA).
 
 ``` r
+# 1. Función base de predicción
+predict(object = "Modelo Ajustado (lda/qda)")
+
+# 2. Extracción e indexación para obtener el vector continuo (Predictor ROC)
+predict(object = "Modelo")$posterior[ , "Índice/Nombre de la Clase Positiva" - Entero o Cadena]
+```
+
+- **\$ (Operador de Extracción de Listas)**: Aísla un elemento específico de la lista estructurada que devuelve predict(). Al llamar a \$posterior, se extrae exclusivamente la matriz numérica de dimensiones n×k (observaciones × clases) que contiene las probabilidades a posteriori calculadas por el modelo.
+
+- **[ , ] (Operador de Indexación de Matrices)**: Aplica un filtro bidimensional [filas, columnas] sobre la matriz extraída.
+
+  - **Espacio vacío (antes de la coma)**: Indica que se deben retener todas las filas (todas las observaciones de la muestra).
+
+  - **2 (después de la coma)**: Valor entero que selecciona exclusivamente la segunda columna de la matriz. En modelos binarios, esta columna suele contener la probabilidad matemática de pertenecer a la clase positiva (el evento de interés). Este vector numérico continuo resultante es el insumo estricto que requiere el argumento predictor de la función roc().
+
+en otras palabras:
+
+La expresión `predict(object = FLD)$posterior[, 2]` no es una sola función, sino una cadena de tres operaciones consecutivas diseñadas para extraer exactamente el vector numérico continuo que la función roc() requiere como predictor.
+
+Desglose técnico de cada componente:
+
+1.  `predict(object = FLD)` (Generación de Predicciones): Al ejecutar predict() sobre un modelo de Análisis Discriminante Lineal (lda), la función evalúa los datos y devuelve una lista estructurada que contiene tres elementos matemáticos:
+
+- class: Un vector con la clasificación final asignada (ej. 0 o 1).
+- posterior: Una matriz numérica con las probabilidades a posteriori.
+- x: Las puntuaciones proyectadas en la función discriminante.
+
+2.  `$posterior` (Extracción del Elemento): El operador \$ se utiliza para aislar y extraer exclusivamente la matriz posterior de la lista generada en el paso anterior.
+
+- Esta es una matriz de dimensiones n x k (donde n es el número de observaciones/pacientes y k el número de clases).
+- Al ser un modelo binario (Fuma / No fuma), la matriz tiene exactamente 2 columnas:
+  - Columna 1: Probabilidad matemática de pertenecer a la clase negativa ("No fumador" / 0).
+  - Columna 2: Probabilidad matemática de pertenecer a la clase positiva ("Fumador" / 1).
+
+3.  `[, 2]` (Indexación de la Matriz): Los corchetes [filas, columnas] aplican un filtro dimensional sobre la matriz extraída.
+
+- El espacio vacío antes de la coma indica que se deben retener todas las filas (todos los pacientes).
+- El número 2 después de la coma indica que se debe extraer exclusivamente la segunda columna.
+
+En resumen: La curva ROC evalúa el rendimiento de un modelo basándose en distintos umbrales de probabilidad, no en clasificaciones absolutas. Por lo tanto, `predict(object = FLD)$posterior[, 2]` le entrega a la función roc() un vector numérico continuo que representa la probabilidad exacta que el modelo le asignó a cada paciente de ser fumador.
+
+``` r
 library(pROC)
 
 roc(response = "Variable Respuesta (Real)" - Vector/Factor binario,
@@ -890,10 +932,86 @@ coords(roc = "Objeto de clase roc",
 
 - **x**: Define qué puntos evaluar. "best" busca el umbral óptimo; "all" devuelve todos los umbrales observados; "local maximas" devuelve picos locales.
 
+  - "best": Calcula algorítmicamente el punto de corte óptimo (el que mejor equilibra la clasificación) basándose en el criterio definido en best.method.
+
+  - "all": Extrae las coordenadas para absolutamente todos los umbrales (valores únicos del predictor) observados en el conjunto de datos.
+
+  - "local maximas": Extrae solo los umbrales que representan máximos locales en la curva ROC (puntos donde la curva empírica cambia de dirección acercándose al punto ideal superior izquierdo).
+
+  - Vector numérico: Permite ingresar un valor exacto (ej. 0.5 o c(0.2, 0.8)) para evaluar el rendimiento del modelo en ese umbral específico.
+
 - **ret**: Vector de caracteres que especifica las métricas a extraer para el punto de corte seleccionado.
 
   (ej. "threshold", "specificity", "sensitivity", "accuracy", "ppv" [Valor Predictivo Positivo], etc.).
 
+  - "threshold": El valor de corte numérico del predictor.
+
+  - "specificity": Tasa de Verdaderos Negativos (TN/(TN+FP)). Proporción de controles correctamente identificados.
+
+  - "sensitivity" / "recall": Tasa de Verdaderos Positivos (TP/(TP+FN)). Proporción de casos correctamente identificados.
+
+  - "accuracy": Exactitud global ((TP+TN)/Total). Proporción total de predicciones correctas.
+
+  - "tn", "tp", "fn", "fp": Conteos absolutos de Verdaderos Negativos, Verdaderos Positivos, Falsos Negativos y Falsos Positivos, respectivamente.
+
+  - "npv": Valor Predictivo Negativo (TN/(TN+FN)). Probabilidad de que la observación sea realmente un control si el modelo predice control.
+
+  - "ppv" / "precision": Valor Predictivo Positivo (TP/(TP+FP)). Probabilidad de que la observación sea realmente un caso si el modelo predice caso.
+
+  - "1-specificity" / "fpr": Tasa de Falsos Positivos (FP/(FP+TN)). Proporción de controles clasificados erróneamente como casos (Eje X de la curva ROC).
+
+  - "1-sensitivity": Tasa de Falsos Negativos (FN/(TP+FN)). Proporción de casos clasificados erróneamente como controles.
+
+  - "1-accuracy": Tasa de error global de clasificación.
+
+  - "fdr": Tasa de Falso Descubrimiento (FP/(FP+TP)). Complemento matemático del Valor Predictivo Positivo.
+
+  - "all": Retorna una matriz que incluye simultáneamente todas las métricas listadas anteriormente.
+
 - **best.method**: Si x = "best", define el criterio de optimización. "youden" maximiza (Sensibilidad + Especificidad - 1); "closest.topleft" minimiza la distancia euclidiana al punto ideal (0,1).
 
+  - "youden": Maximiza el estadístico J de Youden (J = Sensibilidad + Especificidad −1). Geométricamente, busca el punto de la curva ROC que tiene la mayor distancia vertical respecto a la línea diagonal de azar.
+
+  - "closest.topleft": Minimiza la distancia euclidiana geométrica entre un punto de la curva y el punto de clasificación perfecta (0,1) en el plano ROC. La función a minimizar es $d^2=(1−Sensibilidad)2+(1−Especificidad)^2$.
+
 - **best.weights**: Vector numérico c(costo, prevalencia) para ponderar el cálculo del mejor umbral si los falsos positivos/negativos tienen impactos asimétricos.
+
+  Permite desplazar el umbral óptimo si los errores no tienen el mismo impacto.
+
+  - costo: Razón de costos entre cometer un Falso Negativo vs. un Falso Positivo.
+
+  - prevalencia: Proporción real de casos positivos en la población.
+
+  - (Ejemplo: Si un falso negativo es letal y un falso positivo solo requiere otro examen, se ajusta el costo para forzar un umbral con mayor sensibilidad).
+
+<!-- -->
+
+- **transpose**: Valor lógico. Si es TRUE, transpone la matriz de resultados (intercambia filas por columnas) para facilitar su lectura o integración en tablas.
+
+- **as.list**: Valor lógico. Si es TRUE, fuerza a que el resultado se devuelva como una lista de R en lugar de un vector o matriz.
+
+- **drop**: Valor lógico. Si es TRUE (por defecto), aplica coerción dimensional: si el resultado es una matriz de una sola fila o columna, la simplifica convirtiéndola en un vector numérico estándar.
+
+``` r
+```
+
+**Para la función plot.roc():**
+
+- x (primer argumento): El objeto ROC.
+
+- print.thres: Si es "best", imprime en el gráfico el número exacto del mejor punto de corte.
+
+- print.auc: Argumento lógico. Si es TRUE, imprime en el gráfico el valor del Área Bajo la Curva (AUC).
+
+- col: Color de la línea de la curva (ej. "blue").
+
+- grid: Si es TRUE, dibuja una cuadrícula de fondo para facilitar la lectura.
+
+``` r
+```
+
+**Para la función table():**
+
+- ... (primeros argumentos): Los vectores a cruzar. Pones primero los datos reales (Base_Multi\$fuma_bin) y luego las predicciones (predict()\$class).
+
+- dnn: Define los nombres de las dimensiones (filas y columnas) de la tabla. Le asignas c("reales", "predichos").
