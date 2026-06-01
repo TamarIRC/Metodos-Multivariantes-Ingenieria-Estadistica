@@ -169,7 +169,7 @@ andrews(df = "Data.frame numérico/mixto",
 ### Funciones y librerías utilizadas
 
 |  |  |  |
-|-----------------|-----------------|---------------------------------------|
+|------------------|------------------|-------------------------------------|
 | **Función** | **Origen** | **Descripción** |
 | mvn() | Librería MVN | Realiza pruebas de normalidad tanto multivariadas (todas las variables juntas) como univariadas (variable por variable). |
 | HotellingsT2Test() | Librería DescTools | Ejecuta la prueba T-cuadrado de Hotelling. Es la versión multivariada de la prueba T de Student; sirve para comparar las medias de dos grupos usando múltiples variables a la vez. |
@@ -359,7 +359,7 @@ Segundo, para las **variables categóricas** (texto), se utiliza el Análisis 
 ### Funciones y librerías utilizadas
 
 |  |  |  |
-|-----------------|-----------------|---------------------------------------|
+|------------------|------------------|-------------------------------------|
 | **Función** | **Origen** | **Descripción** |
 | cor() | Nativa de R (stats) | Calcula la matriz de correlación entre variables numéricas. |
 | KMO() | Librería psych | Calcula el índice Kaiser-Meyer-Olkin para evaluar si los datos son aptos para hacer un Análisis Factorial o PCA. |
@@ -592,7 +592,7 @@ fviz_mca_var(X = "Objeto de clase MCA",
 
 - En acm\$eig se revisa cuánta variabilidad explica cada dimensión.
 
--  Las dos primeras dimensiones suelen utilizarse para representar gráficamente la relación entre categorías.
+- Las dos primeras dimensiones suelen utilizarse para representar gráficamente la relación entre categorías.
 
 - En el gráfico, las categorías cercanas entre sí tienen mayor asociación.
 
@@ -611,7 +611,7 @@ Primero, se calcula la distancia matemática entre todos los pacientes. Luego, s
 ### Funciones y librerías utilizadas
 
 |  |  |  |
-|--------------|---------------------|-------------------------------------|
+|-----------------|--------------------|-----------------------------------|
 | **Función** | **Origen** | **Descripción** |
 | get_dist() | Librería factoextra | Calcula la matriz de distancias entre todas las filas (pacientes). |
 | hclust() | Nativa de R (stats) | Ejecuta el algoritmo de agrupamiento jerárquico (crea la estructura del árbol). |
@@ -762,7 +762,7 @@ Lo que cambia es el **criterio de unión**.
 En métodos como:
 
 | Método | ¿Cómo decide unir clusters? |
-|----|----|
+|------------------------------------|------------------------------------|
 | `single` | Une según la menor distancia entre puntos. |
 | `complete` | Une según la mayor distancia entre puntos. |
 | `average` | Une según la distancia promedio. |
@@ -778,15 +778,15 @@ Porque Ward sigue siendo un método de **clustering jerárquico aglomerativo**.
 
 Eso significa que hace esto:
 
-1.   Comienza con cada observación como su propio cluster.
+1.  Comienza con cada observación como su propio cluster.
 
-2.   Evalúa qué dos clusters conviene fusionar.
+2.  Evalúa qué dos clusters conviene fusionar.
 
-3.   Fusiona los dos que menos aumentan la variabilidad interna.
+3.  Fusiona los dos que menos aumentan la variabilidad interna.
 
-4.   Repite el proceso hasta que todo queda en un solo cluster.
+4.  Repite el proceso hasta que todo queda en un solo cluster.
 
-5.   Esa historia de fusiones se dibuja como **dendrograma**.
+5.  Esa historia de fusiones se dibuja como **dendrograma**.
 
 El dendrograma no significa “este método es solo distancia entre puntos”. Significa:
 
@@ -802,7 +802,7 @@ Se prueban dos modelos: el **Lineal (LDA)**, que intenta separar a los grupos c
 ### Funciones y librerías utilizadas
 
 |  |  |  |
-|----|----|----|
+|------------------------|------------------------|------------------------|
 | **Función** | **Origen** | **Descripción** |
 | factor() | Nativa de R (base) | Convierte una variable de texto o numérica en una variable categórica formal (factor) con "niveles" definidos. |
 | lda() | Librería MASS | Ejecuta el Análisis Discriminante Lineal (Linear Discriminant Analysis). |
@@ -984,8 +984,6 @@ coords(roc = "Objeto de clase roc",
 
   - (Ejemplo: Si un falso negativo es letal y un falso positivo solo requiere otro examen, se ajusta el costo para forzar un umbral con mayor sensibilidad).
 
-<!-- -->
-
 - **transpose**: Valor lógico. Si es TRUE, transpone la matriz de resultados (intercambia filas por columnas) para facilitar su lectura o integración en tablas.
 
 - **as.list**: Valor lógico. Si es TRUE, fuerza a que el resultado se devuelva como una lista de R en lugar de un vector o matriz.
@@ -993,25 +991,98 @@ coords(roc = "Objeto de clase roc",
 - **drop**: Valor lógico. Si es TRUE (por defecto), aplica coerción dimensional: si el resultado es una matriz de una sola fila o columna, la simplifica convirtiéndola en un vector numérico estándar.
 
 ``` r
+library(pROC)
+
+plot.roc(x = "Objeto de clase roc",
+         add = "Añadir a Gráfico Existente" - TRUE, FALSE,
+         reuse.auc = "Reutilizar AUC Precalculado" - TRUE, FALSE,
+         axes = "Dibujar Ejes" - TRUE, FALSE,
+         legacy.axes = "Eje X como 1-Especificidad (0 a 1)" - TRUE, FALSE,
+         identity = "Dibujar Línea de Identidad (Diagonal)" - TRUE, FALSE,
+         identity.col = "Color de Línea de Identidad" - Nombre/Hexadecimal,
+         identity.lty = "Tipo de Línea de Identidad" - Entero (1-6),
+         identity.lwd = "Grosor de Línea de Identidad" - Numérico,
+         print.thres = "Imprimir Umbral" - "best", "all", vector numérico, TRUE,                                                                             FALSE,
+         print.thres.pch = "Símbolo del Umbral" - Entero (0-25),
+         print.thres.cex = "Tamaño del Texto/Símbolo del Umbral" - Numérico,
+         print.thres.col = "Color del Texto/Símbolo del Umbral" - Nombre/                                                                            Hexadecimal,
+         print.thres.pattern = "Formato de Texto del Umbral" - Cadena (ej. "%.3f (%                                                                         .3f, %.3f)"          ),
+         print.thres.adj = "Ajuste de Posición del Texto del Umbral" - Vector numérico c(x, y),
+         print.auc = "Imprimir Valor AUC" - TRUE, FALSE,
+         print.auc.pattern = "Formato de Texto del AUC" - Cadena (ej. "AUC: %.3f"),
+         print.auc.x = "Posición X del Texto AUC" - Numérico,
+         print.auc.y = "Posición Y del Texto AUC" - Numérico,
+         print.auc.cex = "Tamaño del Texto AUC" - Numérico,
+         print.auc.col = "Color del Texto AUC" - Nombre/Hexadecimal,
+         print.auc.adj = "Ajuste de Posición del Texto AUC" - Vector numérico c(x, y),
+         auc.polygon = "Rellenar Polígono del AUC" - TRUE, FALSE,
+         auc.polygon.col = "Color del Polígono AUC" - Nombre/Hexadecimal,
+         auc.polygon.density = "Densidad de Líneas del Polígono" - Numérico/NULL,
+         auc.polygon.angle = "Ángulo de Líneas del Polígono" - Numérico (grados),
+         auc.polygon.border = "Borde del Polígono AUC" - Nombre/Hexadecimal/NA,
+         max.auc.polygon = "Rellenar Polígono del AUC Máximo (1.0)" - TRUE, FALSE,
+         max.auc.polygon.col = "Color del Polígono AUC Máximo" - Nombre/Hexadecimal,
+         max.auc.polygon.lty = "Tipo de Línea del Polígono Máximo" - Entero (1-6),
+         max.auc.polygon.lwd = "Grosor de Línea del Polígono Máximo" - Numérico,
+         max.auc.polygon.density = "Densidad de Líneas del Polígono Máximo" - Numérico/NULL,
+         max.auc.polygon.angle = "Ángulo de Líneas del Polígono Máximo" - Numérico (grados),
+         max.auc.polygon.border = "Borde del Polígono AUC Máximo" - Nombre/Hexadecimal/NA,
+         grid = "Mostrar Cuadrícula" - TRUE, FALSE, vector numérico,
+         grid.v = "Líneas de Cuadrícula Verticales" - Vector numérico,
+         grid.h = "Líneas de Cuadrícula Horizontales" - Vector numérico,
+         grid.lty = "Tipo de Línea de Cuadrícula" - Entero (1-6),
+         grid.lwd = "Grosor de Línea de Cuadrícula" - Numérico,
+         grid.col = "Color de Cuadrícula" - Nombre/Hexadecimal,
+         col = "Color de la Curva ROC" - Nombre/Hexadecimal,
+         type = "Tipo de Trazado de Curva" - "l", "s", "S",
+         xlab = "Etiqueta Eje X" - Cadena de caracteres/NULL,
+         ylab = "Etiqueta Eje Y" - Cadena de caracteres/NULL,
+         main = "Título del Gráfico" - Cadena de caracteres/NULL)
 ```
 
-**Para la función plot.roc():**
+**Para plot.roc() (paquete pROC):**
 
-- x (primer argumento): El objeto ROC.
+- **x** (en nuestro código ROC): Objeto de clase roc que contiene los cálculos empíricos generados previamente.
 
-- print.thres: Si es "best", imprime en el gráfico el número exacto del mejor punto de corte.
+- **legacy.axes**: Si es TRUE, fuerza el eje X a mostrar "1 - Especificidad" (escala de 0 a 1). Si es FALSE (por defecto), muestra "Especificidad" invertida (escala de 1 a 0).
 
-- print.auc: Argumento lógico. Si es TRUE, imprime en el gráfico el valor del Área Bajo la Curva (AUC).
+- **identity.\***: Familia de argumentos que controlan la línea diagonal de referencia (AUC = 0.5, modelo aleatorio). Permite modificar su color (identity.col), tipo de trazo (identity.lty) y grosor (identity.lwd).
 
-- col: Color de la línea de la curva (ej. "blue").
+- **print.thres.\***: Familia de argumentos gráficos para personalizar el texto y símbolo del umbral impreso. Controla qué umbral imprimir (print.thres), el tipo de punto (pch), tamaño (cex), color (col), formato del texto (pattern, usando sintaxis C como sprintf) y ajuste de coordenadas (adj).
 
-- grid: Si es TRUE, dibuja una cuadrícula de fondo para facilitar la lectura.
+- **print.auc.\***: Familia de argumentos gráficos para personalizar el texto del AUC impreso. Controla su formato (pattern), coordenadas exactas en el gráfico (x, y), tamaño (cex), color (col) y ajuste (adj).
+
+- **auc.polygon.\***: Familia de argumentos para personalizar el área bajo la curva empírica. Controla el color de relleno (col), la densidad y ángulo del achurado si no se desea un relleno sólido (density, angle) y el color del borde (border).
+
+- **max.auc.polygon.\***: Familia de argumentos idéntica a la anterior, pero aplicada al polígono de fondo que representa el modelo perfecto (AUC = 1.0).
+
+- **grid.\***: Familia de argumentos para personalizar la cuadrícula. Permite definir vectores numéricos exactos donde trazar las líneas verticales (grid.v) y horizontales (grid.h), así como su estilo (lty, lwd, col).
+
+- **type**: Define el estilo de trazado de la curva ROC. "l" (líneas directas), "s" o "S" (trazado escalonado estricto, recomendado para curvas empíricas).
+
+- **xlab, ylab, main**: Cadenas de caracteres que sobrescriben los nombres de los ejes y el título principal.
 
 ``` r
+table(... = "Variable Respuesta (Real)" - Vector/Factor,
+      ... = "Variable Predicha" - predict(object = "Modelo Ajustado")$class,
+      dnn = "Nombres de las Dimensiones" - Vector de caracteres c("Nombre Fila",                                                            "Nombre Columna")/NULL,
+      useNA = "Inclusión de Valores Nulos" - "no", "ifany", "always")
 ```
 
-**Para la función table():**
+**Para table() (Generación de la Matriz de Confusión):**
 
-- ... (primeros argumentos): Los vectores a cruzar. Pones primero los datos reales (Base_Multi\$fuma_bin) y luego las predicciones (predict()\$class).
+- **... (Vectores a cruzar)**: La función table acepta una cantidad arbitraria de objetos (vectores o factores) separados por comas. En el contexto de evaluar un modelo predictivo, se le entregan exactamente dos vectores de la misma longitud:
 
-- dnn: Define los nombres de las dimensiones (filas y columnas) de la tabla. Le asignas c("reales", "predichos").
+  1.  **El vector real** (en tu código Base_Multi\$fuma_bin): Contiene las clases verdaderas observadas en los datos. Por convención, al ponerlo primero, se asigna a las **filas** de la matriz.
+
+  2.  **El vector predicho** (en tu código predict(object = FLD)\$class): Contiene las clases que el modelo estimó. Al ponerlo segundo, se asigna a las **columnas** de la matriz.
+
+- **dnn** (Dimension Names): Vector de caracteres que sobrescribe los nombres automáticos de las dimensiones de la tabla. En tu código, c("reales", "predichos") etiqueta explícitamente las filas como "reales" y las columnas como "predichos", dándole la estructura formal y legible de una Matriz de Confusión.
+
+- **useNA**: Cadena de caracteres que define el tratamiento de los valores perdidos (NA). "no" (por defecto) los ignora; "ifany" agrega una fila/columna para NA solo si existen en los datos; "always" siempre agrega la fila/columna de NA aunque el conteo sea cero.
+
+**Para la extracción predict()\$class (Insumo de la tabla):**
+
+- **predict(object = FLD)**: Evalúa el modelo discriminante y devuelve una lista de resultados.
+
+- **\$class**: Aísla y extrae exclusivamente el vector categórico (factor) que contiene la **asignación de clase final** (ej. "Fumador" o "No fumador") que el modelo le otorgó a cada paciente. Este vector es el que se cruza directamente contra los datos reales en la función table().

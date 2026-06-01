@@ -1,5 +1,6 @@
 
 
+
 View(Base_Multi)
 
 #Gráficos Multivariantes----
@@ -339,6 +340,7 @@ fviz_cluster(list(data = vecst, cluster = Ward_Clusters),
 
 
 
+
 #ANÁLISIS DISCRIMINANTE----
 
 ##Función lineal discriminante----
@@ -355,21 +357,21 @@ FLD <- MASS::lda(fuma_bin ~ Edad + Peso + IMC + Presión_Arterial_Sistólica, da
 
 
 
-library(MASS)
-lda(formula = "Fórmula del Modelo",
-    data = "Data.frame de Origen")
+# library(MASS)
+# lda(formula = "Fórmula del Modelo",
+#     data = "Data.frame de Origen")
 
-#Función base de predicción para obtener el vector continuo (Predictor ROC)
-predict(object = "Modelo Ajustado (lda o qda)")$posterior[ , "Índice/Nombre de la Clase Positiva" - Entero o Cadena])
+ #Función base de predicción para obtener el vector continuo (Predictor ROC)
+# predict(object = "Modelo Ajustado (lda o qda)")$posterior[ , "Índice/Nombre de la Clase Positiva" - Entero o Cadena])
 
-library(pROC)
-roc(response = "Variable Respuesta (Real)" - Vector/Factor binario,
-    predictor = "Variable Predictora (Probabilidades/Scores)" - Vector numérico,)
-
-coords(roc = "Objeto de clase roc",
-       x = "Criterio de Coordenadas" - "best", "all", "local maximas", valor numérico,
-       ret = "Métricas a Retornar" - "threshold", "specificity", "sensitivity", "accuracy", "tn", "tp", "fn", "fp", 
-             "npv", "ppv", "precision", "recall", "1-specificity", "1-sensitivity", "1-accuracy", "fdr", "fpr", "all")
+# library(pROC)
+# roc(response = "Variable Respuesta (Real)" - Vector/Factor binario,
+#     predictor = "Variable Predictora (Probabilidades/Scores)" - Vector numérico,)
+ 
+# coords(roc = "Objeto de clase roc",
+#        x = "Criterio de Coordenadas" - "best", "all", "local maximas", valor numérico,
+#        ret = "Métricas a Retornar" - "threshold", "specificity", "sensitivity", "accuracy", "tn", "tp", "fn", "fp", 
+#              "npv", "ppv", "precision", "recall", "1-specificity", "1-sensitivity", "1-accuracy", "fdr", "fpr", "all")
 
 
 
@@ -384,11 +386,29 @@ plot.roc(ROC, print.thres = "best", print.auc = TRUE, main = "Curva ROC LDA",
          auc.polygon = FALSE, max.auc.polygon = FALSE, auc.polygon.col = "#458B74",
          col = "#00a499", grid = TRUE, xlab = "1-Especificidad", ylab = "Sensibilidad")
 
+library(pROC)
+
+plot.roc(x = "Objeto de clase roc",
+         print.thres = "Imprimir Umbral" - "best", "all", vector numérico, TRUE, FALSE,
+         print.auc = "Imprimir Valor AUC" - TRUE, FALSE,
+         main = "Título del Gráfico" - Cadena de caracteres/NULL,
+         auc.polygon = "Rellenar Polígono del AUC" - TRUE, FALSE,
+         max.auc.polygon = "Rellenar Polígono del AUC Máximo (1.0)" - TRUE, FALSE,
+         auc.polygon.col = "Color del Polígono AUC" - Nombre/Hexadecimal,
+         col = "Color de la Curva ROC" - Nombre/Hexadecimal,
+         grid = "Mostrar Cuadrícula" - TRUE, FALSE, vector numérico,
+         xlab = "Etiqueta Eje X" - Cadena de caracteres/NULL,
+         ylab = "Etiqueta Eje Y" - Cadena de caracteres/NULL)
+
+
 #Generamos la Matriz de Confusión
 table(Base_Multi$fuma_bin, predict(object = FLD)$class, dnn = c("reales", "predichos"))
 
 
-
+table(... = "Variable Respuesta (Real)" - Vector/Factor,
+      ... = "Variable Predicha" - predict(object = "Modelo Ajustado")$class,
+      dnn = "Nombres de las Dimensiones" - Vector de caracteres c("Nombre Fila", "Nombre Columna")/NULL,
+      useNA = "Inclusión de Valores Nulos" - "no", "ifany", "always")
 
 ##Función discriminante de razón de verosimilitud----
 
