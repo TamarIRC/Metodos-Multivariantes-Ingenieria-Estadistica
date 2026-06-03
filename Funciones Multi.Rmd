@@ -18,7 +18,7 @@ Se tiene como objetivo explorar visualmente la base de datos considerando múlti
 ### Funciones y librerías utilizadas
 
 |  |  |  |
-|----|----|----|
+|------------------------|------------------------|------------------------|
 | **Función** | **Origen** | **Descripción** |
 | View() | Nativa de R (utils) | Abre una pestaña en RStudio para visualizar la base de datos en formato de tabla (similar a Excel). |
 | library() | Nativa de R (base) | Carga los paquetes necesarios para usar sus funciones. |
@@ -67,6 +67,16 @@ Otros argumentos importantes de `faces()` son:
   ```
 
   **Caras de Chernoff**, si ves una cara que está muy enojada, con ojos gigantes o cabello muy extraño en comparación al resto, acabas de encontrar un paciente con valores extremos (quizás obesidad severa o presión altísima).
+
+  **Edad:** Altura de la cara, Sonrisa, Estilo del cabello.\
+
+  **Peso:** Ancho de la cara, Altura de los ojos, Altura de la nariz.\
+
+  **IMC:** Estructura de la cara, Ancho de los ojos, Ancho de la nariz.\
+
+  **Nivel_de_Glucosa:** Altura de la boca, Altura del cabello, Ancho de las orejas.\
+
+  **Presión_Arterial_Sistólica:** Ancho de la boca, Ancho del cabello, Altura de las orejas.
 
 **Función stars():**
 
@@ -169,7 +179,7 @@ andrews(df = "Data.frame numérico/mixto",
 ### Funciones y librerías utilizadas
 
 |  |  |  |
-|----|----|----|
+|------------------------|------------------------|------------------------|
 | **Función** | **Origen** | **Descripción** |
 | mvn() | Librería MVN | Realiza pruebas de normalidad tanto multivariadas (todas las variables juntas) como univariadas (variable por variable). |
 | HotellingsT2Test() | Librería DescTools | Ejecuta la prueba T-cuadrado de Hotelling. Es la versión multivariada de la prueba T de Student; sirve para comparar las medias de dos grupos usando múltiples variables a la vez. |
@@ -225,7 +235,7 @@ mvn(data = "Matriz o data.frame numérico",
 Aunque no los usas directamente en este bloque, conviene conocerlos:
 
 | Argumento | Valor por defecto | ¿Qué controla? |
-|----|----|----|
+|------------------------|------------------------|------------------------|
 | `scale` | `FALSE` | Si `TRUE`, estandariza las variables antes del análisis |
 | `descriptives` | `TRUE` | Calcula media, desviación estándar, asimetría y curtosis |
 | `transform` | `"none"` | Permite aplicar transformaciones como logaritmo, raíz o cuadrado |
@@ -359,7 +369,7 @@ Segundo, para las **variables categóricas** (texto), se utiliza el Análisis 
 ### Funciones y librerías utilizadas
 
 |  |  |  |
-|----|----|----|
+|------------------------|------------------------|------------------------|
 | **Función** | **Origen** | **Descripción** |
 | cor() | Nativa de R (stats) | Calcula la matriz de correlación entre variables numéricas. |
 | KMO() | Librería psych | Calcula el índice Kaiser-Meyer-Olkin para evaluar si los datos son aptos para hacer un Análisis Factorial o PCA. |
@@ -611,7 +621,7 @@ Primero, se calcula la distancia matemática entre todos los pacientes. Luego, s
 ### Funciones y librerías utilizadas
 
 |  |  |  |
-|----|----|----|
+|------------------------|------------------------|------------------------|
 | **Función** | **Origen** | **Descripción** |
 | get_dist() | Librería factoextra | Calcula la matriz de distancias entre todas las filas (pacientes). |
 | hclust() | Nativa de R (stats) | Ejecuta el algoritmo de agrupamiento jerárquico (crea la estructura del árbol). |
@@ -762,7 +772,7 @@ Lo que cambia es el **criterio de unión**.
 En métodos como:
 
 | Método | ¿Cómo decide unir clusters? |
-|----|----|
+|------------------------------------|------------------------------------|
 | `single` | Une según la menor distancia entre puntos. |
 | `complete` | Une según la mayor distancia entre puntos. |
 | `average` | Une según la distancia promedio. |
@@ -802,7 +812,7 @@ Se prueban dos modelos: el **Lineal (LDA)**, que intenta separar a los grupos c
 ### Funciones y librerías utilizadas
 
 |  |  |  |
-|----|----|----|
+|------------------------|------------------------|------------------------|
 | **Función** | **Origen** | **Descripción** |
 | factor() | Nativa de R (base) | Convierte una variable de texto o numérica en una variable categórica formal (factor) con "niveles" definidos. |
 | lda() | Librería MASS | Ejecuta el Análisis Discriminante Lineal (Linear Discriminant Analysis). |
@@ -1151,7 +1161,7 @@ A diferencia de los modelos anteriores, aquí hacemos algo fundamental en Machi
 ### Funciones y librerías utilizadas
 
 |  |  |  |
-|----|----|----|
+|------------------------|------------------------|------------------------|
 | **Función** | **Origen** | **Descripción** |
 | scale() | Nativa de R (base) | Estandariza las variables numéricas (les da media 0 y desviación estándar 1). Esto es **obligatorio** en redes neuronales para que funcionen bien. |
 | as.data.frame() | Nativa de R (base) | Convierte el resultado matemático de scale() de vuelta a un formato de tabla manejable. |
