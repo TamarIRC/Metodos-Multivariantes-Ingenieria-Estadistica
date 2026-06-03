@@ -386,29 +386,33 @@ plot.roc(ROC, print.thres = "best", print.auc = TRUE, main = "Curva ROC LDA",
          auc.polygon = FALSE, max.auc.polygon = FALSE, auc.polygon.col = "#458B74",
          col = "#00a499", grid = TRUE, xlab = "1-Especificidad", ylab = "Sensibilidad")
 
-library(pROC)
+#library(pROC)
 
-plot.roc(x = "Objeto de clase roc",
-         print.thres = "Imprimir Umbral" - "best", "all", vector numérico, TRUE, FALSE,
-         print.auc = "Imprimir Valor AUC" - TRUE, FALSE,
-         main = "Título del Gráfico" - Cadena de caracteres/NULL,
-         auc.polygon = "Rellenar Polígono del AUC" - TRUE, FALSE,
-         max.auc.polygon = "Rellenar Polígono del AUC Máximo (1.0)" - TRUE, FALSE,
-         auc.polygon.col = "Color del Polígono AUC" - Nombre/Hexadecimal,
-         col = "Color de la Curva ROC" - Nombre/Hexadecimal,
-         grid = "Mostrar Cuadrícula" - TRUE, FALSE, vector numérico,
-         xlab = "Etiqueta Eje X" - Cadena de caracteres/NULL,
-         ylab = "Etiqueta Eje Y" - Cadena de caracteres/NULL)
+#plot.roc(x = "Objeto de clase roc",
+#          print.thres = "Imprimir Umbral" - "best", "all", vector numérico, TRUE, FALSE,
+#          print.auc = "Imprimir Valor AUC" - TRUE, FALSE,
+#          main = "Título del Gráfico" - Cadena de caracteres/NULL,
+#           auc.polygon = "Rellenar Polígono del AUC" - TRUE, FALSE,
+#          max.auc.polygon = "Rellenar Polígono del AUC Máximo (1.0)" - TRUE, FALSE,
+#          auc.polygon.col = "Color del Polígono AUC" - Nombre/Hexadecimal,
+#          col = "Color de la Curva ROC" - Nombre/Hexadecimal,
+#          grid = "Mostrar Cuadrícula" - TRUE, FALSE, vector numérico,
+#          xlab = "Etiqueta Eje X" - Cadena de caracteres/NULL,
+#          ylab = "Etiqueta Eje Y" - Cadena de caracteres/NULL)
 
 
 #Generamos la Matriz de Confusión
 table(Base_Multi$fuma_bin, predict(object = FLD)$class, dnn = c("reales", "predichos"))
 
 
-table(... = "Variable Respuesta (Real)" - Vector/Factor,
-      ... = "Variable Predicha" - predict(object = "Modelo Ajustado")$class,
-      dnn = "Nombres de las Dimensiones" - Vector de caracteres c("Nombre Fila", "Nombre Columna")/NULL,
-      useNA = "Inclusión de Valores Nulos" - "no", "ifany", "always")
+# table(... = "Variable Respuesta (Real)" - Vector/Factor,
+#       ... = "Variable Predicha" - predict(object = "Modelo Ajustado")$class,
+#       dnn = "Nombres de las Dimensiones" - Vector de caracteres c("Nombre Fila", "Nombre Columna")/NULL,
+#       useNA = "Inclusión de Valores Nulos" - "no", "ifany", "always")
+
+
+
+
 
 ##Función discriminante de razón de verosimilitud----
 
@@ -417,6 +421,12 @@ Base_Multi$fuma_bin <- factor(ifelse(Base_Multi$fuma == "No fumador", "No fumado
 
 #Ejecutamos el Análisis Discriminante Cuadrático (QDA)
 QDA <- MASS::qda(fuma_bin ~ Edad + Peso + IMC + Presión_Arterial_Sistólica, data = Base_Multi)
+
+
+#library(MASS)
+
+# qda(formula = "Fórmula del Modelo",
+#     data = "Data.frame de Origen")
 
 #Generamos las predicciones del modelo
 qda_pred <- predict(QDA)
@@ -438,6 +448,7 @@ pROC::plot.roc(ROC, print.thres = "best", print.auc = TRUE, main = "Curva ROC QD
 
 #Generamos la Matriz de Confusión
 table(Base_Multi$fuma_bin, qda_pred$class, dnn = c("reales", "predichos"))
+
 
 
 

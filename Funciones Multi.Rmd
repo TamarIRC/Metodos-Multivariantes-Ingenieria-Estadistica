@@ -169,7 +169,7 @@ andrews(df = "Data.frame numérico/mixto",
 ### Funciones y librerías utilizadas
 
 |  |  |  |
-|------------------|------------------|-------------------------------------|
+|------------------------|------------------------|------------------------|
 | **Función** | **Origen** | **Descripción** |
 | mvn() | Librería MVN | Realiza pruebas de normalidad tanto multivariadas (todas las variables juntas) como univariadas (variable por variable). |
 | HotellingsT2Test() | Librería DescTools | Ejecuta la prueba T-cuadrado de Hotelling. Es la versión multivariada de la prueba T de Student; sirve para comparar las medias de dos grupos usando múltiples variables a la vez. |
@@ -225,7 +225,7 @@ mvn(data = "Matriz o data.frame numérico",
 Aunque no los usas directamente en este bloque, conviene conocerlos:
 
 | Argumento | Valor por defecto | ¿Qué controla? |
-|-------------------------|-------------------|----------------------------|
+|------------------------|------------------------|------------------------|
 | `scale` | `FALSE` | Si `TRUE`, estandariza las variables antes del análisis |
 | `descriptives` | `TRUE` | Calcula media, desviación estándar, asimetría y curtosis |
 | `transform` | `"none"` | Permite aplicar transformaciones como logaritmo, raíz o cuadrado |
@@ -359,7 +359,7 @@ Segundo, para las **variables categóricas** (texto), se utiliza el Análisis 
 ### Funciones y librerías utilizadas
 
 |  |  |  |
-|------------------|------------------|-------------------------------------|
+|------------------------|------------------------|------------------------|
 | **Función** | **Origen** | **Descripción** |
 | cor() | Nativa de R (stats) | Calcula la matriz de correlación entre variables numéricas. |
 | KMO() | Librería psych | Calcula el índice Kaiser-Meyer-Olkin para evaluar si los datos son aptos para hacer un Análisis Factorial o PCA. |
@@ -611,7 +611,7 @@ Primero, se calcula la distancia matemática entre todos los pacientes. Luego, s
 ### Funciones y librerías utilizadas
 
 |  |  |  |
-|-----------------|--------------------|-----------------------------------|
+|------------------------|------------------------|------------------------|
 | **Función** | **Origen** | **Descripción** |
 | get_dist() | Librería factoextra | Calcula la matriz de distancias entre todas las filas (pacientes). |
 | hclust() | Nativa de R (stats) | Ejecuta el algoritmo de agrupamiento jerárquico (crea la estructura del árbol). |
@@ -1086,3 +1086,77 @@ table(... = "Variable Respuesta (Real)" - Vector/Factor,
 - **predict(object = FLD)**: Evalúa el modelo discriminante y devuelve una lista de resultados.
 
 - **\$class**: Aísla y extrae exclusivamente el vector categórico (factor) que contiene la **asignación de clase final** (ej. "Fumador" o "No fumador") que el modelo le otorgó a cada paciente. Este vector es el que se cruza directamente contra los datos reales en la función table().
+
+### Función discriminante de razón de verosimilitud
+
+``` r
+library(MASS)
+
+qda(formula = "Fórmula del Modelo",
+    data = "Data.frame de Origen")
+
+predict(object = "Modelo Ajustado (qda)")
+
+# Extracción e indexación de probabilidades
+predict(object = "Modelo")$posterior[ , "Nombre de la Clase Positiva" - Cadena de caracteres]
+
+library(pROC)
+
+roc(response = "Variable Respuesta (Real)" - Vector/Factor binario,
+    predictor = "Variable Predictora (Probabilidades/Scores)" - Vector numérico,
+    levels = "Niveles de la Respuesta" - Vector de caracteres c("Control", "Caso"))
+
+coords(roc = "Objeto de clase roc",
+       x = "Criterio de Coordenadas" - "best", "all", etc.,
+       ret = "Métricas a Retornar" - Vector de caracteres)
+```
+
+**Para qda() (paquete MASS):**
+
+- **formula**: Objeto de clase formula. Define la variable categórica dependiente (izquierda de \~) y las variables continuas predictoras (derecha de \~). A diferencia de lda, el Análisis Discriminante Cuadrático asume que cada clase tiene su propia matriz de varianza-covarianza (heterogeneidad), generando fronteras de decisión curvas (cuadráticas) en lugar de líneas rectas.
+
+- **data**: Data frame que contiene las variables declaradas en la fórmula.
+
+**Para predict() (método para objetos qda):**
+
+- **object** (en tu código QDA): Modelo qda previamente ajustado. Evalúa los datos originales y devuelve una lista con las clasificaciones y probabilidades.
+
+**Para la extracción qda_pred\$posterior[, "Fumador"]:**
+
+- **\$ (Operador de Extracción)**: Aísla la matriz posterior de la lista de predicciones. Esta matriz contiene las probabilidades matemáticas de pertenecer a cada clase.
+
+- **[ , "Fumador"] (Indexación por Nombre)**: El espacio vacío antes de la coma retiene a todos los pacientes (filas). La cadena "Fumador" después de la coma extrae explícitamente la columna que contiene la probabilidad de ser fumador. Usar el nombre exacto de la clase es una práctica más segura y robusta que usar el índice numérico [, 2].
+
+**Para roc() (paquete pROC):**
+
+- **response**: Vector o factor binario con las clasificaciones reales observadas en los datos.
+
+- **predictor**: Vector numérico continuo con el criterio de decisión (las probabilidades extraídas en el paso anterior).
+
+- **levels**: Vector de caracteres de longitud 2. Define explícitamente el orden de las clases c("Clase Negativa/Control", "Clase Positiva/Caso"). En tu código, c("No fumador", "Fumador") le asegura a la función qué categoría debe considerar como el evento a predecir, evitando que lo asuma por orden alfabético.
+
+**Para coords() (paquete pROC):**
+
+- **roc**: Objeto de clase roc generado previamente.
+
+- **x**: Al especificar "best", la función calcula algorítmicamente el punto de corte óptimo (maximizando el índice de Youden: Sensibilidad + Especificidad - 1).
+
+- **ret**: Vector de caracteres que especifica exactamente qué métricas extraer para ese punto óptimo. En tu código, extrae el umbral numérico ("threshold"), la proporción de sanos detectados ("specificity") y la proporción de enfermos detectados ("sensitivity").
+
+## Redes Neuronales Artificiales
+
+El objetivo de este bloque es crear un modelo predictivo inspirado en el cerebro humano para detectar si un paciente fuma o no.\
+A diferencia de los modelos anteriores, aquí hacemos algo fundamental en Machine Learning: **dividimos los datos**. Tomamos el 70% de los pacientes para "entrenar" a la red neuronal (enseñarle a reconocer patrones) y escondemos el 30% restante para hacerle un "examen final" (testeo). Luego, calculamos métricas de rendimiento (Exactitud, Sensibilidad y Especificidad) sobre ese examen final. Por último, verificamos si la máquina realmente aprendió o si solo "memorizó" los datos de entrenamiento, un problema muy común conocido como **Sobreajuste** (Overfitting).
+
+### Funciones y librerías utilizadas
+
+|  |  |  |
+|-------------|-----------------|-------------------------------------------|
+| **Función** | **Origen** | **Descripción** |
+| scale() | Nativa de R (base) | Estandariza las variables numéricas (les da media 0 y desviación estándar 1). Esto es **obligatorio** en redes neuronales para que funcionen bien. |
+| as.data.frame() | Nativa de R (base) | Convierte el resultado matemático de scale() de vuelta a un formato de tabla manejable. |
+| set.seed() | Nativa de R (base) | Fija una "semilla" para la generación de números aleatorios. Garantiza que el sorteo de pacientes sea exactamente el mismo cada vez que corras el código. |
+| sample() | Nativa de R (base) | Toma una muestra aleatoria (un sorteo) de un conjunto de elementos. |
+| nrow() | Nativa de R (base) | Cuenta el número total de filas de una base de datos. |
+| neuralnet() | Librería neuralnet | Construye y entrena la Red Neuronal Artificial. |
+| sum() | Nativa de R (base) | Suma los valores de un vector o matriz. |
