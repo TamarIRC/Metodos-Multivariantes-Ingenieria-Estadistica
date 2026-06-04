@@ -253,17 +253,12 @@ fviz_pca_var(pca,
              repel = TRUE,
              title = "Círculo de Correlaciones")
 
-library(factoextra)
+#library(factoextra)
 
-fviz_pca_var(X = "Objeto de clase prcomp/PCA",
-             col.var = "Criterio de Coloración" - "cos2", "contrib", "coord", Nombre/Hexadecimal, Vector factor,
-             fill.var = "Color de Relleno" - "cos2", "contrib", "coord", Nombre/Hexadecimal, Vector factor,
-             alpha.var = "Transparencia de Variables" - "cos2", "contrib", "coord", Numérico (0-1),
-             gradient.cols = "Vector de Colores para Gradiente" - c("color1", "color2", ...)/NULL,
-             col.quanti.sup = "Color de Variables Suplementarias" - Nombre/Hexadecimal,
-             select.var = "Selección de Variables a Mostrar" - list(name = ..., cos2 = ..., contrib = ...)/NULL,
-             invisible = "Ocultar Elementos" - "var", "quanti.sup", "none",
-             title = "Título del Gráfico" - Cadena de caracteres/NULL)
+# fviz_pca_var(X = "Objeto de clase prcomp/PCA",
+#             col.var = "Criterio de Coloración" - "cos2", "contrib", "coord", Nombre/Hexadecimal, Vector factor,
+#             repel = "Evitar Solapamiento de Texto" - TRUE, FALSE,
+#             title = "Título del Gráfico" - Cadena de caracteres/NULL)
 
 ###Gráfico 3----
 install.packages("ade4")

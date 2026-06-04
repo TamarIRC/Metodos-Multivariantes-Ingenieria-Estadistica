@@ -794,43 +794,43 @@ muestra las categorías como puntos en un plano.
 
 Regla de lectura:
 
--   Categorías cercanas tienden a aparecer juntas.
+- Categorías cercanas tienden a aparecer juntas.
 
--   Categorías alejadas del centro son más diferenciadoras.
+- Categorías alejadas del centro son más diferenciadoras.
 
--   Categorías cerca del centro aportan menos a la interpretación.
+- Categorías cerca del centro aportan menos a la interpretación.
 
--   Colores más intensos indican mayor contribución a la construcción del plano.
+- Colores más intensos indican mayor contribución a la construcción del plano.
 
 En nuestros resultados, las categorías que más ayudan a formar el plano son:
 
--   Peso normal
+- Peso normal
 
--   Sobrepeso
+- Sobrepeso
 
--   HOMBRE
+- HOMBRE
 
--   MUJER
+- MUJER
 
--   Fumador
+- Fumador
 
--   Obesidad, sobre todo en la segunda dimensión
+- Obesidad, sobre todo en la segunda dimensión
 
 **4. Interpretación De Las Dimensiones**
 
 La **Dimensión 1** separa principalmente:
 
--   Lado positivo: HOMBRE, Sobrepeso, Fumador ocasional.
+- Lado positivo: HOMBRE, Sobrepeso, Fumador ocasional.
 
--   Lado negativo: MUJER, Peso normal.
+- Lado negativo: MUJER, Peso normal.
 
 Entonces Dim 1 parece distinguir perfiles asociados al sexo y estado nutricional.
 
 La **Dimensión 2** separa principalmente:
 
--   Lado positivo: Fumador, Peso normal.
+- Lado positivo: Fumador, Peso normal.
 
--   Lado negativo: Obesidad, No fumador, Fumador ocasional.
+- Lado negativo: Obesidad, No fumador, Fumador ocasional.
 
 Entonces Dim 2 parece captar diferencias relacionadas con el patrón de tabaquismo y estado nutricional.
 
@@ -1326,68 +1326,6 @@ table(... = "Variable Respuesta (Real)" - Vector/Factor,
 
 - **\$class**: Aísla y extrae exclusivamente el vector categórico (factor) que contiene la **asignación de clase final** (ej. "Fumador" o "No fumador") que el modelo le otorgó a cada paciente. Este vector es el que se cruza directamente contra los datos reales en la función table().
 
-La idea central es:
-
-> Usamos Edad, Peso, IMC y Presión Arterial Sistólica para clasificar a cada persona como No fumador o Fumador/Fumador ocasional.
-
-**Qué Hace Cada Parte**
-
-Primero se crea la variable respuesta:
-
-`Base_Multi$fuma_bin <- ifelse(Base_Multi$fuma == "No fumador", 0, 1)`
-
-Esto transforma fuma en una variable binaria:
-
--   0 = No fumador
-
--   1 = Fumador o fumador ocasional
-
-Esto es necesario porque el modelo y la curva ROC necesitan una clasificación binaria.
-
-Luego se ajusta el modelo LDA:
-
-`FLD <- MASS::lda(   fuma_bin ~ Edad + Peso + IMC + Presión_Arterial_Sistólica,   data = Base_Multi )`
-
-Aquí se está diciendo:
-
-> Quiero predecir fuma_bin usando Edad, Peso, IMC y Presión Arterial Sistólica.
-
-Después se obtiene una probabilidad o score:
-
-`predict(object = FLD)$posterior[, 2]`
-
-Eso extrae la probabilidad estimada de pertenecer a la clase positiva, es decir, 1 = Fumador.
-
-Luego se construye la curva ROC:
-
-`ROC <- roc(Base_Multi$fuma_bin, predict(object = FLD)$posterior[, 2])`
-
-La curva ROC evalúa qué tan bien el modelo separa fumadores de no fumadores usando distintos puntos de corte.
-
-Finalmente:
-
-`coords(ROC, "best", ret = c("threshold", "specificity", "sensitivity"))`
-
-busca el **mejor umbral de clasificación**.
-
-**Qué Destacar En La Salida**
-
-En la tablita de la derecha yo subrayaría estos tres valores:
-
-`threshold = 0.3803794 specificity = 0.7948718 sensitivity = 0.5238095`
-
-Interpretación:
-
--   threshold = 0.3804: el mejor punto de corte no es 0.5, sino aprox. 0.38.
-
--   specificity = 0.7949: el modelo identifica correctamente cerca del **79.5% de los no fumadores**.
-
--   sensitivity = 0.5238: el modelo identifica correctamente cerca del **52.4% de los fumadores**.
-
-**Conclusión Para Decir En La Presentación**
-
-> El modelo LDA permite clasificar a los individuos según su condición de fumador usando variables biométricas. La curva ROC indica que el mejor punto de corte es aproximadamente 0.38. Con este umbral, el modelo logra una especificidad cercana al 79.5%, identificando bien a los no fumadores, y una sensibilidad de 52.4%, detectando aproximadamente la mitad de los fumadores. Esto muestra que el modelo tiene una capacidad discriminante moderada, pero no perfecta.
-
 ### Función discriminante de razón de verosimilitud
 
 ``` r
@@ -1444,240 +1382,6 @@ coords(roc = "Objeto de clase roc",
 
 - **ret**: Vector de caracteres que especifica exactamente qué métricas extraer para ese punto óptimo. En tu código, extrae el umbral numérico ("threshold"), la proporción de sanos detectados ("specificity") y la proporción de enfermos detectados ("sensitivity").
 
-Esta diapo muestra dos salidas clave del **LDA**:
-
-1.  La **curva ROC**
-
-2.  La **matriz de confusión**
-
-**1. Curva ROC**
-
-El código principal es:
-
-`plot.roc(ROC,          print.thres = "best",          print.auc = TRUE,          main = "Curva ROC LDA",          col = "#00a499",          grid = TRUE,          xlab = "1-Especificidad",          ylab = "Sensibilidad")`
-
-Esto grafica el rendimiento del modelo LDA para distintos puntos de corte.
-
-En el gráfico deberías destacar:
-
-`AUC = 0.628`
-
-y el punto marcado:
-
-`threshold = 0.380 specificity = 0.795 sensitivity = 0.524`
-
-Interpretación:
-
--   AUC = 0.628: el modelo tiene capacidad discriminante **moderada-baja**.
-
--   Si el AUC fuera 0.5, sería casi azar.
-
--   Si fuera cercano a 1, sería excelente.
-
--   Entonces 0.628 indica que el modelo separa fumadores y no fumadores, pero no con gran fuerza.
-
-El punto 0.380 es el mejor umbral según la curva ROC. Con ese umbral:
-
--   Detecta aprox. 52.4% de fumadores.
-
--   Reconoce aprox. 79.5% de no fumadores.
-
-**2. Matriz De Confusión**
-
-El código es:
-
-`table(Base_Multi$fuma_bin,       predict(object = FLD)$class,       dnn = c("reales", "predichos"))`
-
-La salida es:
-
-| **Reales / Predichos** | **0** | **1** |
-|------------------------|-------|-------|
-| 0                      | 37    | 2     |
-| 1                      | 19    | 2     |
-
-Donde:
-
--   0 = No fumador
-
--   1 = Fumador o fumador ocasional
-
-Interpretación fila por fila:
-
--   37: no fumadores correctamente clasificados.
-
--   2: no fumadores clasificados erróneamente como fumadores.
-
--   19: fumadores reales clasificados erróneamente como no fumadores.
-
--   2: fumadores correctamente clasificados.
-
-De aquí salen métricas importantes:
-
-`Exactitud = (37 + 2) / 60 = 65% Sensibilidad = 2 / (19 + 2) = 9.5% Especificidad = 37 / (37 + 2) = 94.9%`
-
-**Ojo Con Algo Importante**
-
-La matriz de confusión usa la clasificación directa de predict(FLD)\$class, probablemente con el umbral interno/default del modelo.
-
-La curva ROC, en cambio, muestra que si usas un umbral óptimo de 0.380, mejora la sensibilidad.
-
-Por eso puedes decir:
-
-> Con la clasificación directa, el modelo reconoce muy bien a los no fumadores, pero casi no detecta fumadores. La curva ROC sugiere que un umbral menor, cercano a 0.38, mejora el equilibrio entre sensibilidad y especificidad.
-
-**Qué Destacar En La Diapo**
-
-Subrayaría en el gráfico:
-
-`AUC = 0.628`
-
-y el punto:
-
-`0.380 (0.795, 0.524)`
-
-En la matriz de confusión subrayaría:
-
-`37 19 2`
-
-Especialmente el 19, porque muestra el problema principal:
-
-> El modelo está clasificando muchos fumadores como no fumadores.
-
-**Conclusión Para Presentar**
-
-> La curva ROC del LDA muestra un AUC de 0.628, lo que indica una capacidad discriminante moderada-baja. El mejor umbral es aproximadamente 0.38, con sensibilidad de 52.4% y especificidad de 79.5%. Sin embargo, la matriz de confusión del modelo clasificado directamente muestra que identifica muy bien a los no fumadores, pero falla en detectar fumadores, ya que 19 de 21 fumadores reales son clasificados como no fumadores. Por lo tanto, el LDA no es un buen clasificador para detectar fumadores con estas variables, aunque sí distingue razonablemente a los no fumadores.
-
-Esta diapo corresponde al **Análisis Discriminante Cuadrático**, o **QDA**.
-
-La idea es parecida al LDA: clasificar a los pacientes como Fumador o No fumador usando:
-
-`Edad + Peso + IMC + Presión_Arterial_Sistólica`
-
-Pero QDA es más flexible que LDA.
-
-**Diferencia Con LDA**
-
--   LDA usa una frontera lineal.
-
--   QDA usa una frontera cuadrática.
-
--   LDA asume matrices de covarianza iguales entre grupos.
-
--   QDA permite matrices de covarianza distintas entre fumadores y no fumadores.
-
-Por eso QDA puede adaptarse mejor cuando los grupos no tienen la misma forma o dispersión.
-
-**Qué Hace El Código**
-
-Primero redefine la variable respuesta como factor:
-
-`Base_Multi$fuma_bin <- factor(   ifelse(Base_Multi$fuma == "No fumador", "No fumador", "Fumador") )`
-
-Esto deja dos clases:
-
--   No fumador
-
--   Fumador
-
-Luego ajusta el modelo QDA:
-
-`QDA <- MASS::qda(   fuma_bin ~ Edad + Peso + IMC + Presión_Arterial_Sistólica,   data = Base_Multi )`
-
-Después genera predicciones:
-
-`qda_pred <- predict(QDA)`
-
-Y extrae la probabilidad de pertenecer a la clase Fumador:
-
-`p_event <- qda_pred$posterior[, "Fumador"]`
-
-Eso se usa para la curva ROC:
-
-`ROC <- pROC::roc(   response = Base_Multi$fuma_bin,   predictor = p_event,   levels = c("No fumador", "Fumador") )`
-
-**Qué Destacar De La Curva ROC**
-
-En el gráfico aparece:
-
-`AUC = 0.700`
-
-Este número es muy importante.
-
-Interpretación:
-
--   AUC = 0.700 indica una capacidad discriminante **moderada**.
-
--   Es mejor que el LDA, que tenía AUC = 0.628.
-
--   No es excelente, pero sí muestra mayor capacidad para separar fumadores de no fumadores.
-
-También aparece el mejor punto de corte:
-
-`threshold = 0.419303 specificity = 0.7435897 sensitivity = 0.6666667`
-
-Interpretación:
-
--   Con un umbral de 0.419, el modelo detecta correctamente aprox. 66.7% de los fumadores.
-
--   Identifica correctamente aprox. 74.4% de los no fumadores.
-
--   Tiene un mejor equilibrio que LDA.
-
-**Qué Destacar De La Matriz De Confusión**
-
-La matriz mostrada es:
-
-| **Reales / Predichos** | **Fumador** | **No fumador** |
-|------------------------|-------------|----------------|
-| Fumador                | 5           | 16             |
-| No fumador             | 5           | 34             |
-
-Interpretación:
-
--   5 fumadores fueron correctamente clasificados como fumadores.
-
--   16 fumadores fueron clasificados erróneamente como no fumadores.
-
--   34 no fumadores fueron correctamente clasificados.
-
--   5 no fumadores fueron clasificados erróneamente como fumadores.
-
-Con esa matriz:
-
-`Exactitud = (5 + 34) / 60 = 65% Sensibilidad = 5 / (5 + 16) = 23.8% Especificidad = 34 / (34 + 5) = 87.2%`
-
-La matriz de confusión directa todavía muestra baja sensibilidad, pero mejora respecto al LDA.
-
-**Qué Subrayaría En La Diapo**
-
-En el código:
-
-`qda(...)`
-
-porque indica que ahora se usa un modelo cuadrático.
-
-`p_event <- qda_pred$posterior[, "Fumador"]`
-
-porque toma la probabilidad de la clase positiva.
-
-`levels = c("No fumador", "Fumador")`
-
-porque define correctamente cuál es la clase negativa y cuál la positiva.
-
-En la salida:
-
-`AUC = 0.700`
-
-`threshold = 0.419303 specificity = 0.7435897 sensitivity = 0.6666667`
-
-Y en la matriz:
-
-`Fumador: 5 correctos, 16 incorrectos No fumador: 34 correctos, 5 incorrectos`
-
-**Conclusión Para Presentar**
-
-> El modelo QDA presenta una mejor capacidad discriminante que el LDA, con un AUC de 0.700 frente a 0.628. El umbral óptimo es aproximadamente 0.419, logrando una sensibilidad de 66.7% y una especificidad de 74.4%. Esto indica un mejor equilibrio entre detectar fumadores y reconocer no fumadores. Sin embargo, la matriz de confusión directa muestra que todavía se clasifican muchos fumadores como no fumadores, por lo que el modelo mejora respecto al LDA, pero sigue teniendo una capacidad predictiva moderada.
-
 ## Redes Neuronales Artificiales
 
 El objetivo de este bloque es crear un modelo predictivo inspirado en el cerebro humano para detectar si un paciente fuma o no.\
@@ -1695,87 +1399,3 @@ A diferencia de los modelos anteriores, aquí hacemos algo fundamental en Machi
 | nrow() | Nativa de R (base) | Cuenta el número total de filas de una base de datos. |
 | neuralnet() | Librería neuralnet | Construye y entrena la Red Neuronal Artificial. |
 | sum() | Nativa de R (base) | Suma los valores de un vector o matriz. |
-
-La idea central es:
-
-> Se entrena una red neuronal para predecir fuma_bin usando variables biométricas: Edad, Peso, IMC, Nivel de Glucosa y Presión Arterial Sistólica.
-
-**Qué Hace El Código**
-
-Primero se estandarizan las variables:
-
-`datos_escalados <- as.data.frame(scale(Base_Multi[, c(   "Edad", "Peso", "IMC", "Nivel_de_Glucosa", "Presión_Arterial_Sistólica" )]))`
-
-Esto es muy importante en redes neuronales.
-
-Como las variables tienen escalas distintas, por ejemplo:
-
--   Edad en años
-
--   Peso en kilos
-
--   IMC en índice
-
--   Glucosa en mg/dL
-
--   Presión en mmHg
-
-se usa scale() para que todas queden comparables. Si no se estandarizan, una variable con valores grandes podría dominar el entrenamiento.
-
-Luego se crea la variable objetivo:
-
-`datos_escalados$fuma_bin <- ifelse(Base_Multi$fuma == "No fumador", 0, 1)`
-
-Donde:
-
--   0 = No fumador
-
--   1 = Fumador o fumador ocasional
-
-Después se divide la base:
-
-`set.seed(42) sorteo <- sample(1:nrow(datos_escalados), size = 0.7 * nrow(datos_escalados)) datos_entrenamiento <- datos_escalados[sorteo, ] datos_prueba <- datos_escalados[-sorteo, ]`
-
-Aquí se separa:
-
--   70% entrenamiento: 42 pacientes
-
--   30% prueba: 18 pacientes
-
-Esto sirve para evaluar si la red aprende patrones generales y no solo memoriza los datos.
-
-Luego se entrena la red:
-
-`modelo_rna_real <- neuralnet(   fuma_bin ~ Edad + Peso + IMC + Nivel_de_Glucosa + Presión_Arterial_Sistólica,   data = datos_entrenamiento,   hidden = 3,   err.fct = "ce",   linear.output = FALSE )`
-
-Lo más importante:
-
-`hidden = 3`
-
-Significa que la red tiene una capa oculta con 3 neuronas.
-
-`err.fct = "ce"`
-
-Usa entropía cruzada, adecuada para clasificación binaria.
-
-`linear.output = FALSE`
-
-Indica que la salida será tipo probabilidad entre 0 y 1.
-
-**Qué Muestra El Diagrama**
-
-El gráfico de la red muestra:
-
--   A la izquierda: variables de entrada.
-
--   Al centro: 3 neuronas ocultas.
-
--   A la derecha: salida fuma_bin.
-
--   Las líneas: pesos aprendidos por la red.
-
--   Los nodos con 1: sesgos o interceptos.
-
-Visualmente:
-
-`Edad Peso IMC Nivel de Glucosa Presión Arterial Sistólica         ↓    3 neuronas ocultas         ↓      fuma_bin`
