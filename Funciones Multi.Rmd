@@ -18,7 +18,7 @@ Se tiene como objetivo explorar visualmente la base de datos considerando múlti
 ### Funciones y librerías utilizadas
 
 |  |  |  |
-|-----------------|-----------------|---------------------------------------|
+|----|----|----|
 | **Función** | **Origen** | **Descripción** |
 | View() | Nativa de R (utils) | Abre una pestaña en RStudio para visualizar la base de datos en formato de tabla (similar a Excel). |
 | library() | Nativa de R (base) | Carga los paquetes necesarios para usar sus funciones. |
@@ -33,82 +33,82 @@ Se tiene como objetivo explorar visualmente la base de datos considerando múlti
 
 **Función faces():**
 
--   xy (primer argumento): Los datos numéricos que se van a graficar (datos_num).
+- xy (primer argumento): Los datos numéricos que se van a graficar (datos_num).
 
--   face.type: Define el estilo del dibujo de la cara.
+- face.type: Define el estilo del dibujo de la cara.
 
-    -   0: Caras de líneas simples (sin color).
+  - 0: Caras de líneas simples (sin color).
 
-    -   1: Caras pintadas con colores (valor por defecto en tu código).
+  - 1: Caras pintadas con colores (valor por defecto en tu código).
 
-    -   2: Estilo de caras de Papá Noel.
+  - 2: Estilo de caras de Papá Noel.
 
--   main: Título principal del gráfico.
+- main: Título principal del gráfico.
 
 Otros argumentos importantes de `faces()` son:
 
--   `scale`: por defecto es `TRUE`. Esto normaliza las variables antes de graficarlas. Es útil porque tus variables están en escalas distintas, por ejemplo edad, peso, IMC y glucosa.
+- `scale`: por defecto es `TRUE`. Esto normaliza las variables antes de graficarlas. Es útil porque tus variables están en escalas distintas, por ejemplo edad, peso, IMC y glucosa.
 
--   `labels`: permite cambiar las etiquetas de cada cara. Si no se especifica, se usan números como `1`, `2`, `3`, etc.
+- `labels`: permite cambiar las etiquetas de cada cara. Si no se especifica, se usan números como `1`, `2`, `3`, etc.
 
--   `print.info`: por defecto es `TRUE`. Por eso en la consola aparece la tabla `effect of variables`, que muestra qué variable controla cada parte de la cara.
+- `print.info`: por defecto es `TRUE`. Por eso en la consola aparece la tabla `effect of variables`, que muestra qué variable controla cada parte de la cara.
 
--   `nrow.plot` y `ncol.plot`: controlan cuántas filas y columnas de caras aparecen en el gráfico.
+- `nrow.plot` y `ncol.plot`: controlan cuántas filas y columnas de caras aparecen en el gráfico.
 
-    ``` r
-    library(aplpack)
+  ``` r
+  library(aplpack)
 
-    faces(xy = "Matriz o data.frame numérico",
-          face.type = "Especificar Estilo Visual" - 0, 1, 2,
-          main = "Título del Gráfico/NULL",
-          labels = "Vector de Etiquetas de Observaciones/NULL",
-          print.info = "Imprimir Mapeo en Consola" - TRUE, FALSE,
-          scale = "Estandarizar Datos" - TRUE, FALSE)
-    ```
+  faces(xy = "Matriz o data.frame numérico",
+        face.type = "Especificar Estilo Visual" - 0, 1, 2,
+        main = "Título del Gráfico/NULL",
+        labels = "Vector de Etiquetas de Observaciones/NULL",
+        print.info = "Imprimir Mapeo en Consola" - TRUE, FALSE,
+        scale = "Estandarizar Datos" - TRUE, FALSE)
+  ```
 
-    **Caras de Chernoff**, si ves una cara que está muy enojada, con ojos gigantes o cabello muy extraño en comparación al resto, acabas de encontrar un paciente con valores extremos (quizás obesidad severa o presión altísima).
+  **Caras de Chernoff**, si ves una cara que está muy enojada, con ojos gigantes o cabello muy extraño en comparación al resto, acabas de encontrar un paciente con valores extremos (quizás obesidad severa o presión altísima).
 
-    **Edad:** Altura de la cara, Sonrisa, Estilo del cabello.\
+  **Edad:** Altura de la cara, Sonrisa, Estilo del cabello.\
 
-    **Peso:** Ancho de la cara, Altura de los ojos, Altura de la nariz.\
+  **Peso:** Ancho de la cara, Altura de los ojos, Altura de la nariz.\
 
-    **IMC:** Estructura de la cara, Ancho de los ojos, Ancho de la nariz.\
+  **IMC:** Estructura de la cara, Ancho de los ojos, Ancho de la nariz.\
 
-    **Nivel_de_Glucosa:** Altura de la boca, Altura del cabello, Ancho de las orejas.\
+  **Nivel_de_Glucosa:** Altura de la boca, Altura del cabello, Ancho de las orejas.\
 
-    **Presión_Arterial_Sistólica:** Ancho de la boca, Ancho del cabello, Altura de las orejas.
+  **Presión_Arterial_Sistólica:** Ancho de la boca, Ancho del cabello, Altura de las orejas.
 
 **Función stars():**
 
--   x (primer argumento): Los datos numéricos.
+- x (primer argumento): Los datos numéricos.
 
--   draw.segments: Argumento lógico (TRUE o FALSE).
+- draw.segments: Argumento lógico (TRUE o FALSE).
 
-    -   Si es TRUE, dibuja un gráfico circular dividido en segmentos (tipo "quesito" o diagrama de sectores) donde el radio de cada segmento representa el valor de la variable.
+  - Si es TRUE, dibuja un gráfico circular dividido en segmentos (tipo "quesito" o diagrama de sectores) donde el radio de cada segmento representa el valor de la variable.
 
-    -   Si es FALSE (por defecto), dibuja un polígono uniendo las puntas de la estrella (gráfico de radar clásico).
+  - Si es FALSE (por defecto), dibuja un polígono uniendo las puntas de la estrella (gráfico de radar clásico).
 
--   labels: Las etiquetas que irán debajo de cada estrella. Al usar rownames(datos_num), le pone el número de fila de cada paciente.
+- labels: Las etiquetas que irán debajo de cada estrella. Al usar rownames(datos_num), le pone el número de fila de cada paciente.
 
--   key.loc: Define las coordenadas c(x, y) donde se dibujará la leyenda explicativa. En tu caso, en la posición c(14, 1.7).
+- key.loc: Define las coordenadas c(x, y) donde se dibujará la leyenda explicativa. En tu caso, en la posición c(14, 1.7).
 
-    ``` r
-    stars(x = "Matriz o data.frame numérico",
-          draw.segments = "Tipo de Representación" - TRUE, FALSE,
-          main = "Título del Gráfico/NULL",
-          labels = "Vector de Etiquetas de Observaciones/NULL",
-          key.loc = "Coordenadas de la Leyenda" - c(x, y)/NULL)
-    ```
+  ``` r
+  stars(x = "Matriz o data.frame numérico",
+        draw.segments = "Tipo de Representación" - TRUE, FALSE,
+        main = "Título del Gráfico/NULL",
+        labels = "Vector de Etiquetas de Observaciones/NULL",
+        key.loc = "Coordenadas de la Leyenda" - c(x, y)/NULL)
+  ```
 
-    **Estrellas**, buscas formas similares. Si dos estrellas tienen los mismos colores grandes, son pacientes con perfiles de salud parecidos.
+  **Estrellas**, buscas formas similares. Si dos estrellas tienen los mismos colores grandes, son pacientes con perfiles de salud parecidos.
 
 `datos_andrews <- Base_Multi[, c(1:5, 6)]`
 
--   Este código selecciona columnas específicas de `Base_Multi`.
+- Este código selecciona columnas específicas de `Base_Multi`.
 
--   c(1:5, 6) significa que se seleccionan las columnas.
+- c(1:5, 6) significa que se seleccionan las columnas.
 
--   1, 2, 3, 4, 5, 6 Las columnas `1:5` serían variables numéricas como edad, peso, IMC, glucosa y presión arterial. La columna `6` corresponde a `Sexo`, que se usará para colorear las curvas.
+- 1, 2, 3, 4, 5, 6 Las columnas `1:5` serían variables numéricas como edad, peso, IMC, glucosa y presión arterial. La columna `6` corresponde a `Sexo`, que se usará para colorear las curvas.
 
 `andrews(datos_andrews, clr = 6, ymax = NA, main = "Curvas de Andrews (Color por Sexo)")`
 
@@ -129,8 +129,8 @@ andrews(df,            #data frame que se va a graficar
 
 `ymax = 3` estás haciendo que el gráfico tenga un rango vertical más pequeño. Esto puede ayudar a visualizar mejor las curvas si sus valores no son muy altos.
 
--   Si `ymax` aumenta, las curvas se verán más comprimidas verticalmente.\
-    Si `ymax` disminuye demasiado, algunas curvas podrían quedar cortadas o salirse del área visible.
+- Si `ymax` aumenta, las curvas se verán más comprimidas verticalmente.\
+  Si `ymax` disminuye demasiado, algunas curvas podrían quedar cortadas o salirse del área visible.
 
 si `ymax` no se define, se usa un rango aproximado de `ylim = c(-10, 10)`, y que también puede usarse `ymax = NA` para calcular automáticamente el límite a partir de las curvas.
 
@@ -151,35 +151,35 @@ andrews(df = "Data.frame numérico/mixto",
 
 `Base_Multi$Sexo == "HOMBRE"`: evalúa si cada paciente pertenece al grupo `"HOMBRE"`.
 
--   `"blue"`: valor que se asigna cuando la condición es verdadera.
+- `"blue"`: valor que se asigna cuando la condición es verdadera.
 
--   `"red"`: valor que se asigna cuando la condición es falsa.
+- `"red"`: valor que se asigna cuando la condición es falsa.
 
-    Una observación importante: este código asume que todos los valores distintos de `"HOMBRE"` corresponden a mujeres. Si existieran valores perdidos, errores de escritura u otras categorías, también serían coloreados en rojo.
+  Una observación importante: este código asume que todos los valores distintos de `"HOMBRE"` corresponden a mujeres. Si existieran valores perdidos, errores de escritura u otras categorías, también serían coloreados en rojo.
 
 **función pairs():**
 
--   x (primer argumento): Los datos numéricos a cruzar.
+- x (primer argumento): Los datos numéricos a cruzar.
 
--   pch: Define el tipo de símbolo (punto) a dibujar. El valor 21 corresponde a un círculo que tiene un borde y que puede ser rellenado con color.
+- pch: Define el tipo de símbolo (punto) a dibujar. El valor 21 corresponde a un círculo que tiene un borde y que puede ser rellenado con color.
 
--   bg: Define el color de relleno (background) de los puntos. Aquí recibe el vector de colores que creamos con ifelse().
+- bg: Define el color de relleno (background) de los puntos. Aquí recibe el vector de colores que creamos con ifelse().
 
-    ``` r
-    pairs(x = "Matriz o data.frame numérico",
-          pch = "Símbolo de Ploteo" - Entero (0-25),
-          bg = "Color de Relleno del Símbolo" - Vector de colores/NULL,
-          main = "Título del Gráfico/NULL")
-    ```
+  ``` r
+  pairs(x = "Matriz o data.frame numérico",
+        pch = "Símbolo de Ploteo" - Entero (0-25),
+        bg = "Color de Relleno del Símbolo" - Vector de colores/NULL,
+        main = "Título del Gráfico/NULL")
+  ```
 
-    **Matriz de correlación** te permite ver si, por ejemplo, a mayor peso hay mayor presión arterial, y si esa tendencia es igual para hombres (puntos azules) y mujeres (puntos rojos).
+  **Matriz de correlación** te permite ver si, por ejemplo, a mayor peso hay mayor presión arterial, y si esa tendencia es igual para hombres (puntos azules) y mujeres (puntos rojos).
 
 # Inferencia Multivariada
 
 ### Funciones y librerías utilizadas
 
 |  |  |  |
-|-----------------|-----------------|---------------------------------------|
+|----|----|----|
 | **Función** | **Origen** | **Descripción** |
 | mvn() | Librería MVN | Realiza pruebas de normalidad tanto multivariadas (todas las variables juntas) como univariadas (variable por variable). |
 | HotellingsT2Test() | Librería DescTools | Ejecuta la prueba T-cuadrado de Hotelling. Es la versión multivariada de la prueba T de Student; sirve para comparar las medias de dos grupos usando múltiples variables a la vez. |
@@ -206,36 +206,36 @@ mvn(data = "Matriz o data.frame numérico",
              "SW", "Lillie", "AD", "CVM", "SF", NULL)
 ```
 
--   **mvnTest** (o mvn_test): Define qué algoritmo usar para probar la normalidad multivariada conjunta. Las opciones son[[**5**](https://www.google.com/url?sa=E&q=https%3A%2F%2Fvertexaisearch.cloud.google.com%2Fgrounding-api-redirect%2FAUZIYQFavQjMEd9gskIifrulPfgncXHDbIIVNrurIIxlwnGQedjTaZ4CguIR0hV3CGSYbXxugbk9rfipTBXVy29Pnk4tguT6mCsznOofChJYkd1D_DWiQWxoXpuXVjHNEg%3D%3D)]:
+- **mvnTest** (o mvn_test): Define qué algoritmo usar para probar la normalidad multivariada conjunta. Las opciones son[[**5**](https://www.google.com/url?sa=E&q=https%3A%2F%2Fvertexaisearch.cloud.google.com%2Fgrounding-api-redirect%2FAUZIYQFavQjMEd9gskIifrulPfgncXHDbIIVNrurIIxlwnGQedjTaZ4CguIR0hV3CGSYbXxugbk9rfipTBXVy29Pnk4tguT6mCsznOofChJYkd1D_DWiQWxoXpuXVjHNEg%3D%3D)]:
 
-    -   "hz" (Por defecto): Prueba de Henze-Zirkler. Es la más recomendada porque se adapta muy bien a cualquier tamaño de muestra.
+  - "hz" (Por defecto): Prueba de Henze-Zirkler. Es la más recomendada porque se adapta muy bien a cualquier tamaño de muestra.
 
-    -   "mardia": Prueba de Mardia. Se basa en medir si la asimetría y curtosis multivariada se desvían de lo normal. Es excelente para muestras grandes.
+  - "mardia": Prueba de Mardia. Se basa en medir si la asimetría y curtosis multivariada se desvían de lo normal. Es excelente para muestras grandes.
 
-    -   "royston": Prueba de Royston. Es la versión multivariada del famoso test de Shapiro-Wilk. Útil para muestras pequeñas/medianas.
+  - "royston": Prueba de Royston. Es la versión multivariada del famoso test de Shapiro-Wilk. Útil para muestras pequeñas/medianas.
 
-    -   "dh": Prueba de Doornik-Hansen.
+  - "dh": Prueba de Doornik-Hansen.
 
-    -   "energy": Prueba de E-statistic (basada en la distancia de energía).
+  - "energy": Prueba de E-statistic (basada en la distancia de energía).
 
--   **univariateTest** (o univariate_test): Define la prueba para comprobar la normalidad de **cada variable por separado** (univariada). Opciones:
+- **univariateTest** (o univariate_test): Define la prueba para comprobar la normalidad de **cada variable por separado** (univariada). Opciones:
 
-    -   "AD" (Por defecto): Anderson-Darling.
+  - "AD" (Por defecto): Anderson-Darling.
 
-    -   "SW": Shapiro-Wilk.
+  - "SW": Shapiro-Wilk.
 
-    -   "CVM": Cramer-von Mises.
+  - "CVM": Cramer-von Mises.
 
-    -   "Lillie": Lilliefors (adaptación de Kolmogorov-Smirnov).
+  - "Lillie": Lilliefors (adaptación de Kolmogorov-Smirnov).
 
-    -   "SF": Shapiro-Francia.
+  - "SF": Shapiro-Francia.
 
 ## Otros argumentos importantes de `mvn()`
 
 Aunque no los usas directamente en este bloque, conviene conocerlos:
 
 | Argumento | Valor por defecto | ¿Qué controla? |
-|-----------------------|-----------------|--------------------------------|
+|----|----|----|
 | `scale` | `FALSE` | Si `TRUE`, estandariza las variables antes del análisis |
 | `descriptives` | `TRUE` | Calcula media, desviación estándar, asimetría y curtosis |
 | `transform` | `"none"` | Permite aplicar transformaciones como logaritmo, raíz o cuadrado |
@@ -253,24 +253,24 @@ Comparación de medias mediante T² de Hotelling.
 
 Esta prueba permite comparar si dos grupos independientes presentan diferencias significativas en sus medias multivariadas. En este caso, se comparan los pacientes según la variable Sexo: HOMBRE vs MUJER.
 
--   `Base_Multi[, 1:5]` Selecciona las primeras cinco variables numéricas de la base de datos.
+- `Base_Multi[, 1:5]` Selecciona las primeras cinco variables numéricas de la base de datos.
 
--   `Sexo <- Base_Multi$Sexo` Guarda la variable categórica Sexo para separar los grupos.
+- `Sexo <- Base_Multi$Sexo` Guarda la variable categórica Sexo para separar los grupos.
 
--   `vec[Sexo == "HOMBRE", ]` Selecciona únicamente las observaciones correspondientes a hombres.
+- `vec[Sexo == "HOMBRE", ]` Selecciona únicamente las observaciones correspondientes a hombres.
 
--   `vec[Sexo == "MUJER", ]` Selecciona únicamente las observaciones correspondientes a mujeres.
+- `vec[Sexo == "MUJER", ]` Selecciona únicamente las observaciones correspondientes a mujeres.
 
--   `HotellingsT2Test()`Ejecuta la prueba T² de Hotelling para comparar las medias multivariadas entre ambos grupos.
+- `HotellingsT2Test()`Ejecuta la prueba T² de Hotelling para comparar las medias multivariadas entre ambos grupos.
 
--   Interpretación general:
+- Interpretación general:
 
-    **Hipótesis nula H0**: No existen diferencias significativas entre las medias multivariadas de hombres y mujeres.\
-    \
-    **Hipótesis alternativa H1**: Sí existen diferencias significativas entre las medias multivariadas de hombres y mujeres.\
-    \
-    *Si p-value \< 0.05: Se rechaza H0, por lo tanto, hay diferencias significativas.\
-    Si p-value \>= 0.05: No se rechaza H0, por lo tanto, no hay evidencia suficiente de diferencias significativas.*
+  **Hipótesis nula H0**: No existen diferencias significativas entre las medias multivariadas de hombres y mujeres.\
+  \
+  **Hipótesis alternativa H1**: Sí existen diferencias significativas entre las medias multivariadas de hombres y mujeres.\
+  \
+  *Si p-value \< 0.05: Se rechaza H0, por lo tanto, hay diferencias significativas.\
+  Si p-value \>= 0.05: No se rechaza H0, por lo tanto, no hay evidencia suficiente de diferencias significativas.*
 
 ``` r
 library(DescTools)
@@ -280,11 +280,11 @@ HotellingsT2Test(x = "Matriz o data.frame numérico (Muestra 1)",
                  test = "Distribución de referencia" - "f", "chi")
 ```
 
--   **x**: Matriz o data frame numérico de dimensiones $n_1 \times p$ . Representa el conjunto de observaciones multivariadas para la primera muestra independiente (en tu código, el subconjunto de datos filtrado mediante indexación lógica para Sexo == "HOMBRE").
+- **x**: Matriz o data frame numérico de dimensiones $n_1 \times p$ . Representa el conjunto de observaciones multivariadas para la primera muestra independiente (en tu código, el subconjunto de datos filtrado mediante indexación lógica para Sexo == "HOMBRE").
 
--   **y**: Matriz o data frame numérico de dimensiones $n_2 \times p$ . Representa el conjunto de observaciones multivariadas para la segunda muestra independiente (en tu código, el subconjunto filtrado para Sexo == "MUJER"). Si se omite (NULL), la función asume una prueba de una sola muestra para comparar contra un vector de medias poblacionales hipotético.
+- **y**: Matriz o data frame numérico de dimensiones $n_2 \times p$ . Representa el conjunto de observaciones multivariadas para la segunda muestra independiente (en tu código, el subconjunto filtrado para Sexo == "MUJER"). Si se omite (NULL), la función asume una prueba de una sola muestra para comparar contra un vector de medias poblacionales hipotético.
 
--   **test** (implícito en tu código): Cadena de caracteres (character) que define el estadístico de contraste a utilizar. Por defecto es "f", el cual utiliza la distribución F de Fisher (exacta bajo el supuesto de normalidad multivariada). La opción "chi" utiliza una aproximación asintótica basada en la distribución Chi-cuadrado (útil para muestras grandes).
+- **test** (implícito en tu código): Cadena de caracteres (character) que define el estadístico de contraste a utilizar. Por defecto es "f", el cual utiliza la distribución F de Fisher (exacta bajo el supuesto de normalidad multivariada). La opción "chi" utiliza una aproximación asintótica basada en la distribución Chi-cuadrado (útil para muestras grandes).
 
 ## K (3) muestras aleatorias homogéneas e independientes(Comparación de medias MANOVA)
 
@@ -301,33 +301,33 @@ summary(object = "Objeto MANOVA",
 
 Esta función se encarga estrictamente de calcular y ajustar el modelo matemático.
 
--   **formula** (Obligatorio): Es la estructura de tu modelo. Siempre tiene la forma Y \~ X.
+- **formula** (Obligatorio): Es la estructura de tu modelo. Siempre tiene la forma Y \~ X.
 
-    -   Como es multivariado, la Y (las variables dependientes) deben agruparse usando **cbind(Var1, Var2, Var3)**.
+  - Como es multivariado, la Y (las variables dependientes) deben agruparse usando **cbind(Var1, Var2, Var3)**.
 
-    -   La X es tu variable categórica o de agrupación (ej. Estado_Nutricional).
+  - La X es tu variable categórica o de agrupación (ej. Estado_Nutricional).
 
--   **data** (Recomendado): El nombre de tu base de datos (ej. data = Base_Multi). Si no lo pones, R buscará las variables sueltas en el entorno, lo cual suele dar errores.
+- **data** (Recomendado): El nombre de tu base de datos (ej. data = Base_Multi). Si no lo pones, R buscará las variables sueltas en el entorno, lo cual suele dar errores.
 
--   **subset**: Te permite hacer el MANOVA solo para una parte de los datos sin tener que crear otra base. Ejemplo: subset = (Sexo == "MUJER").
+- **subset**: Te permite hacer el MANOVA solo para una parte de los datos sin tener que crear otra base. Ejemplo: subset = (Sexo == "MUJER").
 
--   **na.action**: Le indica a R qué hacer si encuentra datos vacíos (NA). Por defecto usa na.omit (borra la fila completa que tenga algún vacío en las variables usadas).
+- **na.action**: Le indica a R qué hacer si encuentra datos vacíos (NA). Por defecto usa na.omit (borra la fila completa que tenga algún vacío en las variables usadas).
 
 ### Argumentos de la función summary() (Específicos para MANOVA)
 
 Crear el modelo con manova() no te da los p-values. Para eso usas summary(modelo), el cual recibe estos argumentos clave:
 
--   **object** (Obligatorio): El nombre donde guardaste tu modelo (en tu caso modelo_manova).
+- **object** (Obligatorio): El nombre donde guardaste tu modelo (en tu caso modelo_manova).
 
--   **test**: Este es el argumento más importante. Le dice a R qué estadístico multivariado utilizar para obtener el p-value. Tiene 4 opciones:
+- **test**: Este es el argumento más importante. Le dice a R qué estadístico multivariado utilizar para obtener el p-value. Tiene 4 opciones:
 
-    -   **"Pillai"** (Es el que usa R por defecto si no escribes nada): La traza de Pillai-Bartlett. Es **el más recomendado** porque es el más robusto (el que mejor soporta si tus datos no son perfectamente normales o si hay diferencias de varianza entre grupos).
+  - **"Pillai"** (Es el que usa R por defecto si no escribes nada): La traza de Pillai-Bartlett. Es **el más recomendado** porque es el más robusto (el que mejor soporta si tus datos no son perfectamente normales o si hay diferencias de varianza entre grupos).
 
-    -   **"Wilks"**: La lambda de Wilks. Es el más famoso y enseñado en la universidad. Funciona excelente si se cumplen todos los supuestos estrictos (normalidad y homogeneidad de covarianzas).
+  - **"Wilks"**: La lambda de Wilks. Es el más famoso y enseñado en la universidad. Funciona excelente si se cumplen todos los supuestos estrictos (normalidad y homogeneidad de covarianzas).
 
-    -   **"Hotelling-Lawley"**: La traza de Hotelling-Lawley. Suele usarse cuando hay exactamente dos grupos.
+  - **"Hotelling-Lawley"**: La traza de Hotelling-Lawley. Suele usarse cuando hay exactamente dos grupos.
 
-    -   **"Roy"**: La raíz mayor de Roy. Es el estadístico más potente, pero también el más sensible y engañoso si no se cumplen los supuestos matemáticos a la perfección.
+  - **"Roy"**: La raíz mayor de Roy. Es el estadístico más potente, pero también el más sensible y engañoso si no se cumplen los supuestos matemáticos a la perfección.
 
 **En resumen:** manova() arma el esqueleto del cálculo y summary() le aplica la prueba estadística (Wilks, Pillai, etc.) para decirte si hay o no diferencias significativas.
 
@@ -422,17 +422,17 @@ boxM(data = "Matriz o data.frame numérico",
 
 La sintaxis de la función es muy sencilla y directa: boxM(data, grouping)
 
--   **data** (Obligatorio): Un data.frame o matriz que contenga **únicamente las variables numéricas** que deseas evaluar (en tu caso, tu variable vec con Edad, Peso, IMC, etc.).
+- **data** (Obligatorio): Un data.frame o matriz que contenga **únicamente las variables numéricas** que deseas evaluar (en tu caso, tu variable vec con Edad, Peso, IMC, etc.).
 
--   **grouping** (Obligatorio): Un vector categórico (factor) que indica a qué grupo pertenece cada fila de tus datos (en tu caso, la variable Sexo o Estado_Nutricional). Debe tener la misma longitud que la cantidad de filas en tus datos numéricos.
+- **grouping** (Obligatorio): Un vector categórico (factor) que indica a qué grupo pertenece cada fila de tus datos (en tu caso, la variable Sexo o Estado_Nutricional). Debe tener la misma longitud que la cantidad de filas en tus datos numéricos.
 
 Esta prueba permite evaluar si las matrices de varianza-covarianza son iguales entre dos o más grupos. Es útil antes de aplicar pruebas multivariadas, ya que muchas de ellas asumen que los grupos comparados tienen matrices de covarianza homogéneas.
 
--   **Hipótesis nula H0**: Las matrices de varianza-covarianza son iguales entre los grupos.\
-    **Hipótesis alternativa H1**: Al menos una matriz de varianza-covarianza es diferente.
+- **Hipótesis nula H0**: Las matrices de varianza-covarianza son iguales entre los grupos.\
+  **Hipótesis alternativa H1**: Al menos una matriz de varianza-covarianza es diferente.
 
--   *Si p-value \< 0.05: Se rechaza H0, por lo tanto, no hay homogeneidad de matrices.\
-    Si p-value \>= 0.05: No se rechaza H0, por lo tanto, se asume homogeneidad de matrices de varianza-covarianza.*
+- *Si p-value \< 0.05: Se rechaza H0, por lo tanto, no hay homogeneidad de matrices.\
+  Si p-value \>= 0.05: No se rechaza H0, por lo tanto, se asume homogeneidad de matrices de varianza-covarianza.*
 
 # Reducción de Dimensionalidad
 
@@ -443,7 +443,7 @@ Segundo, para las **variables categóricas** (texto), se utiliza el Análisis 
 ### Funciones y librerías utilizadas
 
 |  |  |  |
-|----------------|----------------|----------------------------------------|
+|----|----|----|
 | **Función** | **Origen** | **Descripción** |
 | cor() | Nativa de R (stats) | Calcula la matriz de correlación entre variables numéricas. |
 | KMO() | Librería psych | Calcula el índice Kaiser-Meyer-Olkin para evaluar si los datos son aptos para hacer un Análisis Factorial o PCA. |
@@ -467,26 +467,26 @@ library(psych)
 KMO(cor(vec) = "Matriz de Correlación o Matriz de Datos")
 ```
 
--   **La función cor(vec)**: Calcula la matriz de correlación de tus variables (cómo se relaciona la Edad con el Peso, el IMC con la Glucosa, etc.).
+- **La función cor(vec)**: Calcula la matriz de correlación de tus variables (cómo se relaciona la Edad con el Peso, el IMC con la Glucosa, etc.).
 
-    Se utiliza la función base cor() para generar y pasar directamente la matriz de correlaciones de Pearson. El estadístico evalúa la magnitud de los coeficientes de correlación parcial frente a los coeficientes de correlación observados.
+  Se utiliza la función base cor() para generar y pasar directamente la matriz de correlaciones de Pearson. El estadístico evalúa la magnitud de los coeficientes de correlación parcial frente a los coeficientes de correlación observados.
 
--   **La función KMO()**: Toma esa matriz y evalúa si las correlaciones conjuntas son lo suficientemente fuertes como para justificar el análisis. Indicando si el conjunto de datos es idóneo para técnicas de reducción de dimensionalidad como PCA o Análisis Factorial (valores \>0.6 o cercanos a 1 indican alta adecuación).
+- **La función KMO()**: Toma esa matriz y evalúa si las correlaciones conjuntas son lo suficientemente fuertes como para justificar el análisis. Indicando si el conjunto de datos es idóneo para técnicas de reducción de dimensionalidad como PCA o Análisis Factorial (valores \>0.6 o cercanos a 1 indican alta adecuación).
 
 **Cómo leer el resultado (Overall MSA - Measure of Sampling Adequacy):**\
 El test arroja un valor global que va del 0 al 1. La regla general de Kaiser para interpretarlo es:
 
--   **\> 0.90**: Maravilloso (Excelente viabilidad).
+- **\> 0.90**: Maravilloso (Excelente viabilidad).
 
--   **0.80 a 0.89**: Meritorio (Buena viabilidad).
+- **0.80 a 0.89**: Meritorio (Buena viabilidad).
 
--   **0.70 a 0.79**: Aceptable / Regular.
+- **0.70 a 0.79**: Aceptable / Regular.
 
--   **0.60 a 0.69**: Mediocre (Se puede hacer el análisis, pero con reservas).
+- **0.60 a 0.69**: Mediocre (Se puede hacer el análisis, pero con reservas).
 
--   **0.50 a 0.59**: Miserable (Muy pobre).
+- **0.50 a 0.59**: Miserable (Muy pobre).
 
--   **\< 0.50**: Inaceptable (Tus variables son demasiado independientes; **no** se recomienda aplicar PCA ni Análisis Factorial).
+- **\< 0.50**: Inaceptable (Tus variables son demasiado independientes; **no** se recomienda aplicar PCA ni Análisis Factorial).
 
 Nota en el resultado: R también te mostrará los valores KMO individuales para cada variable (MSA for each item). Si tu KMO global es muy bajo, puedes mirar estos valores individuales para detectar cuál es la variable "problemática" (la que no se relaciona con ninguna otra) y eliminarla para mejorar el modelo.
 
@@ -502,22 +502,22 @@ prcomp(x = "Matriz o data.frame numérico",
        scale. = "Escalado de Variables" - TRUE, FALSE)
 ```
 
--   **center = TRUE, scale. = TRUE (Estandarización):** Esto es vital. Tus variables tienen unidades y tamaños totalmente distintos (la edad va de 20 a 60 años, el peso en kilos, la presión pasa de los 100 mmHg). Si no estandarizas, R pensará que la Presión Arterial es la variable "más importante" solo porque sus números son más grandes. Al estandarizar, todas las variables pasan a jugar en "cancha pareja" (media 0 y desviación estándar 1).
+- **center = TRUE, scale. = TRUE (Estandarización):** Esto es vital. Tus variables tienen unidades y tamaños totalmente distintos (la edad va de 20 a 60 años, el peso en kilos, la presión pasa de los 100 mmHg). Si no estandarizas, R pensará que la Presión Arterial es la variable "más importante" solo porque sus números son más grandes. Al estandarizar, todas las variables pasan a jugar en "cancha pareja" (media 0 y desviación estándar 1).
 
 ``` r
 summary(object = "Objeto de clase prcomp")
 ```
 
--   **summary(pca):** R te mostrará una tabla con los componentes (PC1, PC2, PC3, PC4). Fíjate en la fila que dice **Cumulative Proportion** (Proporción Acumulada). Ahí verás qué porcentaje de tus datos originales logras explicar si te quedas con 1, 2 o 3 componentes.
+- **summary(pca):** R te mostrará una tabla con los componentes (PC1, PC2, PC3, PC4). Fíjate en la fila que dice **Cumulative Proportion** (Proporción Acumulada). Ahí verás qué porcentaje de tus datos originales logras explicar si te quedas con 1, 2 o 3 componentes.
 
 ``` r
 plot(x = "Objeto de clase prcomp",
      type = "Tipo de Representación" - "lines", "p", "b", etc.)
 ```
 
--   **plot(pca, type = "lines"):** Te genera un gráfico de líneas ("Scree plot"). Se usa para la regla del codo: buscas el punto donde la línea deja de caer en picada y se vuelve una llanura suave. Ese "codo" te indica visualmente cuántos componentes principales vale la pena conservar en tu estudio.
+- **plot(pca, type = "lines"):** Te genera un gráfico de líneas ("Scree plot"). Se usa para la regla del codo: buscas el punto donde la línea deja de caer en picada y se vuelve una llanura suave. Ese "codo" te indica visualmente cuántos componentes principales vale la pena conservar en tu estudio.
 
-    Al usar "lines", dibuja un "Gráfico de sedimentación" (Scree plot). Muestra una línea que cae, indicando cuánta varianza (información) explica cada componente. Ayuda a decidir con cuántos componentes quedarse.
+  Al usar "lines", dibuja un "Gráfico de sedimentación" (Scree plot). Muestra una línea que cae, indicando cuánta varianza (información) explica cada componente. Ayuda a decidir con cuántos componentes quedarse.
 
 ``` r
 library(factoextra)
@@ -538,37 +538,37 @@ fviz_pca_var(X = "Objeto de clase prcomp/PCA",
 
 **Para fviz_pca_var() (paquete factoextra):**
 
--   **X** (en tu código pca): Objeto resultante de un Análisis de Componentes Principales (generado previamente por funciones como prcomp, princomp o PCA).
+- **X** (en tu código pca): Objeto resultante de un Análisis de Componentes Principales (generado previamente por funciones como prcomp, princomp o PCA).
 
--   **axes**: Vector numérico de longitud 2 que especifica los componentes principales exactos a proyectar en los ejes X e Y (por defecto c(1, 2)).
+- **axes**: Vector numérico de longitud 2 que especifica los componentes principales exactos a proyectar en los ejes X e Y (por defecto c(1, 2)).
 
--   **geom**: Define los elementos visuales a renderizar. "arrow" dibuja vectores direccionales desde el origen (0,0); "text" dibuja exclusivamente las etiquetas de los nombres de las variables.
+- **geom**: Define los elementos visuales a renderizar. "arrow" dibuja vectores direccionales desde el origen (0,0); "text" dibuja exclusivamente las etiquetas de los nombres de las variables.
 
--   **repel**: Valor lógico. Si es TRUE, implementa un algoritmo de repulsión (vía el paquete ggrepel) para desplazar automáticamente las etiquetas de texto, evitando que se superpongan entre sí o con los vectores, garantizando la legibilidad.
+- **repel**: Valor lógico. Si es TRUE, implementa un algoritmo de repulsión (vía el paquete ggrepel) para desplazar automáticamente las etiquetas de texto, evitando que se superpongan entre sí o con los vectores, garantizando la legibilidad.
 
--   **col.var**: Define el mapeo estético del color de las variables (vectores y texto).
+- **col.var**: Define el mapeo estético del color de las variables (vectores y texto).
 
-    -   "cos2" (usado en tu código): Colorea las variables según su Coseno Cuadrado, métrica que representa la calidad de representación de la variable en el plano bidimensional actual (valores cercanos a 1 indican que la variable está perfectamente representada por esos dos componentes).
+  - "cos2" (usado en tu código): Colorea las variables según su Coseno Cuadrado, métrica que representa la calidad de representación de la variable en el plano bidimensional actual (valores cercanos a 1 indican que la variable está perfectamente representada por esos dos componentes).
 
-    -   "contrib": Colorea según la contribución porcentual de la variable a la construcción de los componentes principales graficados.
+  - "contrib": Colorea según la contribución porcentual de la variable a la construcción de los componentes principales graficados.
 
-    -   "coord": Colorea según las coordenadas matemáticas de la variable.
+  - "coord": Colorea según las coordenadas matemáticas de la variable.
 
-    -   Color estático: Un nombre o código hexadecimal (ej. "blue").
+  - Color estático: Un nombre o código hexadecimal (ej. "blue").
 
-    -   Vector factor: Permite colorear las variables agrupándolas según una variable categórica externa.
+  - Vector factor: Permite colorear las variables agrupándolas según una variable categórica externa.
 
--   **fill.var** / **alpha.var**: Controlan el color de relleno y la opacidad (transparencia) de las variables, respectivamente. Aceptan las mismas métricas analíticas que col.var.
+- **fill.var** / **alpha.var**: Controlan el color de relleno y la opacidad (transparencia) de las variables, respectivamente. Aceptan las mismas métricas analíticas que col.var.
 
--   **gradient.cols**: Vector de caracteres (códigos hexadecimales o nombres) que define la paleta de colores continua. Se activa automáticamente cuando col.var depende de una métrica numérica (como "cos2"), generando un gradiente visual desde valores bajos hasta altos.
+- **gradient.cols**: Vector de caracteres (códigos hexadecimales o nombres) que define la paleta de colores continua. Se activa automáticamente cuando col.var depende de una métrica numérica (como "cos2"), generando un gradiente visual desde valores bajos hasta altos.
 
--   **col.quanti.sup**: Cadena de caracteres que define un color estricto para graficar variables cuantitativas suplementarias (variables proyectadas en el espacio PCA que no participaron en su cálculo original).
+- **col.quanti.sup**: Cadena de caracteres que define un color estricto para graficar variables cuantitativas suplementarias (variables proyectadas en el espacio PCA que no participaron en su cálculo original).
 
--   **select.var**: Lista estructurada que permite filtrar qué variables graficar para evitar la saturación visual en modelos con alta dimensionalidad. Permite filtrar por nombre (name), por umbral de calidad (cos2) o por las variables de mayor contribución (contrib = 10 grafica solo las 10 más importantes).
+- **select.var**: Lista estructurada que permite filtrar qué variables graficar para evitar la saturación visual en modelos con alta dimensionalidad. Permite filtrar por nombre (name), por umbral de calidad (cos2) o por las variables de mayor contribución (contrib = 10 grafica solo las 10 más importantes).
 
--   **invisible**: Cadena de caracteres para ocultar elementos específicos del gráfico. "var" oculta las variables activas, dejando solo las suplementarias; "quanti.sup" oculta las suplementarias.
+- **invisible**: Cadena de caracteres para ocultar elementos específicos del gráfico. "var" oculta las variables activas, dejando solo las suplementarias; "quanti.sup" oculta las suplementarias.
 
--   **title**: Cadena de caracteres que sobrescribe el título principal del gráfico (en tu código, "Círculo de Correlaciones").
+- **title**: Cadena de caracteres que sobrescribe el título principal del gráfico (en tu código, "Círculo de Correlaciones").
 
 ## Análisis Factorial
 
@@ -581,21 +581,21 @@ La función principal() toma tus 4 variables y las agrupa matemáticamente en 2 
 
 **Los argumentos:**
 
--   nfactors = 2: Le indicamos que queremos extraer solo 2 factores. Generalmente, este número se decide mirando el gráfico de codo (Scree plot) del paso anterior.
+- nfactors = 2: Le indicamos que queremos extraer solo 2 factores. Generalmente, este número se decide mirando el gráfico de codo (Scree plot) del paso anterior.
 
--   rotate = "none": Indica que no queremos "rotar" los ejes matemáticos. La rotación (como la famosa Varimax) se suele usar más adelante para que los factores sean más fáciles de interpretar, pero como primer paso siempre se extraen sin rotar.
+- rotate = "none": Indica que no queremos "rotar" los ejes matemáticos. La rotación (como la famosa Varimax) se suele usar más adelante para que los factores sean más fáciles de interpretar, pero como primer paso siempre se extraen sin rotar.
 
 **Interpretación de la tabla de resultados (fa1):**
 
--   **Columnas PC1 y PC2 (Cargas factoriales):** Son como correlaciones. Te dicen qué tanto peso tiene cada variable original en ese nuevo factor. Por ejemplo, en tu imagen, el IMC tiene una carga altísima en el factor 1 (0.91), lo que significa que el Factor 1 está midiendo fuertemente aspectos corporales.
+- **Columnas PC1 y PC2 (Cargas factoriales):** Son como correlaciones. Te dicen qué tanto peso tiene cada variable original en ese nuevo factor. Por ejemplo, en tu imagen, el IMC tiene una carga altísima en el factor 1 (0.91), lo que significa que el Factor 1 está midiendo fuertemente aspectos corporales.
 
--   **Columna h2 (Comunalidad):** Es exactamente lo mismo que arroja tu último comando fa1\$communality. Va de 0 a 1 y representa **qué porcentaje de la información de esa variable original lograste salvar** al resumirla en estos 2 factores.
+- **Columna h2 (Comunalidad):** Es exactamente lo mismo que arroja tu último comando fa1\$communality. Va de 0 a 1 y representa **qué porcentaje de la información de esa variable original lograste salvar** al resumirla en estos 2 factores.
 
-    -   Ejemplo de la imagen: El Peso tiene una comunalidad de 0.96. ¡Es excelente! Significa que el modelo logró capturar el 96% de la información del Peso de los pacientes usando solo 2 factores.
+  - Ejemplo de la imagen: El Peso tiene una comunalidad de 0.96. ¡Es excelente! Significa que el modelo logró capturar el 96% de la información del Peso de los pacientes usando solo 2 factores.
 
--   **Columna u2 (Unicidad):** Es lo opuesto a la comunalidad (1 - h2). Es la cantidad de información que se "perdió" o que es única de esa variable y no encaja en los factores.
+- **Columna u2 (Unicidad):** Es lo opuesto a la comunalidad (1 - h2). Es la cantidad de información que se "perdió" o que es única de esa variable y no encaja en los factores.
 
--   **Cumulative Var:** Al final de la tabla verás la varianza acumulada. En tu imagen sale 0.81, lo que significa que estos 2 factores en conjunto logran explicar el **81% de toda la información** de las 4 variables originales. ¡Es un modelo muy exitoso!
+- **Cumulative Var:** Al final de la tabla verás la varianza acumulada. En tu imagen sale 0.81, lo que significa que estos 2 factores en conjunto logran explicar el **81% de toda la información** de las 4 variables originales. ¡Es un modelo muy exitoso!
 
 ``` r
 library(psych)
@@ -605,73 +605,73 @@ principal(r = "Matriz de Correlación o Matriz de Datos",
           rotate = "Método de Rotación" - "none", "varimax", "quartimax", "bentlerT", "equamax", "varimin", "geominT", "bifactor", "promax", "oblimin", "simplimax", "bentlerQ", "geominQ", "biquartimin", "cluster", "target")
 ```
 
--   **r** (en tu código vecst): Matriz o data frame numérico de dimensiones $n \times p$ , o en su defecto, una matriz de correlación cuadrada. Representa los datos de entrada sobre los cuales se ejecutará el modelo de extracción (basado en componentes principales).
+- **r** (en tu código vecst): Matriz o data frame numérico de dimensiones $n \times p$ , o en su defecto, una matriz de correlación cuadrada. Representa los datos de entrada sobre los cuales se ejecutará el modelo de extracción (basado en componentes principales).
 
--   **nfactors**: Valor numérico entero. Define la cantidad de componentes o factores latentes que se forzará a extraer y retener en el modelo (en el código, se especifica 2).
+- **nfactors**: Valor numérico entero. Define la cantidad de componentes o factores latentes que se forzará a extraer y retener en el modelo (en el código, se especifica 2).
 
--   **rotate**:
+- **rotate**:
 
-    El argumento rotate acepta una cadena de caracteres (character) que define el algoritmo geométrico para transformar la matriz de cargas factoriales.
+  El argumento rotate acepta una cadena de caracteres (character) que define el algoritmo geométrico para transformar la matriz de cargas factoriales.
 
-    Su objetivo es redistribuir la varianza explicada para lograr una "estructura simple" que facilite la interpretación de las cargas factoriales (loadings).
+  Su objetivo es redistribuir la varianza explicada para lograr una "estructura simple" que facilite la interpretación de las cargas factoriales (loadings).
 
-    Las opciones se dividen en tres categorías principales (la mayoría ejecutadas internamente a través del paquete GPArotation):
+  Las opciones se dividen en tres categorías principales (la mayoría ejecutadas internamente a través del paquete GPArotation):
 
-    **1. Sin Rotación:**
+  **1. Sin Rotación:**
 
-    -   "none": Mantiene la solución original extraída. El primer componente maximiza la varianza total explicada, el segundo maximiza la varianza residual, y así sucesivamente.
+  - "none": Mantiene la solución original extraída. El primer componente maximiza la varianza total explicada, el segundo maximiza la varianza residual, y así sucesivamente.
 
-    **2. Rotaciones Ortogonales (Mantienen los factores incorrelacionados, ejes a 90°):**
+  **2. Rotaciones Ortogonales (Mantienen los factores incorrelacionados, ejes a 90°):**
 
-    -   "**varimax**": Maximiza la varianza de las cargas al cuadrado por factor (columnas). Es la más utilizada; tiende a asociar cada variable a un solo factor. Mantiene los factores incorrelacionados (ejes a 90 grados) y maximiza la varianza de las cargas al cuadrado dentro de cada factor, polarizando los coeficientes hacia valores altos o cercanos a cero.
+  - "**varimax**": Maximiza la varianza de las cargas al cuadrado por factor (columnas). Es la más utilizada; tiende a asociar cada variable a un solo factor. Mantiene los factores incorrelacionados (ejes a 90 grados) y maximiza la varianza de las cargas al cuadrado dentro de cada factor, polarizando los coeficientes hacia valores altos o cercanos a cero.
 
-    -   "**quartimax**": Maximiza la varianza de las cargas al cuadrado por variable (filas). Tiende a generar un factor general dominante.
+  - "**quartimax**": Maximiza la varianza de las cargas al cuadrado por variable (filas). Tiende a generar un factor general dominante.
 
-    -   "equamax": Compromiso matemático entre Varimax y Quartimax.
+  - "equamax": Compromiso matemático entre Varimax y Quartimax.
 
-    -   "bentlerT": Rotación ortogonal basada en el criterio de Bentler para simplificar la estructura.
+  - "bentlerT": Rotación ortogonal basada en el criterio de Bentler para simplificar la estructura.
 
-    -   "geominT": Rotación ortogonal basada en el criterio Geomin, útil cuando las variables tienen cargas moderadas en múltiples factores.
+  - "geominT": Rotación ortogonal basada en el criterio Geomin, útil cuando las variables tienen cargas moderadas en múltiples factores.
 
-    -   "varimin": Minimiza la varianza de las cargas al cuadrado (raramente utilizada en la práctica).
+  - "varimin": Minimiza la varianza de las cargas al cuadrado (raramente utilizada en la práctica).
 
-    -   "bifactor": Fuerza la extracción de un factor general global ortogonal a los factores de grupo (específicos).
+  - "bifactor": Fuerza la extracción de un factor general global ortogonal a los factores de grupo (específicos).
 
-    **3. Rotaciones Oblicuas (Permiten correlación entre factores,** $\text{ejes} \neq 90^\circ$ **:**
+  **3. Rotaciones Oblicuas (Permiten correlación entre factores,** $\text{ejes} \neq 90^\circ$ **:**
 
-    -   "**promax**": Rotación oblicua rápida basada en elevar a una potencia (usualmente k=4) las cargas de una rotación Varimax previa. Muy eficiente en muestras grandes.
+  - "**promax**": Rotación oblicua rápida basada en elevar a una potencia (usualmente k=4) las cargas de una rotación Varimax previa. Muy eficiente en muestras grandes.
 
-    -   "**oblimin**": Minimiza la covarianza cruzada entre factores. Es el estándar de facto para rotaciones oblicuas. Permite que los factores resultantes estén correlacionados entre sí (ejes a ángulos distintos de 90 grados). Suele representar mejor constructos reales donde las dimensiones latentes interactúan.
+  - "**oblimin**": Minimiza la covarianza cruzada entre factores. Es el estándar de facto para rotaciones oblicuas. Permite que los factores resultantes estén correlacionados entre sí (ejes a ángulos distintos de 90 grados). Suele representar mejor constructos reales donde las dimensiones latentes interactúan.
 
-    -   "simplimax": Busca minimizar el número de cargas cruzadas (cargas altas en más de un factor) utilizando un parámetro de penalización.
+  - "simplimax": Busca minimizar el número de cargas cruzadas (cargas altas en más de un factor) utilizando un parámetro de penalización.
 
-    -   "bentlerQ": Versión oblicua del criterio de Bentler.
+  - "bentlerQ": Versión oblicua del criterio de Bentler.
 
-    -   "geominQ": Versión oblicua del criterio Geomin.
+  - "geominQ": Versión oblicua del criterio Geomin.
 
-    -   "biquartimin": Caso especial de Oblimin donde el parámetro δ (delta) es igual a cero.
+  - "biquartimin": Caso especial de Oblimin donde el parámetro δ (delta) es igual a cero.
 
-    -   "cluster": Rotación dirigida hacia una estructura de conglomerados (clusters) definida a partir de una solución Varimax previa.
+  - "cluster": Rotación dirigida hacia una estructura de conglomerados (clusters) definida a partir de una solución Varimax previa.
 
-    **4. Rotación Dirigida:**
+  **4. Rotación Dirigida:**
 
-    -   "target": Permite rotar la matriz hacia una matriz objetivo (ideal) especificada por el usuario mediante el argumento adicional keys.
+  - "target": Permite rotar la matriz hacia una matriz objetivo (ideal) especificada por el usuario mediante el argumento adicional keys.
 
 **Sobre el elemento extraído (\$communality):**
 
--   **communality**: Es un vector numérico almacenado dentro del objeto resultante (fa1, fa2, fa3). Representa las **comunalidades** ($h^2$), es decir, la proporción de la varianza total de cada variable original que logra ser explicada por los factores retenidos en el modelo (valores entre 0 y 1).
+- **communality**: Es un vector numérico almacenado dentro del objeto resultante (fa1, fa2, fa3). Representa las **comunalidades** ($h^2$), es decir, la proporción de la varianza total de cada variable original que logra ser explicada por los factores retenidos en el modelo (valores entre 0 y 1).
 
 Interpretación:
 
--   Las cargas factoriales indican la relación entre cada variable y cada factor extraído.\
-    Cargas altas, positivas o negativas, indican que la variable tiene una fuerte relación con ese factor.\
-    Las comunalidades muestran qué proporción de la variabilidad de cada variable es explicada por los factores.
+- Las cargas factoriales indican la relación entre cada variable y cada factor extraído.\
+  Cargas altas, positivas o negativas, indican que la variable tiene una fuerte relación con ese factor.\
+  Las comunalidades muestran qué proporción de la variabilidad de cada variable es explicada por los factores.
 
--   Comunalidades cercanas a 1 indican que la variable está bien representada por el modelo factorial.\
-    Comunalidades bajas indican que la variable no está siendo explicada adecuadamente por los factores seleccionados.
+- Comunalidades cercanas a 1 indican que la variable está bien representada por el modelo factorial.\
+  Comunalidades bajas indican que la variable no está siendo explicada adecuadamente por los factores seleccionados.
 
--   Si la rotación Varimax mejora la interpretación, se pueden interpretar los factores como independientes.\
-    Si la rotación Promax ofrece una estructura más clara, se puede asumir que los factores pueden estar correlacionados.
+- Si la rotación Varimax mejora la interpretación, se pueden interpretar los factores como independientes.\
+  Si la rotación Promax ofrece una estructura más clara, se puede asumir que los factores pueden estar correlacionados.
 
 ## Análisis de Correspondencia Múltiple
 
@@ -701,40 +701,40 @@ fviz_mca_var(X = "Objeto de clase MCA",
 
 **Para getBurt():**
 
--   **X** (en tu código muestra_cat): Data frame de dimensiones $n \times p$ que contiene exclusivamente variables categóricas (factores). La función calcula y devuelve la matriz de Burt, una matriz simétrica de bloques que contiene todas las tablas de contingencia cruzadas bidimensionales posibles entre las variables.
+- **X** (en tu código muestra_cat): Data frame de dimensiones $n \times p$ que contiene exclusivamente variables categóricas (factores). La función calcula y devuelve la matriz de Burt, una matriz simétrica de bloques que contiene todas las tablas de contingencia cruzadas bidimensionales posibles entre las variables.
 
 **Para MCA():**
 
--   **X** (en tu código muestra_cat): Data frame con las variables categóricas sobre las cuales se ejecutará el Análisis de Correspondencias Múltiples (ACM).
+- **X** (en tu código muestra_cat): Data frame con las variables categóricas sobre las cuales se ejecutará el Análisis de Correspondencias Múltiples (ACM).
 
--   **graph**: Valor lógico (TRUE/FALSE). Si es FALSE (como en tu código), suprime la generación automática de los gráficos base de R. Esto es una práctica recomendada cuando se planea utilizar el paquete factoextra para generar visualizaciones más estéticas posteriormente.
+- **graph**: Valor lógico (TRUE/FALSE). Si es FALSE (como en tu código), suprime la generación automática de los gráficos base de R. Esto es una práctica recomendada cuando se planea utilizar el paquete factoextra para generar visualizaciones más estéticas posteriormente.
 
--   (Nota sobre acm\$eig): Extrae los valores propios (eigenvalues), los cuales representan la cantidad de inercia (varianza) explicada por cada dimensión extraída.
+- (Nota sobre acm\$eig): Extrae los valores propios (eigenvalues), los cuales representan la cantidad de inercia (varianza) explicada por cada dimensión extraída.
 
 **Para fviz_mca_var():**
 
--   **X** (en tu código acm): Objeto de clase MCA (el modelo previamente ajustado). Esta función extrae y grafica específicamente las coordenadas de las categorías de las variables en un plano bidimensional.
+- **X** (en tu código acm): Objeto de clase MCA (el modelo previamente ajustado). Esta función extrae y grafica específicamente las coordenadas de las categorías de las variables en un plano bidimensional.
 
--   **repel**: Valor lógico (TRUE/FALSE). Si es TRUE, implementa un algoritmo de repulsión (vía el paquete ggrepel) para desplazar automáticamente las etiquetas de texto y evitar que se superpongan entre sí o con los puntos, mejorando la legibilidad.
+- **repel**: Valor lógico (TRUE/FALSE). Si es TRUE, implementa un algoritmo de repulsión (vía el paquete ggrepel) para desplazar automáticamente las etiquetas de texto y evitar que se superpongan entre sí o con los puntos, mejorando la legibilidad.
 
--   **col.var**: Cadena de caracteres (character) que define el mapeo estético del color de las categorías. El valor "contrib" colorea los puntos según su contribución porcentual a la definición de las dimensiones graficadas. Otras opciones analíticas incluyen "cos2" (calidad de representación en el mapa) o simplemente asignar un color estático (ej. "blue").
+- **col.var**: Cadena de caracteres (character) que define el mapeo estético del color de las categorías. El valor "contrib" colorea los puntos según su contribución porcentual a la definición de las dimensiones graficadas. Otras opciones analíticas incluyen "cos2" (calidad de representación en el mapa) o simplemente asignar un color estático (ej. "blue").
 
--   **gradient.cols**: Vector de caracteres (códigos hexadecimales o nombres de colores). Define la paleta de colores continua que se utilizará cuando col.var dependa de una métrica numérica (como "contrib"). Genera un gradiente visual que interpola desde valores bajos (primer color) hasta valores altos (último color).
+- **gradient.cols**: Vector de caracteres (códigos hexadecimales o nombres de colores). Define la paleta de colores continua que se utilizará cuando col.var dependa de una métrica numérica (como "contrib"). Genera un gradiente visual que interpola desde valores bajos (primer color) hasta valores altos (último color).
 
 **Interpretación:**\
 
--   La matriz de Burt permite observar la frecuencia conjunta entre las categorías de las variables cualitativas.
+- La matriz de Burt permite observar la frecuencia conjunta entre las categorías de las variables cualitativas.
 
--   En acm\$eig se revisa cuánta variabilidad explica cada dimensión.
+- En acm\$eig se revisa cuánta variabilidad explica cada dimensión.
 
--   Las dos primeras dimensiones suelen utilizarse para representar gráficamente la relación entre categorías.
+- Las dos primeras dimensiones suelen utilizarse para representar gráficamente la relación entre categorías.
 
--   En el gráfico, las categorías cercanas entre sí tienen mayor asociación.
+- En el gráfico, las categorías cercanas entre sí tienen mayor asociación.
 
--   Las categorías alejadas del origen suelen tener mayor aporte a la explicación de las dimensiones.
+- Las categorías alejadas del origen suelen tener mayor aporte a la explicación de las dimensiones.
 
--   Los colores indican la contribución de cada categoría:\
-    categorías con mayor contribución tienen mayor importancia en la construcción del plano factorial.
+- Los colores indican la contribución de cada categoría:\
+  categorías con mayor contribución tienen mayor importancia en la construcción del plano factorial.
 
 **1. Matriz De Burt**
 
@@ -754,13 +754,13 @@ En nuestros datos hay:
 
 La matriz de Burt sirve para ver qué categorías aparecen juntas con más frecuencia. Por ejemplo, en los cruces se observa que:
 
--   Los hombres aparecen más asociados a Sobrepeso.
+- Los hombres aparecen más asociados a Sobrepeso.
 
--   Las mujeres aparecen relativamente más cerca de Peso normal y también de Obesidad.
+- Las mujeres aparecen relativamente más cerca de Peso normal y también de Obesidad.
 
--   No fumador es la categoría dominante en la base.
+- No fumador es la categoría dominante en la base.
 
--   Fumador ocasional tiene pocos casos, por eso puede aparecer más alejada en el gráfico.
+- Fumador ocasional tiene pocos casos, por eso puede aparecer más alejada en el gráfico.
 
 **2. Valores Propios: acm\$eig**
 
@@ -794,43 +794,43 @@ muestra las categorías como puntos en un plano.
 
 Regla de lectura:
 
--   Categorías cercanas tienden a aparecer juntas.
+- Categorías cercanas tienden a aparecer juntas.
 
--   Categorías alejadas del centro son más diferenciadoras.
+- Categorías alejadas del centro son más diferenciadoras.
 
--   Categorías cerca del centro aportan menos a la interpretación.
+- Categorías cerca del centro aportan menos a la interpretación.
 
--   Colores más intensos indican mayor contribución a la construcción del plano.
+- Colores más intensos indican mayor contribución a la construcción del plano.
 
 En nuestros resultados, las categorías que más ayudan a formar el plano son:
 
--   Peso normal
+- Peso normal
 
--   Sobrepeso
+- Sobrepeso
 
--   HOMBRE
+- HOMBRE
 
--   MUJER
+- MUJER
 
--   Fumador
+- Fumador
 
--   Obesidad, sobre todo en la segunda dimensión
+- Obesidad, sobre todo en la segunda dimensión
 
 **4. Interpretación De Las Dimensiones**
 
 La **Dimensión 1** separa principalmente:
 
--   Lado positivo: HOMBRE, Sobrepeso, Fumador ocasional.
+- Lado positivo: HOMBRE, Sobrepeso, Fumador ocasional.
 
--   Lado negativo: MUJER, Peso normal.
+- Lado negativo: MUJER, Peso normal.
 
 Entonces Dim 1 parece distinguir perfiles asociados al sexo y estado nutricional.
 
 La **Dimensión 2** separa principalmente:
 
--   Lado positivo: Fumador, Peso normal.
+- Lado positivo: Fumador, Peso normal.
 
--   Lado negativo: Obesidad, No fumador, Fumador ocasional.
+- Lado negativo: Obesidad, No fumador, Fumador ocasional.
 
 Entonces Dim 2 parece captar diferencias relacionadas con el patrón de tabaquismo y estado nutricional.
 
@@ -850,7 +850,7 @@ Primero, se calcula la distancia matemática entre todos los pacientes. Luego, s
 ### Funciones y librerías utilizadas
 
 |  |  |  |
-|----------------|----------------|----------------------------------------|
+|----|----|----|
 | **Función** | **Origen** | **Descripción** |
 | get_dist() | Librería factoextra | Calcula la matriz de distancias entre todas las filas (pacientes). |
 | hclust() | Nativa de R (stats) | Ejecuta el algoritmo de agrupamiento jerárquico (crea la estructura del árbol). |
@@ -898,101 +898,101 @@ fviz_cluster(object = "Lista con datos y vector de clústeres (o modelo particio
 
 **Para get_dist():**
 
--   **x** (en tu código vecst): Matriz o data frame numérico. Contiene los datos sobre los cuales se calculará la matriz de distancias o disimilitudes.
+- **x** (en tu código vecst): Matriz o data frame numérico. Contiene los datos sobre los cuales se calculará la matriz de distancias o disimilitudes.
 
--   **method**: Cadena de caracteres (character). Define la métrica matemática para calcular la distancia entre pares de observaciones. "euclidean" calcula la distancia en línea recta en un espacio multidimensional.
+- **method**: Cadena de caracteres (character). Define la métrica matemática para calcular la distancia entre pares de observaciones. "euclidean" calcula la distancia en línea recta en un espacio multidimensional.
 
-    Define la métrica matemática para calcular la matriz de disimilitud.
+  Define la métrica matemática para calcular la matriz de disimilitud.
 
-    -   "euclidean": Distancia geométrica estándar en línea recta.
+  - "euclidean": Distancia geométrica estándar en línea recta.
 
-    -   "maximum": Distancia de Chebyshev (máxima diferencia absoluta en cualquier dimensión).
+  - "maximum": Distancia de Chebyshev (máxima diferencia absoluta en cualquier dimensión).
 
-    -   "manhattan": Distancia del taxista (suma de diferencias absolutas).
+  - "manhattan": Distancia del taxista (suma de diferencias absolutas).
 
-    -   "canberra": Versión ponderada de Manhattan, muy sensible a valores cercanos a cero.
+  - "canberra": Versión ponderada de Manhattan, muy sensible a valores cercanos a cero.
 
-    -   "binary": Distancia asimétrica para datos binarios (proporción de bits diferentes).
+  - "binary": Distancia asimétrica para datos binarios (proporción de bits diferentes).
 
-    -   "minkowski": Generalización de la distancia Euclidiana y Manhattan (requiere parámetro p).
+  - "minkowski": Generalización de la distancia Euclidiana y Manhattan (requiere parámetro p).
 
-    -   "pearson", "spearman", "kendall": Distancias basadas en correlación (1-r). Agrupa observaciones con perfiles/tendencias similares, sin importar su magnitud absoluta.
+  - "pearson", "spearman", "kendall": Distancias basadas en correlación (1-r). Agrupa observaciones con perfiles/tendencias similares, sin importar su magnitud absoluta.
 
--   **stand**: Si es TRUE, estandariza automáticamente los datos (media 0, varianza 1) antes de calcular las distancias.
+- **stand**: Si es TRUE, estandariza automáticamente los datos (media 0, varianza 1) antes de calcular las distancias.
 
 **Para hclust():**
 
--   **d** (en tu código Dist_Eucl): Objeto de clase dist (matriz de distancias generada previamente).
+- **d** (en tu código Dist_Eucl): Objeto de clase dist (matriz de distancias generada previamente).
 
--   **method**: Cadena de caracteres (character). Define el algoritmo de enlace (aglomeración) para construir el dendrograma jerárquico.
+- **method**: Cadena de caracteres (character). Define el algoritmo de enlace (aglomeración) para construir el dendrograma jerárquico.
 
-    -   **"complete"** (Vecinos lejanos): Define la distancia entre dos clústeres como la distancia máxima entre sus puntos. Tiende a formar clústeres compactos y esféricos.
+  - **"complete"** (Vecinos lejanos): Define la distancia entre dos clústeres como la distancia máxima entre sus puntos. Tiende a formar clústeres compactos y esféricos.
 
-    -   **"ward.D2"**: Minimiza la varianza intra-clúster (suma de cuadrados de las desviaciones respecto al centroide). Utiliza las distancias euclidianas al cuadrado.
+  - **"ward.D2"**: Minimiza la varianza intra-clúster (suma de cuadrados de las desviaciones respecto al centroide). Utiliza las distancias euclidianas al cuadrado.
 
-    -   "single": Enlace simple (vecino más cercano). Tiende a formar cadenas largas (efecto chaining).
+  - "single": Enlace simple (vecino más cercano). Tiende a formar cadenas largas (efecto chaining).
 
-    -   "average": UPGMA (promedio de todas las distancias entre pares de los dos clústeres).
+  - "average": UPGMA (promedio de todas las distancias entre pares de los dos clústeres).
 
-    -   "mcquitty": WPGMA (promedio ponderado, útil cuando los tamaños de los clústeres son muy desiguales).
+  - "mcquitty": WPGMA (promedio ponderado, útil cuando los tamaños de los clústeres son muy desiguales).
 
-    -   "median": WPGMC (distancia entre las medianas de los clústeres).
+  - "median": WPGMC (distancia entre las medianas de los clústeres).
 
-    -   "centroid": UPGMC (distancia geométrica entre los centroides de los clústeres).
+  - "centroid": UPGMC (distancia geométrica entre los centroides de los clústeres).
 
-    -   "ward.D": Minimiza la varianza intra-clúster usando distancias no cuadradas.
+  - "ward.D": Minimiza la varianza intra-clúster usando distancias no cuadradas.
 
 **Para fviz_dend():**
 
--   **x** (en tu código VLEucl o ward_clusters): Objeto resultante del agrupamiento jerárquico (hclust).
+- **x** (en tu código VLEucl o ward_clusters): Objeto resultante del agrupamiento jerárquico (hclust).
 
--   **k**: Valor entero. Especifica el número de grupos en los que se dividirá visualmente el árbol, asignando un color distinto a cada rama principal.
+- **k**: Valor entero. Especifica el número de grupos en los que se dividirá visualmente el árbol, asignando un color distinto a cada rama principal.
 
--   **type**: Estilo visual del dendrograma.
+- **type**: Estilo visual del dendrograma.
 
-    -   "rectangle": Árbol jerárquico estándar con ramas ortogonales.
+  - "rectangle": Árbol jerárquico estándar con ramas ortogonales.
 
-    -   "circular": Árbol proyectado en coordenadas polares (útil para muchos datos).
+  - "circular": Árbol proyectado en coordenadas polares (útil para muchos datos).
 
-    -   "phylogram": Árbol tipo filogenético (ramas sin ángulos rectos).
+  - "phylogram": Árbol tipo filogenético (ramas sin ángulos rectos).
 
--   **cex** / **lwd**: Valores numéricos que escalan el tamaño de la fuente de las etiquetas y el grosor de las líneas del dendrograma, respectivamente.
+- **cex** / **lwd**: Valores numéricos que escalan el tamaño de la fuente de las etiquetas y el grosor de las líneas del dendrograma, respectivamente.
 
--   **show_labels** / **color_labels_by_k**: Valores lógicos. Controlan la visibilidad de los nombres de las observaciones en las hojas del árbol y si el texto hereda el color de su respectivo clúster.
+- **show_labels** / **color_labels_by_k**: Valores lógicos. Controlan la visibilidad de los nombres de las observaciones en las hojas del árbol y si el texto hereda el color de su respectivo clúster.
 
 **Para cutree():**
 
--   **tree**: Objeto de clase hclust.
+- **tree**: Objeto de clase hclust.
 
--   **k**: Valor entero. Corta matemáticamente el árbol jerárquico a una altura específica para generar exactamente k grupos, devolviendo un vector con la asignación de clúster (1, 2, 3...) para cada observación.
+- **k**: Valor entero. Corta matemáticamente el árbol jerárquico a una altura específica para generar exactamente k grupos, devolviendo un vector con la asignación de clúster (1, 2, 3...) para cada observación.
 
--   **h**: Corta el árbol en una altura numérica específica h del eje Y (distancia de aglomeración), dejando que el número de grupos se determine automáticamente según esa altura. (Nota: Se debe usar k o h, no ambos a la vez).
+- **h**: Corta el árbol en una altura numérica específica h del eje Y (distancia de aglomeración), dejando que el número de grupos se determine automáticamente según esa altura. (Nota: Se debe usar k o h, no ambos a la vez).
 
 **Para fviz_cluster():**
 
--   **object**: Requiere un objeto de modelo de clúster (como kmeans) o, en el caso de agrupamiento jerárquico, una lista explícita que contenga los datos originales (data = vecst) y el vector de asignaciones generado por cutree (cluster = VlEucl_Clusters).
+- **object**: Requiere un objeto de modelo de clúster (como kmeans) o, en el caso de agrupamiento jerárquico, una lista explícita que contenga los datos originales (data = vecst) y el vector de asignaciones generado por cutree (cluster = VlEucl_Clusters).
 
--   **show.clust.cent**: Valor lógico. Si es TRUE, calcula y grafica el centroide (punto medio multivariado) de cada clúster en el plano bidimensional de los componentes principales.
+- **show.clust.cent**: Valor lógico. Si es TRUE, calcula y grafica el centroide (punto medio multivariado) de cada clúster en el plano bidimensional de los componentes principales.
 
 (Nota sobre funciones de ggplot2 utilizadas para personalizar):
 
--   **geom_hline(yintercept, linetype, linewidth)**: Traza una línea horizontal de referencia en el eje Y (altura del dendrograma) indicando dónde se realiza el corte matemático.
+- **geom_hline(yintercept, linetype, linewidth)**: Traza una línea horizontal de referencia en el eje Y (altura del dendrograma) indicando dónde se realiza el corte matemático.
 
--   **labs(title, subtitle, x, y)**: Modifica las etiquetas de texto de los ejes y títulos.
+- **labs(title, subtitle, x, y)**: Modifica las etiquetas de texto de los ejes y títulos.
 
--   **theme(plot.title = element_text(hjust = 0.5))**: Ajusta parámetros estéticos del tema; hjust = 0.5 centra el texto del título horizontalmente.
+- **theme(plot.title = element_text(hjust = 0.5))**: Ajusta parámetros estéticos del tema; hjust = 0.5 centra el texto del título horizontalmente.
 
 **Interpretación sencilla:**
 
 Imagina que tienes a todos tus pacientes en una habitación y les pides que se tomen de las manos con la persona que tenga la salud más parecida a la suya.
 
--   El **Dendrograma** es una foto desde arriba de cómo se van formando esos grupos. Las ramas más bajas unen a "gemelos" casi idénticos. A medida que subes por el árbol, se unen grupos más grandes.
+- El **Dendrograma** es una foto desde arriba de cómo se van formando esos grupos. Las ramas más bajas unen a "gemelos" casi idénticos. A medida que subes por el árbol, se unen grupos más grandes.
 
--   La **línea punteada** es tu decisión como investigador: "Voy a cortar el árbol a esta altura porque quiero dividir a mi clínica en exactamente 3 tipos de pacientes (o 2)".
+- La **línea punteada** es tu decisión como investigador: "Voy a cortar el árbol a esta altura porque quiero dividir a mi clínica en exactamente 3 tipos de pacientes (o 2)".
 
--   El método de **Ward** suele ser el favorito porque actúa como un buen organizador de fiestas: se asegura de que los grupos que se formen sean lo más homogéneos posible por dentro.
+- El método de **Ward** suele ser el favorito porque actúa como un buen organizador de fiestas: se asegura de que los grupos que se formen sean lo más homogéneos posible por dentro.
 
--   Finalmente, el gráfico de **fviz_cluster** toma esa decisión y te la dibuja como "burbujas" o territorios en un mapa. Si las burbujas no se cruzan mucho, significa que lograste encontrar perfiles de pacientes muy bien diferenciados (por ejemplo: el grupo de los "sanos", el grupo de "riesgo moderado" y el grupo de "riesgo alto").
+- Finalmente, el gráfico de **fviz_cluster** toma esa decisión y te la dibuja como "burbujas" o territorios en un mapa. Si las burbujas no se cruzan mucho, significa que lograste encontrar perfiles de pacientes muy bien diferenciados (por ejemplo: el grupo de los "sanos", el grupo de "riesgo moderado" y el grupo de "riesgo alto").
 
 El **método de Ward sí puede tener dendrograma** porque pertenece al **clustering jerárquico aglomerativo**. Es decir, empieza con cada observación como un grupo separado y va uniendo grupos paso a paso hasta formar un solo grupo.
 
@@ -1001,7 +1001,7 @@ Lo que cambia es el **criterio de unión**.
 En métodos como:
 
 | Método | ¿Cómo decide unir clusters? |
-|------------------------|------------------------------------------------|
+|----|----|
 | `single` | Une según la menor distancia entre puntos. |
 | `complete` | Une según la mayor distancia entre puntos. |
 | `average` | Une según la distancia promedio. |
@@ -1041,7 +1041,7 @@ Se prueban dos modelos: el **Lineal (LDA)**, que intenta separar a los grupos c
 ### Funciones y librerías utilizadas
 
 |  |  |  |
-|---------------|---------------|------------------------------------------|
+|----|----|----|
 | **Función** | **Origen** | **Descripción** |
 | factor() | Nativa de R (base) | Convierte una variable de texto o numérica en una variable categórica formal (factor) con "niveles" definidos. |
 | lda() | Librería MASS | Ejecuta el Análisis Discriminante Lineal (Linear Discriminant Analysis). |
@@ -1067,21 +1067,21 @@ lda(formula = "Fórmula del Modelo",
 
 **Para lda() (paquete MASS):**
 
--   **formula**: Objeto de clase formula. Define la variable categórica dependiente (izquierda de \~) y las variables continuas predictoras (derecha de \~).
+- **formula**: Objeto de clase formula. Define la variable categórica dependiente (izquierda de \~) y las variables continuas predictoras (derecha de \~).
 
--   **data**: Data frame que contiene las variables del modelo.
+- **data**: Data frame que contiene las variables del modelo.
 
--   **prior**: Vector numérico que define las probabilidades previas de pertenencia a cada clase. Si se omite, se estiman a partir de las proporciones muestrales.
+- **prior**: Vector numérico que define las probabilidades previas de pertenencia a cada clase. Si se omite, se estiman a partir de las proporciones muestrales.
 
--   **tol**: Tolerancia numérica para determinar el rango de la matriz de covarianza y realizar su inversión.
+- **tol**: Tolerancia numérica para determinar el rango de la matriz de covarianza y realizar su inversión.
 
--   **method**: Algoritmo para estimar las medias y varianzas. "moment" (por defecto) usa estimadores estándar de momentos; "mle" usa máxima verosimilitud; "mve" y "t" son estimadores robustos.
+- **method**: Algoritmo para estimar las medias y varianzas. "moment" (por defecto) usa estimadores estándar de momentos; "mle" usa máxima verosimilitud; "mve" y "t" son estimadores robustos.
 
--   **CV**: Si es TRUE, ejecuta validación cruzada Leave-One-Out (LOOCV) y devuelve directamente las clasificaciones en lugar del modelo ajustado.
+- **CV**: Si es TRUE, ejecuta validación cruzada Leave-One-Out (LOOCV) y devuelve directamente las clasificaciones en lugar del modelo ajustado.
 
--   **nu**: Grados de libertad utilizados exclusivamente si method = "t".
+- **nu**: Grados de libertad utilizados exclusivamente si method = "t".
 
--   **na.action**: Función que indica cómo manejar los valores perdidos (NA).
+- **na.action**: Función que indica cómo manejar los valores perdidos (NA).
 
 ``` r
 # 1. Función base de predicción
@@ -1091,13 +1091,13 @@ predict(object = "Modelo Ajustado (lda/qda)")
 predict(object = "Modelo")$posterior[ , "Índice/Nombre de la Clase Positiva" - Entero o Cadena]
 ```
 
--   **\$ (Operador de Extracción de Listas)**: Aísla un elemento específico de la lista estructurada que devuelve predict(). Al llamar a \$posterior, se extrae exclusivamente la matriz numérica de dimensiones n×k (observaciones × clases) que contiene las probabilidades a posteriori calculadas por el modelo.
+- **\$ (Operador de Extracción de Listas)**: Aísla un elemento específico de la lista estructurada que devuelve predict(). Al llamar a \$posterior, se extrae exclusivamente la matriz numérica de dimensiones n×k (observaciones × clases) que contiene las probabilidades a posteriori calculadas por el modelo.
 
--   **[ , ] (Operador de Indexación de Matrices)**: Aplica un filtro bidimensional [filas, columnas] sobre la matriz extraída.
+- **[ , ] (Operador de Indexación de Matrices)**: Aplica un filtro bidimensional [filas, columnas] sobre la matriz extraída.
 
-    -   **Espacio vacío (antes de la coma)**: Indica que se deben retener todas las filas (todas las observaciones de la muestra).
+  - **Espacio vacío (antes de la coma)**: Indica que se deben retener todas las filas (todas las observaciones de la muestra).
 
-    -   **2 (después de la coma)**: Valor entero que selecciona exclusivamente la segunda columna de la matriz. En modelos binarios, esta columna suele contener la probabilidad matemática de pertenecer a la clase positiva (el evento de interés). Este vector numérico continuo resultante es el insumo estricto que requiere el argumento predictor de la función roc().
+  - **2 (después de la coma)**: Valor entero que selecciona exclusivamente la segunda columna de la matriz. En modelos binarios, esta columna suele contener la probabilidad matemática de pertenecer a la clase positiva (el evento de interés). Este vector numérico continuo resultante es el insumo estricto que requiere el argumento predictor de la función roc().
 
 en otras palabras:
 
@@ -1107,21 +1107,21 @@ Desglose técnico de cada componente:
 
 1.  `predict(object = FLD)` (Generación de Predicciones): Al ejecutar predict() sobre un modelo de Análisis Discriminante Lineal (lda), la función evalúa los datos y devuelve una lista estructurada que contiene tres elementos matemáticos:
 
--   class: Un vector con la clasificación final asignada (ej. 0 o 1).
--   posterior: Una matriz numérica con las probabilidades a posteriori.
--   x: Las puntuaciones proyectadas en la función discriminante.
+- class: Un vector con la clasificación final asignada (ej. 0 o 1).
+- posterior: Una matriz numérica con las probabilidades a posteriori.
+- x: Las puntuaciones proyectadas en la función discriminante.
 
 2.  `$posterior` (Extracción del Elemento): El operador \$ se utiliza para aislar y extraer exclusivamente la matriz posterior de la lista generada en el paso anterior.
 
--   Esta es una matriz de dimensiones n x k (donde n es el número de observaciones/pacientes y k el número de clases).
--   Al ser un modelo binario (Fuma / No fuma), la matriz tiene exactamente 2 columnas:
-    -   Columna 1: Probabilidad matemática de pertenecer a la clase negativa ("No fumador" / 0).
-    -   Columna 2: Probabilidad matemática de pertenecer a la clase positiva ("Fumador" / 1).
+- Esta es una matriz de dimensiones n x k (donde n es el número de observaciones/pacientes y k el número de clases).
+- Al ser un modelo binario (Fuma / No fuma), la matriz tiene exactamente 2 columnas:
+  - Columna 1: Probabilidad matemática de pertenecer a la clase negativa ("No fumador" / 0).
+  - Columna 2: Probabilidad matemática de pertenecer a la clase positiva ("Fumador" / 1).
 
 3.  `[, 2]` (Indexación de la Matriz): Los corchetes [filas, columnas] aplican un filtro dimensional sobre la matriz extraída.
 
--   El espacio vacío antes de la coma indica que se deben retener todas las filas (todos los pacientes).
--   El número 2 después de la coma indica que se debe extraer exclusivamente la segunda columna.
+- El espacio vacío antes de la coma indica que se deben retener todas las filas (todos los pacientes).
+- El número 2 después de la coma indica que se debe extraer exclusivamente la segunda columna.
 
 En resumen: La curva ROC evalúa el rendimiento de un modelo basándose en distintos umbrales de probabilidad, no en clasificaciones absolutas. Por lo tanto, `predict(object = FLD)$posterior[, 2]` le entrega a la función roc() un vector numérico continuo que representa la probabilidad exacta que el modelo le asignó a cada paciente de ser fumador.
 
@@ -1151,83 +1151,83 @@ coords(roc = "Objeto de clase roc",
 
 **Para roc() (paquete pROC):**
 
--   **response**: Vector o factor que contiene las clasificaciones reales (observadas) de los datos. Debe ser estrictamente binario.
+- **response**: Vector o factor que contiene las clasificaciones reales (observadas) de los datos. Debe ser estrictamente binario.
 
--   **predictor**: Vector numérico continuo con el criterio de decisión (probabilidades a posteriori).
+- **predictor**: Vector numérico continuo con el criterio de decisión (probabilidades a posteriori).
 
-    (las probabilidades a posteriori extraídas con \$posterior[, 2] o \$posterior[, "Fumador"]).
+  (las probabilidades a posteriori extraídas con \$posterior[, 2] o \$posterior[, "Fumador"]).
 
--   **levels**: Vector de caracteres de longitud 2 que define explícitamente la dirección de la clasificación c("Control", "Caso").
+- **levels**: Vector de caracteres de longitud 2 que define explícitamente la dirección de la clasificación c("Control", "Caso").
 
-    c("Clase Negativa/Control", "Clase Positiva/Caso"). Si se omite, la función intenta inferirlos automáticamente.
+  c("Clase Negativa/Control", "Clase Positiva/Caso"). Si se omite, la función intenta inferirlos automáticamente.
 
--   **direction**: Define qué dirección del predictor indica un evento positivo. "auto" lo infiere matemáticamente; "\<" asume que valores menores indican control; "\>" asume que valores mayores indican control.
+- **direction**: Define qué dirección del predictor indica un evento positivo. "auto" lo infiere matemáticamente; "\<" asume que valores menores indican control; "\>" asume que valores mayores indican control.
 
--   **smooth**: Si es TRUE, ajusta una curva ROC suavizada en lugar de la empírica escalonada.
+- **smooth**: Si es TRUE, ajusta una curva ROC suavizada en lugar de la empírica escalonada.
 
--   **auc** / **ci**: Valores lógicos para calcular automáticamente el Área Bajo la Curva y sus Intervalos de Confianza, respectivamente.
+- **auc** / **ci**: Valores lógicos para calcular automáticamente el Área Bajo la Curva y sus Intervalos de Confianza, respectivamente.
 
 **Para coords() (paquete pROC):**
 
--   **x**: Define qué puntos evaluar. "best" busca el umbral óptimo; "all" devuelve todos los umbrales observados; "local maximas" devuelve picos locales.
+- **x**: Define qué puntos evaluar. "best" busca el umbral óptimo; "all" devuelve todos los umbrales observados; "local maximas" devuelve picos locales.
 
-    -   "best": Calcula algorítmicamente el punto de corte óptimo (el que mejor equilibra la clasificación) basándose en el criterio definido en best.method.
+  - "best": Calcula algorítmicamente el punto de corte óptimo (el que mejor equilibra la clasificación) basándose en el criterio definido en best.method.
 
-    -   "all": Extrae las coordenadas para absolutamente todos los umbrales (valores únicos del predictor) observados en el conjunto de datos.
+  - "all": Extrae las coordenadas para absolutamente todos los umbrales (valores únicos del predictor) observados en el conjunto de datos.
 
-    -   "local maximas": Extrae solo los umbrales que representan máximos locales en la curva ROC (puntos donde la curva empírica cambia de dirección acercándose al punto ideal superior izquierdo).
+  - "local maximas": Extrae solo los umbrales que representan máximos locales en la curva ROC (puntos donde la curva empírica cambia de dirección acercándose al punto ideal superior izquierdo).
 
-    -   Vector numérico: Permite ingresar un valor exacto (ej. 0.5 o c(0.2, 0.8)) para evaluar el rendimiento del modelo en ese umbral específico.
+  - Vector numérico: Permite ingresar un valor exacto (ej. 0.5 o c(0.2, 0.8)) para evaluar el rendimiento del modelo en ese umbral específico.
 
--   **ret**: Vector de caracteres que especifica las métricas a extraer para el punto de corte seleccionado.
+- **ret**: Vector de caracteres que especifica las métricas a extraer para el punto de corte seleccionado.
 
-    (ej. "threshold", "specificity", "sensitivity", "accuracy", "ppv" [Valor Predictivo Positivo], etc.).
+  (ej. "threshold", "specificity", "sensitivity", "accuracy", "ppv" [Valor Predictivo Positivo], etc.).
 
-    -   "threshold": El valor de corte numérico del predictor.
+  - "threshold": El valor de corte numérico del predictor.
 
-    -   "specificity": Tasa de Verdaderos Negativos (TN/(TN+FP)). Proporción de controles correctamente identificados.
+  - "specificity": Tasa de Verdaderos Negativos (TN/(TN+FP)). Proporción de controles correctamente identificados.
 
-    -   "sensitivity" / "recall": Tasa de Verdaderos Positivos (TP/(TP+FN)). Proporción de casos correctamente identificados.
+  - "sensitivity" / "recall": Tasa de Verdaderos Positivos (TP/(TP+FN)). Proporción de casos correctamente identificados.
 
-    -   "accuracy": Exactitud global ((TP+TN)/Total). Proporción total de predicciones correctas.
+  - "accuracy": Exactitud global ((TP+TN)/Total). Proporción total de predicciones correctas.
 
-    -   "tn", "tp", "fn", "fp": Conteos absolutos de Verdaderos Negativos, Verdaderos Positivos, Falsos Negativos y Falsos Positivos, respectivamente.
+  - "tn", "tp", "fn", "fp": Conteos absolutos de Verdaderos Negativos, Verdaderos Positivos, Falsos Negativos y Falsos Positivos, respectivamente.
 
-    -   "npv": Valor Predictivo Negativo (TN/(TN+FN)). Probabilidad de que la observación sea realmente un control si el modelo predice control.
+  - "npv": Valor Predictivo Negativo (TN/(TN+FN)). Probabilidad de que la observación sea realmente un control si el modelo predice control.
 
-    -   "ppv" / "precision": Valor Predictivo Positivo (TP/(TP+FP)). Probabilidad de que la observación sea realmente un caso si el modelo predice caso.
+  - "ppv" / "precision": Valor Predictivo Positivo (TP/(TP+FP)). Probabilidad de que la observación sea realmente un caso si el modelo predice caso.
 
-    -   "1-specificity" / "fpr": Tasa de Falsos Positivos (FP/(FP+TN)). Proporción de controles clasificados erróneamente como casos (Eje X de la curva ROC).
+  - "1-specificity" / "fpr": Tasa de Falsos Positivos (FP/(FP+TN)). Proporción de controles clasificados erróneamente como casos (Eje X de la curva ROC).
 
-    -   "1-sensitivity": Tasa de Falsos Negativos (FN/(TP+FN)). Proporción de casos clasificados erróneamente como controles.
+  - "1-sensitivity": Tasa de Falsos Negativos (FN/(TP+FN)). Proporción de casos clasificados erróneamente como controles.
 
-    -   "1-accuracy": Tasa de error global de clasificación.
+  - "1-accuracy": Tasa de error global de clasificación.
 
-    -   "fdr": Tasa de Falso Descubrimiento (FP/(FP+TP)). Complemento matemático del Valor Predictivo Positivo.
+  - "fdr": Tasa de Falso Descubrimiento (FP/(FP+TP)). Complemento matemático del Valor Predictivo Positivo.
 
-    -   "all": Retorna una matriz que incluye simultáneamente todas las métricas listadas anteriormente.
+  - "all": Retorna una matriz que incluye simultáneamente todas las métricas listadas anteriormente.
 
--   **best.method**: Si x = "best", define el criterio de optimización. "youden" maximiza (Sensibilidad + Especificidad - 1); "closest.topleft" minimiza la distancia euclidiana al punto ideal (0,1).
+- **best.method**: Si x = "best", define el criterio de optimización. "youden" maximiza (Sensibilidad + Especificidad - 1); "closest.topleft" minimiza la distancia euclidiana al punto ideal (0,1).
 
-    -   "youden": Maximiza el estadístico J de Youden (J = Sensibilidad + Especificidad −1). Geométricamente, busca el punto de la curva ROC que tiene la mayor distancia vertical respecto a la línea diagonal de azar.
+  - "youden": Maximiza el estadístico J de Youden (J = Sensibilidad + Especificidad −1). Geométricamente, busca el punto de la curva ROC que tiene la mayor distancia vertical respecto a la línea diagonal de azar.
 
-    -   "closest.topleft": Minimiza la distancia euclidiana geométrica entre un punto de la curva y el punto de clasificación perfecta (0,1) en el plano ROC. La función a minimizar es $d^2=(1−Sensibilidad)2+(1−Especificidad)^2$.
+  - "closest.topleft": Minimiza la distancia euclidiana geométrica entre un punto de la curva y el punto de clasificación perfecta (0,1) en el plano ROC. La función a minimizar es $d^2=(1−Sensibilidad)2+(1−Especificidad)^2$.
 
--   **best.weights**: Vector numérico c(costo, prevalencia) para ponderar el cálculo del mejor umbral si los falsos positivos/negativos tienen impactos asimétricos.
+- **best.weights**: Vector numérico c(costo, prevalencia) para ponderar el cálculo del mejor umbral si los falsos positivos/negativos tienen impactos asimétricos.
 
-    Permite desplazar el umbral óptimo si los errores no tienen el mismo impacto.
+  Permite desplazar el umbral óptimo si los errores no tienen el mismo impacto.
 
-    -   costo: Razón de costos entre cometer un Falso Negativo vs. un Falso Positivo.
+  - costo: Razón de costos entre cometer un Falso Negativo vs. un Falso Positivo.
 
-    -   prevalencia: Proporción real de casos positivos en la población.
+  - prevalencia: Proporción real de casos positivos en la población.
 
-    -   (Ejemplo: Si un falso negativo es letal y un falso positivo solo requiere otro examen, se ajusta el costo para forzar un umbral con mayor sensibilidad).
+  - (Ejemplo: Si un falso negativo es letal y un falso positivo solo requiere otro examen, se ajusta el costo para forzar un umbral con mayor sensibilidad).
 
--   **transpose**: Valor lógico. Si es TRUE, transpone la matriz de resultados (intercambia filas por columnas) para facilitar su lectura o integración en tablas.
+- **transpose**: Valor lógico. Si es TRUE, transpone la matriz de resultados (intercambia filas por columnas) para facilitar su lectura o integración en tablas.
 
--   **as.list**: Valor lógico. Si es TRUE, fuerza a que el resultado se devuelva como una lista de R en lugar de un vector o matriz.
+- **as.list**: Valor lógico. Si es TRUE, fuerza a que el resultado se devuelva como una lista de R en lugar de un vector o matriz.
 
--   **drop**: Valor lógico. Si es TRUE (por defecto), aplica coerción dimensional: si el resultado es una matriz de una sola fila o columna, la simplifica convirtiéndola en un vector numérico estándar.
+- **drop**: Valor lógico. Si es TRUE (por defecto), aplica coerción dimensional: si el resultado es una matriz de una sola fila o columna, la simplifica convirtiéndola en un vector numérico estándar.
 
 ``` r
 library(pROC)
@@ -1281,25 +1281,25 @@ plot.roc(x = "Objeto de clase roc",
 
 **Para plot.roc() (paquete pROC):**
 
--   **x** (en nuestro código ROC): Objeto de clase roc que contiene los cálculos empíricos generados previamente.
+- **x** (en nuestro código ROC): Objeto de clase roc que contiene los cálculos empíricos generados previamente.
 
--   **legacy.axes**: Si es TRUE, fuerza el eje X a mostrar "1 - Especificidad" (escala de 0 a 1). Si es FALSE (por defecto), muestra "Especificidad" invertida (escala de 1 a 0).
+- **legacy.axes**: Si es TRUE, fuerza el eje X a mostrar "1 - Especificidad" (escala de 0 a 1). Si es FALSE (por defecto), muestra "Especificidad" invertida (escala de 1 a 0).
 
--   **identity.\***: Familia de argumentos que controlan la línea diagonal de referencia (AUC = 0.5, modelo aleatorio). Permite modificar su color (identity.col), tipo de trazo (identity.lty) y grosor (identity.lwd).
+- **identity.\***: Familia de argumentos que controlan la línea diagonal de referencia (AUC = 0.5, modelo aleatorio). Permite modificar su color (identity.col), tipo de trazo (identity.lty) y grosor (identity.lwd).
 
--   **print.thres.\***: Familia de argumentos gráficos para personalizar el texto y símbolo del umbral impreso. Controla qué umbral imprimir (print.thres), el tipo de punto (pch), tamaño (cex), color (col), formato del texto (pattern, usando sintaxis C como sprintf) y ajuste de coordenadas (adj).
+- **print.thres.\***: Familia de argumentos gráficos para personalizar el texto y símbolo del umbral impreso. Controla qué umbral imprimir (print.thres), el tipo de punto (pch), tamaño (cex), color (col), formato del texto (pattern, usando sintaxis C como sprintf) y ajuste de coordenadas (adj).
 
--   **print.auc.\***: Familia de argumentos gráficos para personalizar el texto del AUC impreso. Controla su formato (pattern), coordenadas exactas en el gráfico (x, y), tamaño (cex), color (col) y ajuste (adj).
+- **print.auc.\***: Familia de argumentos gráficos para personalizar el texto del AUC impreso. Controla su formato (pattern), coordenadas exactas en el gráfico (x, y), tamaño (cex), color (col) y ajuste (adj).
 
--   **auc.polygon.\***: Familia de argumentos para personalizar el área bajo la curva empírica. Controla el color de relleno (col), la densidad y ángulo del achurado si no se desea un relleno sólido (density, angle) y el color del borde (border).
+- **auc.polygon.\***: Familia de argumentos para personalizar el área bajo la curva empírica. Controla el color de relleno (col), la densidad y ángulo del achurado si no se desea un relleno sólido (density, angle) y el color del borde (border).
 
--   **max.auc.polygon.\***: Familia de argumentos idéntica a la anterior, pero aplicada al polígono de fondo que representa el modelo perfecto (AUC = 1.0).
+- **max.auc.polygon.\***: Familia de argumentos idéntica a la anterior, pero aplicada al polígono de fondo que representa el modelo perfecto (AUC = 1.0).
 
--   **grid.\***: Familia de argumentos para personalizar la cuadrícula. Permite definir vectores numéricos exactos donde trazar las líneas verticales (grid.v) y horizontales (grid.h), así como su estilo (lty, lwd, col).
+- **grid.\***: Familia de argumentos para personalizar la cuadrícula. Permite definir vectores numéricos exactos donde trazar las líneas verticales (grid.v) y horizontales (grid.h), así como su estilo (lty, lwd, col).
 
--   **type**: Define el estilo de trazado de la curva ROC. "l" (líneas directas), "s" o "S" (trazado escalonado estricto, recomendado para curvas empíricas).
+- **type**: Define el estilo de trazado de la curva ROC. "l" (líneas directas), "s" o "S" (trazado escalonado estricto, recomendado para curvas empíricas).
 
--   **xlab, ylab, main**: Cadenas de caracteres que sobrescriben los nombres de los ejes y el título principal.
+- **xlab, ylab, main**: Cadenas de caracteres que sobrescriben los nombres de los ejes y el título principal.
 
 ``` r
 table(... = "Variable Respuesta (Real)" - Vector/Factor,
@@ -1310,83 +1310,21 @@ table(... = "Variable Respuesta (Real)" - Vector/Factor,
 
 **Para table() (Generación de la Matriz de Confusión):**
 
--   **... (Vectores a cruzar)**: La función table acepta una cantidad arbitraria de objetos (vectores o factores) separados por comas. En el contexto de evaluar un modelo predictivo, se le entregan exactamente dos vectores de la misma longitud:
+- **... (Vectores a cruzar)**: La función table acepta una cantidad arbitraria de objetos (vectores o factores) separados por comas. En el contexto de evaluar un modelo predictivo, se le entregan exactamente dos vectores de la misma longitud:
 
-    1.  **El vector real** (en tu código Base_Multi\$fuma_bin): Contiene las clases verdaderas observadas en los datos. Por convención, al ponerlo primero, se asigna a las **filas** de la matriz.
+  1.  **El vector real** (en tu código Base_Multi\$fuma_bin): Contiene las clases verdaderas observadas en los datos. Por convención, al ponerlo primero, se asigna a las **filas** de la matriz.
 
-    2.  **El vector predicho** (en tu código predict(object = FLD)\$class): Contiene las clases que el modelo estimó. Al ponerlo segundo, se asigna a las **columnas** de la matriz.
+  2.  **El vector predicho** (en tu código predict(object = FLD)\$class): Contiene las clases que el modelo estimó. Al ponerlo segundo, se asigna a las **columnas** de la matriz.
 
--   **dnn** (Dimension Names): Vector de caracteres que sobrescribe los nombres automáticos de las dimensiones de la tabla. En tu código, c("reales", "predichos") etiqueta explícitamente las filas como "reales" y las columnas como "predichos", dándole la estructura formal y legible de una Matriz de Confusión.
+- **dnn** (Dimension Names): Vector de caracteres que sobrescribe los nombres automáticos de las dimensiones de la tabla. En tu código, c("reales", "predichos") etiqueta explícitamente las filas como "reales" y las columnas como "predichos", dándole la estructura formal y legible de una Matriz de Confusión.
 
--   **useNA**: Cadena de caracteres que define el tratamiento de los valores perdidos (NA). "no" (por defecto) los ignora; "ifany" agrega una fila/columna para NA solo si existen en los datos; "always" siempre agrega la fila/columna de NA aunque el conteo sea cero.
+- **useNA**: Cadena de caracteres que define el tratamiento de los valores perdidos (NA). "no" (por defecto) los ignora; "ifany" agrega una fila/columna para NA solo si existen en los datos; "always" siempre agrega la fila/columna de NA aunque el conteo sea cero.
 
 **Para la extracción predict()\$class (Insumo de la tabla):**
 
--   **predict(object = FLD)**: Evalúa el modelo discriminante y devuelve una lista de resultados.
+- **predict(object = FLD)**: Evalúa el modelo discriminante y devuelve una lista de resultados.
 
--   **\$class**: Aísla y extrae exclusivamente el vector categórico (factor) que contiene la **asignación de clase final** (ej. "Fumador" o "No fumador") que el modelo le otorgó a cada paciente. Este vector es el que se cruza directamente contra los datos reales en la función table().
-
-La idea central es:
-
-> Usamos Edad, Peso, IMC y Presión Arterial Sistólica para clasificar a cada persona como No fumador o Fumador/Fumador ocasional.
-
-**Qué Hace Cada Parte**
-
-Primero se crea la variable respuesta:
-
-`Base_Multi$fuma_bin <- ifelse(Base_Multi$fuma == "No fumador", 0, 1)`
-
-Esto transforma fuma en una variable binaria:
-
--   0 = No fumador
-
--   1 = Fumador o fumador ocasional
-
-Esto es necesario porque el modelo y la curva ROC necesitan una clasificación binaria.
-
-Luego se ajusta el modelo LDA:
-
-`FLD <- MASS::lda(   fuma_bin ~ Edad + Peso + IMC + Presión_Arterial_Sistólica,   data = Base_Multi )`
-
-Aquí se está diciendo:
-
-> Quiero predecir fuma_bin usando Edad, Peso, IMC y Presión Arterial Sistólica.
-
-Después se obtiene una probabilidad o score:
-
-`predict(object = FLD)$posterior[, 2]`
-
-Eso extrae la probabilidad estimada de pertenecer a la clase positiva, es decir, 1 = Fumador.
-
-Luego se construye la curva ROC:
-
-`ROC <- roc(Base_Multi$fuma_bin, predict(object = FLD)$posterior[, 2])`
-
-La curva ROC evalúa qué tan bien el modelo separa fumadores de no fumadores usando distintos puntos de corte.
-
-Finalmente:
-
-`coords(ROC, "best", ret = c("threshold", "specificity", "sensitivity"))`
-
-busca el **mejor umbral de clasificación**.
-
-**Qué Destacar En La Salida**
-
-En la tablita de la derecha yo subrayaría estos tres valores:
-
-`threshold = 0.3803794 specificity = 0.7948718 sensitivity = 0.5238095`
-
-Interpretación:
-
--   threshold = 0.3804: el mejor punto de corte no es 0.5, sino aprox. 0.38.
-
--   specificity = 0.7949: el modelo identifica correctamente cerca del **79.5% de los no fumadores**.
-
--   sensitivity = 0.5238: el modelo identifica correctamente cerca del **52.4% de los fumadores**.
-
-**Conclusión Para Decir En La Presentación**
-
-> El modelo LDA permite clasificar a los individuos según su condición de fumador usando variables biométricas. La curva ROC indica que el mejor punto de corte es aproximadamente 0.38. Con este umbral, el modelo logra una especificidad cercana al 79.5%, identificando bien a los no fumadores, y una sensibilidad de 52.4%, detectando aproximadamente la mitad de los fumadores. Esto muestra que el modelo tiene una capacidad discriminante moderada, pero no perfecta.
+- **\$class**: Aísla y extrae exclusivamente el vector categórico (factor) que contiene la **asignación de clase final** (ej. "Fumador" o "No fumador") que el modelo le otorgó a cada paciente. Este vector es el que se cruza directamente contra los datos reales en la función table().
 
 ### Función discriminante de razón de verosimilitud
 
@@ -1414,269 +1352,35 @@ coords(roc = "Objeto de clase roc",
 
 **Para qda() (paquete MASS):**
 
--   **formula**: Objeto de clase formula. Define la variable categórica dependiente (izquierda de \~) y las variables continuas predictoras (derecha de \~). A diferencia de lda, el Análisis Discriminante Cuadrático asume que cada clase tiene su propia matriz de varianza-covarianza (heterogeneidad), generando fronteras de decisión curvas (cuadráticas) en lugar de líneas rectas.
+- **formula**: Objeto de clase formula. Define la variable categórica dependiente (izquierda de \~) y las variables continuas predictoras (derecha de \~). A diferencia de lda, el Análisis Discriminante Cuadrático asume que cada clase tiene su propia matriz de varianza-covarianza (heterogeneidad), generando fronteras de decisión curvas (cuadráticas) en lugar de líneas rectas.
 
--   **data**: Data frame que contiene las variables declaradas en la fórmula.
+- **data**: Data frame que contiene las variables declaradas en la fórmula.
 
 **Para predict() (método para objetos qda):**
 
--   **object** (en tu código QDA): Modelo qda previamente ajustado. Evalúa los datos originales y devuelve una lista con las clasificaciones y probabilidades.
+- **object** (en tu código QDA): Modelo qda previamente ajustado. Evalúa los datos originales y devuelve una lista con las clasificaciones y probabilidades.
 
 **Para la extracción qda_pred\$posterior[, "Fumador"]:**
 
--   **\$ (Operador de Extracción)**: Aísla la matriz posterior de la lista de predicciones. Esta matriz contiene las probabilidades matemáticas de pertenecer a cada clase.
+- **\$ (Operador de Extracción)**: Aísla la matriz posterior de la lista de predicciones. Esta matriz contiene las probabilidades matemáticas de pertenecer a cada clase.
 
--   **[ , "Fumador"] (Indexación por Nombre)**: El espacio vacío antes de la coma retiene a todos los pacientes (filas). La cadena "Fumador" después de la coma extrae explícitamente la columna que contiene la probabilidad de ser fumador. Usar el nombre exacto de la clase es una práctica más segura y robusta que usar el índice numérico [, 2].
+- **[ , "Fumador"] (Indexación por Nombre)**: El espacio vacío antes de la coma retiene a todos los pacientes (filas). La cadena "Fumador" después de la coma extrae explícitamente la columna que contiene la probabilidad de ser fumador. Usar el nombre exacto de la clase es una práctica más segura y robusta que usar el índice numérico [, 2].
 
 **Para roc() (paquete pROC):**
 
--   **response**: Vector o factor binario con las clasificaciones reales observadas en los datos.
+- **response**: Vector o factor binario con las clasificaciones reales observadas en los datos.
 
--   **predictor**: Vector numérico continuo con el criterio de decisión (las probabilidades extraídas en el paso anterior).
+- **predictor**: Vector numérico continuo con el criterio de decisión (las probabilidades extraídas en el paso anterior).
 
--   **levels**: Vector de caracteres de longitud 2. Define explícitamente el orden de las clases c("Clase Negativa/Control", "Clase Positiva/Caso"). En tu código, c("No fumador", "Fumador") le asegura a la función qué categoría debe considerar como el evento a predecir, evitando que lo asuma por orden alfabético.
+- **levels**: Vector de caracteres de longitud 2. Define explícitamente el orden de las clases c("Clase Negativa/Control", "Clase Positiva/Caso"). En tu código, c("No fumador", "Fumador") le asegura a la función qué categoría debe considerar como el evento a predecir, evitando que lo asuma por orden alfabético.
 
 **Para coords() (paquete pROC):**
 
--   **roc**: Objeto de clase roc generado previamente.
+- **roc**: Objeto de clase roc generado previamente.
 
--   **x**: Al especificar "best", la función calcula algorítmicamente el punto de corte óptimo (maximizando el índice de Youden: Sensibilidad + Especificidad - 1).
+- **x**: Al especificar "best", la función calcula algorítmicamente el punto de corte óptimo (maximizando el índice de Youden: Sensibilidad + Especificidad - 1).
 
--   **ret**: Vector de caracteres que especifica exactamente qué métricas extraer para ese punto óptimo. En tu código, extrae el umbral numérico ("threshold"), la proporción de sanos detectados ("specificity") y la proporción de enfermos detectados ("sensitivity").
-
-Esta diapo muestra dos salidas clave del **LDA**:
-
-1.  La **curva ROC**
-
-2.  La **matriz de confusión**
-
-**1. Curva ROC**
-
-El código principal es:
-
-`plot.roc(ROC,          print.thres = "best",          print.auc = TRUE,          main = "Curva ROC LDA",          col = "#00a499",          grid = TRUE,          xlab = "1-Especificidad",          ylab = "Sensibilidad")`
-
-Esto grafica el rendimiento del modelo LDA para distintos puntos de corte.
-
-En el gráfico deberías destacar:
-
-`AUC = 0.628`
-
-y el punto marcado:
-
-`threshold = 0.380 specificity = 0.795 sensitivity = 0.524`
-
-Interpretación:
-
--   AUC = 0.628: el modelo tiene capacidad discriminante **moderada-baja**.
-
--   Si el AUC fuera 0.5, sería casi azar.
-
--   Si fuera cercano a 1, sería excelente.
-
--   Entonces 0.628 indica que el modelo separa fumadores y no fumadores, pero no con gran fuerza.
-
-El punto 0.380 es el mejor umbral según la curva ROC. Con ese umbral:
-
--   Detecta aprox. 52.4% de fumadores.
-
--   Reconoce aprox. 79.5% de no fumadores.
-
-**2. Matriz De Confusión**
-
-El código es:
-
-`table(Base_Multi$fuma_bin,       predict(object = FLD)$class,       dnn = c("reales", "predichos"))`
-
-La salida es:
-
-| **Reales / Predichos** | **0** | **1** |
-|------------------------|-------|-------|
-| 0                      | 37    | 2     |
-| 1                      | 19    | 2     |
-
-Donde:
-
--   0 = No fumador
-
--   1 = Fumador o fumador ocasional
-
-Interpretación fila por fila:
-
--   37: no fumadores correctamente clasificados.
-
--   2: no fumadores clasificados erróneamente como fumadores.
-
--   19: fumadores reales clasificados erróneamente como no fumadores.
-
--   2: fumadores correctamente clasificados.
-
-De aquí salen métricas importantes:
-
-`Exactitud = (37 + 2) / 60 = 65% Sensibilidad = 2 / (19 + 2) = 9.5% Especificidad = 37 / (37 + 2) = 94.9%`
-
-**Ojo Con Algo Importante**
-
-La matriz de confusión usa la clasificación directa de predict(FLD)\$class, probablemente con el umbral interno/default del modelo.
-
-La curva ROC, en cambio, muestra que si usas un umbral óptimo de 0.380, mejora la sensibilidad.
-
-Por eso puedes decir:
-
-> Con la clasificación directa, el modelo reconoce muy bien a los no fumadores, pero casi no detecta fumadores. La curva ROC sugiere que un umbral menor, cercano a 0.38, mejora el equilibrio entre sensibilidad y especificidad.
-
-**Qué Destacar En La Diapo**
-
-Subrayaría en el gráfico:
-
-`AUC = 0.628`
-
-y el punto:
-
-`0.380 (0.795, 0.524)`
-
-En la matriz de confusión subrayaría:
-
-`37 19 2`
-
-Especialmente el 19, porque muestra el problema principal:
-
-> El modelo está clasificando muchos fumadores como no fumadores.
-
-**Conclusión Para Presentar**
-
-> La curva ROC del LDA muestra un AUC de 0.628, lo que indica una capacidad discriminante moderada-baja. El mejor umbral es aproximadamente 0.38, con sensibilidad de 52.4% y especificidad de 79.5%. Sin embargo, la matriz de confusión del modelo clasificado directamente muestra que identifica muy bien a los no fumadores, pero falla en detectar fumadores, ya que 19 de 21 fumadores reales son clasificados como no fumadores. Por lo tanto, el LDA no es un buen clasificador para detectar fumadores con estas variables, aunque sí distingue razonablemente a los no fumadores.
-
-Esta diapo corresponde al **Análisis Discriminante Cuadrático**, o **QDA**.
-
-La idea es parecida al LDA: clasificar a los pacientes como Fumador o No fumador usando:
-
-`Edad + Peso + IMC + Presión_Arterial_Sistólica`
-
-Pero QDA es más flexible que LDA.
-
-**Diferencia Con LDA**
-
--   LDA usa una frontera lineal.
-
--   QDA usa una frontera cuadrática.
-
--   LDA asume matrices de covarianza iguales entre grupos.
-
--   QDA permite matrices de covarianza distintas entre fumadores y no fumadores.
-
-Por eso QDA puede adaptarse mejor cuando los grupos no tienen la misma forma o dispersión.
-
-**Qué Hace El Código**
-
-Primero redefine la variable respuesta como factor:
-
-`Base_Multi$fuma_bin <- factor(   ifelse(Base_Multi$fuma == "No fumador", "No fumador", "Fumador") )`
-
-Esto deja dos clases:
-
--   No fumador
-
--   Fumador
-
-Luego ajusta el modelo QDA:
-
-`QDA <- MASS::qda(   fuma_bin ~ Edad + Peso + IMC + Presión_Arterial_Sistólica,   data = Base_Multi )`
-
-Después genera predicciones:
-
-`qda_pred <- predict(QDA)`
-
-Y extrae la probabilidad de pertenecer a la clase Fumador:
-
-`p_event <- qda_pred$posterior[, "Fumador"]`
-
-Eso se usa para la curva ROC:
-
-`ROC <- pROC::roc(   response = Base_Multi$fuma_bin,   predictor = p_event,   levels = c("No fumador", "Fumador") )`
-
-**Qué Destacar De La Curva ROC**
-
-En el gráfico aparece:
-
-`AUC = 0.700`
-
-Este número es muy importante.
-
-Interpretación:
-
--   AUC = 0.700 indica una capacidad discriminante **moderada**.
-
--   Es mejor que el LDA, que tenía AUC = 0.628.
-
--   No es excelente, pero sí muestra mayor capacidad para separar fumadores de no fumadores.
-
-También aparece el mejor punto de corte:
-
-`threshold = 0.419303 specificity = 0.7435897 sensitivity = 0.6666667`
-
-Interpretación:
-
--   Con un umbral de 0.419, el modelo detecta correctamente aprox. 66.7% de los fumadores.
-
--   Identifica correctamente aprox. 74.4% de los no fumadores.
-
--   Tiene un mejor equilibrio que LDA.
-
-**Qué Destacar De La Matriz De Confusión**
-
-La matriz mostrada es:
-
-| **Reales / Predichos** | **Fumador** | **No fumador** |
-|------------------------|-------------|----------------|
-| Fumador                | 5           | 16             |
-| No fumador             | 5           | 34             |
-
-Interpretación:
-
--   5 fumadores fueron correctamente clasificados como fumadores.
-
--   16 fumadores fueron clasificados erróneamente como no fumadores.
-
--   34 no fumadores fueron correctamente clasificados.
-
--   5 no fumadores fueron clasificados erróneamente como fumadores.
-
-Con esa matriz:
-
-`Exactitud = (5 + 34) / 60 = 65% Sensibilidad = 5 / (5 + 16) = 23.8% Especificidad = 34 / (34 + 5) = 87.2%`
-
-La matriz de confusión directa todavía muestra baja sensibilidad, pero mejora respecto al LDA.
-
-**Qué Subrayaría En La Diapo**
-
-En el código:
-
-`qda(...)`
-
-porque indica que ahora se usa un modelo cuadrático.
-
-`p_event <- qda_pred$posterior[, "Fumador"]`
-
-porque toma la probabilidad de la clase positiva.
-
-`levels = c("No fumador", "Fumador")`
-
-porque define correctamente cuál es la clase negativa y cuál la positiva.
-
-En la salida:
-
-`AUC = 0.700`
-
-`threshold = 0.419303 specificity = 0.7435897 sensitivity = 0.6666667`
-
-Y en la matriz:
-
-`Fumador: 5 correctos, 16 incorrectos No fumador: 34 correctos, 5 incorrectos`
-
-**Conclusión Para Presentar**
-
-> El modelo QDA presenta una mejor capacidad discriminante que el LDA, con un AUC de 0.700 frente a 0.628. El umbral óptimo es aproximadamente 0.419, logrando una sensibilidad de 66.7% y una especificidad de 74.4%. Esto indica un mejor equilibrio entre detectar fumadores y reconocer no fumadores. Sin embargo, la matriz de confusión directa muestra que todavía se clasifican muchos fumadores como no fumadores, por lo que el modelo mejora respecto al LDA, pero sigue teniendo una capacidad predictiva moderada.
+- **ret**: Vector de caracteres que especifica exactamente qué métricas extraer para ese punto óptimo. En tu código, extrae el umbral numérico ("threshold"), la proporción de sanos detectados ("specificity") y la proporción de enfermos detectados ("sensitivity").
 
 ## Redes Neuronales Artificiales
 
@@ -1686,7 +1390,7 @@ A diferencia de los modelos anteriores, aquí hacemos algo fundamental en Machi
 ### Funciones y librerías utilizadas
 
 |  |  |  |
-|----------------|----------------|----------------------------------------|
+|----|----|----|
 | **Función** | **Origen** | **Descripción** |
 | scale() | Nativa de R (base) | Estandariza las variables numéricas (les da media 0 y desviación estándar 1). Esto es **obligatorio** en redes neuronales para que funcionen bien. |
 | as.data.frame() | Nativa de R (base) | Convierte el resultado matemático de scale() de vuelta a un formato de tabla manejable. |
@@ -1695,87 +1399,3 @@ A diferencia de los modelos anteriores, aquí hacemos algo fundamental en Machi
 | nrow() | Nativa de R (base) | Cuenta el número total de filas de una base de datos. |
 | neuralnet() | Librería neuralnet | Construye y entrena la Red Neuronal Artificial. |
 | sum() | Nativa de R (base) | Suma los valores de un vector o matriz. |
-
-La idea central es:
-
-> Se entrena una red neuronal para predecir fuma_bin usando variables biométricas: Edad, Peso, IMC, Nivel de Glucosa y Presión Arterial Sistólica.
-
-**Qué Hace El Código**
-
-Primero se estandarizan las variables:
-
-`datos_escalados <- as.data.frame(scale(Base_Multi[, c(   "Edad", "Peso", "IMC", "Nivel_de_Glucosa", "Presión_Arterial_Sistólica" )]))`
-
-Esto es muy importante en redes neuronales.
-
-Como las variables tienen escalas distintas, por ejemplo:
-
--   Edad en años
-
--   Peso en kilos
-
--   IMC en índice
-
--   Glucosa en mg/dL
-
--   Presión en mmHg
-
-se usa scale() para que todas queden comparables. Si no se estandarizan, una variable con valores grandes podría dominar el entrenamiento.
-
-Luego se crea la variable objetivo:
-
-`datos_escalados$fuma_bin <- ifelse(Base_Multi$fuma == "No fumador", 0, 1)`
-
-Donde:
-
--   0 = No fumador
-
--   1 = Fumador o fumador ocasional
-
-Después se divide la base:
-
-`set.seed(42) sorteo <- sample(1:nrow(datos_escalados), size = 0.7 * nrow(datos_escalados)) datos_entrenamiento <- datos_escalados[sorteo, ] datos_prueba <- datos_escalados[-sorteo, ]`
-
-Aquí se separa:
-
--   70% entrenamiento: 42 pacientes
-
--   30% prueba: 18 pacientes
-
-Esto sirve para evaluar si la red aprende patrones generales y no solo memoriza los datos.
-
-Luego se entrena la red:
-
-`modelo_rna_real <- neuralnet(   fuma_bin ~ Edad + Peso + IMC + Nivel_de_Glucosa + Presión_Arterial_Sistólica,   data = datos_entrenamiento,   hidden = 3,   err.fct = "ce",   linear.output = FALSE )`
-
-Lo más importante:
-
-`hidden = 3`
-
-Significa que la red tiene una capa oculta con 3 neuronas.
-
-`err.fct = "ce"`
-
-Usa entropía cruzada, adecuada para clasificación binaria.
-
-`linear.output = FALSE`
-
-Indica que la salida será tipo probabilidad entre 0 y 1.
-
-**Qué Muestra El Diagrama**
-
-El gráfico de la red muestra:
-
--   A la izquierda: variables de entrada.
-
--   Al centro: 3 neuronas ocultas.
-
--   A la derecha: salida fuma_bin.
-
--   Las líneas: pesos aprendidos por la red.
-
--   Los nodos con 1: sesgos o interceptos.
-
-Visualmente:
-
-`Edad Peso IMC Nivel de Glucosa Presión Arterial Sistólica         ↓    3 neuronas ocultas         ↓      fuma_bin`
