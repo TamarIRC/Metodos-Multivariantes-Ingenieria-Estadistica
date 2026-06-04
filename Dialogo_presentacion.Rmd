@@ -1,0 +1,936 @@
+---
+title: "Guion de Presentacion - Taller I"
+author: "Metodos Multivariantes"
+date: "2026-06-04"
+output:
+  pdf_document: default
+  html_document: default
+---
+
+# Guion de presentacion
+
+## Objetivo del guion
+
+Este documento contiene un dialogo sugerido para la parte teorica de la presentacion, desde la slide 1 hasta la slide 14. La duracion estimada de esta seccion es de aproximadamente 10 minutos.
+
+La idea es mantener un tono formal, tecnico y conciso, propio de una presentacion de metodos multivariantes desde una perspectiva estadistica.
+
+------------------------------------------------------------------------
+
+# Parte teorica
+
+## Slide 1: Introduccion
+
+Buenos dias. En esta presentacion abordaremos metodos multivariantes, cuyo objetivo es analizar simultaneamente varias variables de interes.
+
+La motivacion principal es que, en muchos problemas reales, las variables no actuan de forma aislada, sino que estan correlacionadas entre si. Por lo tanto, el enfoque multivariante permite estudiar estructura, asociacion, comparacion de grupos, reduccion de dimension, agrupamiento y clasificacion considerando la informacion conjunta.
+
+En la primera parte revisaremos el marco teorico, y posteriormente pasaremos a una aplicacion computacional en R.
+
+------------------------------------------------------------------------
+
+## Slide 2: Informacion multivariante y graficos
+
+En una primera etapa se trabaja con analisis exploratorio multivariante.
+
+A diferencia del analisis univariado, donde se observa una variable a la vez, aqui buscamos analizar perfiles completos de observaciones. Es decir, no solo interesa saber como se comporta la edad, el peso o la presion arterial por separado, sino como se comportan en conjunto.
+
+Herramientas como Caras de Chernoff, graficos de estrellas, curvas de Andrews y matrices de correlacion permiten identificar patrones, similitudes entre observaciones y posibles valores atipicos considerando varias variables al mismo tiempo.
+
+------------------------------------------------------------------------
+
+## Slide 3: Mapas georreferenciados
+
+Los mapas georreferenciados incorporan una dimension espacial al analisis.
+
+Son utiles cuando las observaciones tienen localizacion geografica, porque permiten detectar concentracion, dispersion o diferencias territoriales.
+
+En este contexto, la visualizacion espacial complementa el analisis estadistico tradicional, ya que permite reconocer patrones que no siempre son evidentes en tablas o estadisticos resumen.
+
+------------------------------------------------------------------------
+
+## Slide 4: Datos no estructurados
+
+Cuando se trabaja con datos no estructurados, como texto, se pueden utilizar herramientas descriptivas como frecuencia de palabras o nubes de palabras.
+
+Estas tecnicas permiten resumir informacion textual e identificar terminos dominantes antes de aplicar procedimientos mas complejos.
+
+En este sentido, se mantiene la misma logica del analisis exploratorio: resumir, visualizar e identificar patrones relevantes en los datos.
+
+------------------------------------------------------------------------
+
+## Slide 5: Preliminares distributivos
+
+Antes de entrar a los metodos multivariantes, es necesario establecer algunos preliminares distributivos. La forma mas clara de entenderlos es partir desde el caso univariado y luego generalizarlo.
+
+En estadistica univariada trabajamos con una variable aleatoria $X$, una media poblacional $\mu$ y una varianza $\sigma^2$. En el caso multivariado, esa estructura se extiende a un vector aleatorio:
+
+$$
+X = (X_1, X_2, \ldots, X_p)'
+$$
+
+Ahora el parametro de localizacion ya no es una media escalar, sino un vector de medias:
+
+$$
+\mu = (\mu_1, \mu_2, \ldots, \mu_p)'
+$$
+
+y la dispersion ya no se representa mediante una varianza, sino mediante una matriz de varianza-covarianza:
+
+$$
+\Sigma
+$$
+
+Esta matriz contiene en la diagonal las varianzas individuales de cada variable, y fuera de la diagonal las covarianzas entre pares de variables.
+
+Por lo tanto, en multivariado no basta con estudiar cada variable por separado. Tambien importa como se relacionan entre ellas.
+
+### De normal univariada a normal multivariada
+
+En el caso univariado, muchos procedimientos inferenciales se construyen bajo el supuesto:
+
+$$
+X \sim N(\mu, \sigma^2)
+$$
+
+En el caso multivariado, esto se generaliza a:
+
+$$
+X \sim N_p(\mu, \Sigma)
+$$
+
+Es decir, una normal multivariante de dimension $p$, con vector de medias $\mu$ y matriz de covarianzas $\Sigma$.
+
+La diferencia central es que en una dimension la dispersion se resume con un solo numero, $\sigma^2$. En varias dimensiones, en cambio, la dispersion se resume con una matriz completa, porque ademas de la variabilidad de cada variable debemos considerar la asociacion entre ellas.
+
+### De distancia estandarizada a distancia de Mahalanobis
+
+En el caso univariado, para medir que tan lejos esta una observacion respecto de su media usamos una distancia estandarizada:
+
+$$
+z = \frac{x - \mu}{\sigma}
+$$
+
+Su cuadrado es:
+
+$$
+z^2 = \frac{(x - \mu)^2}{\sigma^2}
+$$
+
+Si $X$ es normal, entonces:
+
+$$
+z^2 \sim \chi^2_1
+$$
+
+En el caso multivariado, esta idea se generaliza mediante la distancia de Mahalanobis:
+
+$$
+D^2 = (x - \mu)' \Sigma^{-1} (x - \mu)
+$$
+
+Esta distancia mide que tan lejos esta una observacion respecto del centro multivariante, pero corrigiendo por escala y por correlacion entre variables.
+
+La analogia es directa:
+
+$$
+\frac{(x - \mu)^2}{\sigma^2}
+\quad \longrightarrow \quad
+(x - \mu)' \Sigma^{-1} (x - \mu)
+$$
+
+Si:
+
+$$
+X \sim N_p(\mu, \Sigma)
+$$
+
+entonces:
+
+$$
+D^2 \sim \chi^2_p
+$$
+
+Esto es relevante porque permite detectar observaciones atipicas multivariadas. Una observacion podria no ser extrema en ninguna variable individual, pero si ser atipica considerando la combinacion conjunta de todas las variables.
+
+### De chi-cuadrado a Wishart
+
+En inferencia univariada, cuando trabajamos con la varianza muestral, aparece la distribucion chi-cuadrado. Si tenemos una muestra normal, se cumple que:
+
+$$
+\frac{(n - 1)S^2}{\sigma^2} \sim \chi^2_{n-1}
+$$
+
+Esto permite hacer inferencia sobre la varianza poblacional $\sigma^2$.
+
+En el caso multivariado, la varianza deja de ser un numero y pasa a ser una matriz $\Sigma$. Por lo tanto, la varianza muestral $S^2$ se generaliza a la matriz de covarianzas muestral $S$.
+
+La distribucion que generaliza a la chi-cuadrado en este contexto es la distribucion de Wishart:
+
+$$
+(n - 1)S \sim W_p(\Sigma, n - 1)
+$$
+
+La interpretacion es que Wishart describe el comportamiento probabilistico de matrices de covarianza muestrales, asi como la chi-cuadrado describe el comportamiento de una varianza muestral en el caso univariado.
+
+Entonces, conceptualmente:
+
+-   $\chi^2$ describe variabilidad muestral de una varianza escalar.
+-   Wishart describe variabilidad muestral de una matriz de covarianzas.
+
+Por eso Wishart es fundamental en metodos multivariantes, especialmente en MANOVA, analisis discriminante, pruebas sobre matrices de covarianza y construccion de regiones de confianza multivariadas.
+
+### De t de Student a T cuadrado de Hotelling
+
+En el caso univariado, cuando queremos contrastar una media poblacional usamos la prueba t de Student:
+
+$$
+H_0: \mu = \mu_0
+$$
+
+$$
+H_1: \mu \ne \mu_0
+$$
+
+con estadistico:
+
+$$
+t = \frac{\bar{x} - \mu_0}{S/\sqrt{n}}
+$$
+
+En multivariado, el parametro ya no es una media escalar, sino un vector de medias. Entonces contrastamos:
+
+$$
+H_0: \mu = \mu_0
+$$
+
+$$
+H_1: \mu \ne \mu_0
+$$
+
+pero ahora $\mu$ y $\mu_0$ son vectores de dimension $p$.
+
+La generalizacion natural de la t de Student es la estadistica $T^2$ de Hotelling:
+
+$$
+T^2 = n(\bar{x} - \mu_0)'S^{-1}(\bar{x} - \mu_0)
+$$
+
+La logica es la misma: medir que tan lejos esta la media muestral de la media hipotetica. Pero ahora esa distancia considera simultaneamente todas las variables y sus covarianzas.
+
+Ademas, cuando $p = 1$, la estadistica $T^2$ se reduce a:
+
+$$
+T^2 = t^2
+$$
+
+Por eso se dice que $T^2$ de Hotelling es la version multivariada de la t de Student.
+
+Para tomar una decision, $T^2$ se transforma a una distribucion F:
+
+$$
+F = \frac{n-p}{p(n-1)}T^2
+$$
+
+La region critica queda definida como:
+
+$$
+F_{calculado} > F_{\alpha; p, n-p}
+$$
+
+Usualmente se trabaja con un nivel de significancia $\alpha = 0.05$. Si el estadistico cae en la region critica, o equivalentemente si el p-value es menor que $\alpha$, se rechaza $H_0$.
+
+### De ANOVA a MANOVA
+
+Algo similar ocurre al pasar de modelos lineales univariados a metodos multivariantes.
+
+En ANOVA, comparamos grupos respecto de una sola variable respuesta:
+
+$$
+Y = \mu + \text{efecto del grupo} + \varepsilon
+$$
+
+La hipotesis tipica es:
+
+$$
+H_0: \mu_1 = \mu_2 = \cdots = \mu_k
+$$
+
+En MANOVA, cada observacion tiene varias respuestas simultaneas. Por lo tanto, el modelo deja de trabajar con un escalar $Y$ y trabaja con un vector de respuestas:
+
+$$
+Y = (Y_1, Y_2, \ldots, Y_p)'
+$$
+
+La hipotesis se transforma en:
+
+$$
+H_0: \mu_1 = \mu_2 = \cdots = \mu_k
+$$
+
+pero ahora cada $\mu_j$ es un vector de medias.
+
+En ANOVA se analizan sumas de cuadrados. En MANOVA se analizan matrices de suma de cuadrados y productos cruzados. Por eso aparecen matrices como:
+
+-   $W$: variabilidad intra-grupos o residual.
+-   $B$: variabilidad entre-grupos o explicada.
+-   $T$: variabilidad total.
+
+La logica se mantiene: comparar variabilidad explicada por los grupos contra variabilidad residual. Lo que cambia es que la variabilidad ya no es un numero, sino una matriz.
+
+En resumen, los preliminares distributivos multivariantes son extensiones naturales del caso univariado. La normal univariada pasa a normal multivariada; la varianza escalar pasa a matriz de covarianzas; la chi-cuadrado se generaliza mediante Wishart; la t de Student se generaliza con $T^2$ de Hotelling; y el ANOVA se extiende a MANOVA.
+
+------------------------------------------------------------------------
+
+## Slide 6: Supuestos de viabilidad
+
+Para que las pruebas multivariantes sean validas, se deben revisar ciertos supuestos de viabilidad.
+
+El primero es la normalidad multivariante. Una docima comun es el test de Mardia, que evalua asimetria y curtosis multivariada.
+
+Para asimetria, la docima se plantea como:
+
+$$
+H_0: \text{los datos provienen de una distribucion normal multivariante}
+$$
+
+$$
+H_1: \text{los datos no provienen de una distribucion normal multivariante}
+$$
+
+El estadistico de asimetria se basa en combinaciones de distancias de Mahalanobis entre observaciones. Bajo $H_0$, una transformacion del estadistico sigue aproximadamente una distribucion chi-cuadrado con:
+
+$$
+\frac{p(p+1)(p+2)}{6}
+$$
+
+grados de libertad.
+
+Para curtosis, se evalua si la concentracion de los datos alrededor del centro multivariante coincide con lo esperado bajo normalidad.
+
+La regla de decision es:
+
+-   Si $p\text{-value} < \alpha$, se rechaza $H_0$.
+-   Si $p\text{-value} \geq \alpha$, no se rechaza $H_0$.
+
+Usualmente se utiliza $\alpha = 0.05$. Por lo tanto, si el p-value es menor que 0.05, concluimos que no hay evidencia de normalidad multivariante.
+
+El segundo supuesto es la homogeneidad de matrices de varianza-covarianza. Aqui se utiliza el test M de Box.
+
+La docima es:
+
+$$
+H_0: \Sigma_1 = \Sigma_2 = \cdots = \Sigma_k
+$$
+
+$$
+H_1: \text{al menos una matriz de covarianza difiere}
+$$
+
+El estadistico compara la matriz de covarianza combinada con las matrices de covarianza de cada grupo. La region critica se define a partir de una aproximacion chi-cuadrado o F, dependiendo de la implementacion.
+
+Con $\alpha = 0.05$, si el p-value es menor que 0.05, se rechaza $H_0$, concluyendo que no hay homogeneidad de matrices de covarianza.
+
+Este supuesto es relevante porque metodos como MANOVA, Hotelling y analisis discriminante pueden verse afectados si las matrices de covarianza son muy distintas entre grupos.
+
+------------------------------------------------------------------------
+
+## Slide 7: Correlacion y test de Bartlett
+
+El tercer supuesto de viabilidad se relaciona con la existencia de correlacion entre variables.
+
+Para reduccion de dimensionalidad, como componentes principales o analisis factorial, necesitamos que las variables compartan informacion. Si las variables fueran completamente independientes, no tendria sentido resumirlas en factores o componentes comunes.
+
+El test de esfericidad de Bartlett contrasta:
+
+$$
+H_0: R = I
+$$
+
+es decir, la matriz de correlacion poblacional es igual a la matriz identidad. Esto implica que las variables no estan correlacionadas.
+
+La hipotesis alternativa es:
+
+$$
+H_1: R \ne I
+$$
+
+es decir, existe al menos una correlacion distinta de cero.
+
+El estadistico se basa en el determinante de la matriz de correlacion:
+
+$$
+\chi^2 =
+-\left[n - 1 - \frac{2p + 5}{6}\right]\ln|R|
+$$
+
+Bajo $H_0$, este estadistico sigue aproximadamente una distribucion chi-cuadrado con:
+
+$$
+\frac{p(p-1)}{2}
+$$
+
+grados de libertad.
+
+La region critica es:
+
+$$
+\chi^2_{calculado} > \chi^2_{\alpha; \frac{p(p-1)}{2}}
+$$
+
+Con $\alpha = 0.05$, si el p-value es menor que 0.05, rechazamos $H_0$. Eso indica que si existe correlacion suficiente entre variables, por lo tanto es razonable aplicar PCA o analisis factorial.
+
+Si no se rechaza $H_0$, estas tecnicas pierden justificacion estadistica, porque las variables no presentan estructura comun relevante.
+
+------------------------------------------------------------------------
+
+## Slide 8: Tipos de analisis multivariante
+
+Una vez revisados los preliminares distributivos y los supuestos de viabilidad, podemos escoger el metodo segun el objetivo del analisis.
+
+Si queremos comparar grupos, usamos $T^2$ de Hotelling o MANOVA. Si queremos reducir dimension, usamos componentes principales o analisis factorial. Si queremos agrupar observaciones, usamos analisis de conglomerados. Si queremos clasificar nuevas observaciones, usamos analisis discriminante, regresion logistica, maquinas de soporte vectorial o redes neuronales.
+
+La eleccion del metodo depende de la pregunta estadistica, del tipo de variables y de los supuestos que sea razonable asumir.
+
+------------------------------------------------------------------------
+
+## Slide 9: Comparacion de medias y MANOVA
+
+MANOVA extiende el ANOVA al caso de varias variables dependientes.
+
+La docima general es:
+
+$$
+H_0: \mu_1 = \mu_2 = \cdots = \mu_k
+$$
+
+$$
+H_1: \text{al menos un vector de medias difiere}
+$$
+
+La idea es comparar grupos considerando simultaneamente todas las variables respuesta.
+
+Para esto se descompone la variabilidad total en variabilidad entre grupos y dentro de grupos, usando matrices como $B$ y $W$.
+
+Estadisticos como Lambda de Wilks, traza de Pillai, traza de Hotelling-Lawley y raiz mayor de Roy permiten decidir si existen diferencias multivariadas significativas.
+
+La decision se realiza, nuevamente, comparando el p-value con el nivel de significancia $\alpha$. Si $p\text{-value} < 0.05$, se rechaza la hipotesis nula y se concluye que existen diferencias multivariadas entre los grupos.
+
+------------------------------------------------------------------------
+
+## Slide 10: Componentes principales y analisis factorial
+
+Componentes principales busca transformar variables correlacionadas en nuevas variables no correlacionadas llamadas componentes principales.
+
+Cada componente es una combinacion lineal de las variables originales y se ordena segun la varianza explicada.
+
+El analisis factorial, en cambio, supone que las variables observadas dependen de factores latentes mas errores especificos.
+
+La diferencia central es que PCA resume varianza total, mientras que analisis factorial modela estructura comun.
+
+En terminos practicos, PCA se utiliza para reducir dimension, mientras que el analisis factorial se utiliza para interpretar factores subyacentes que explican las asociaciones entre variables.
+
+------------------------------------------------------------------------
+
+## Slide 11: Analisis de correspondencias
+
+El analisis de correspondencias trabaja con variables categoricas.
+
+Parte desde una tabla de contingencia y busca representar filas y columnas en un plano de baja dimension.
+
+La dependencia entre categorias se evalua mediante una logica asociada al estadistico chi-cuadrado.
+
+En correspondencias multiples se utiliza una tabla disyuntiva o una matriz de Burt para trabajar con mas de dos variables categoricas.
+
+El objetivo es visualizar asociaciones entre categorias. Categorias cercanas en el plano tienden a estar asociadas, mientras que categorias alejadas representan perfiles mas distintos.
+
+------------------------------------------------------------------------
+
+## Slide 12: Analisis de conglomerados
+
+El analisis de conglomerados es una tecnica no supervisada.
+
+Su objetivo es formar grupos internamente homogeneos y externamente heterogeneos.
+
+Los metodos jerarquicos construyen dendrogramas mediante criterios como vecino mas cercano, vecino mas lejano, distancia entre centroides o metodo de Ward.
+
+El metodo de Ward minimiza el incremento de variabilidad interna al fusionar grupos, por lo que tiende a generar conglomerados compactos.
+
+K-medias, en cambio, es un procedimiento no jerarquico. Requiere fijar previamente el numero de clusters y reasigna observaciones iterativamente hasta estabilizar los grupos.
+
+------------------------------------------------------------------------
+
+## Slide 13: Funciones discriminantes
+
+El analisis discriminante busca clasificar observaciones en grupos conocidos.
+
+LDA, o analisis discriminante lineal, asume normalidad multivariante y matrices de covarianza iguales entre grupos. Bajo esos supuestos, genera fronteras de decision lineales.
+
+QDA, o analisis discriminante cuadratico, relaja el supuesto de igualdad de matrices de covarianza. Por eso permite fronteras cuadraticas y puede adaptarse mejor cuando los grupos tienen dispersiones distintas.
+
+La calidad del clasificador se evalua con matriz de confusion, sensibilidad, especificidad y curva ROC.
+
+La matriz de confusion permite identificar verdaderos positivos, verdaderos negativos, falsos positivos y falsos negativos. La curva ROC resume el balance entre sensibilidad y especificidad para distintos puntos de corte.
+
+------------------------------------------------------------------------
+
+## Slide 14: Otros enfoques
+
+Finalmente, otros enfoques de clasificacion incluyen maquinas de soporte vectorial y redes neuronales.
+
+Las maquinas de soporte vectorial buscan un hiperplano optimo de separacion. Cuando la separacion no es lineal, se pueden utilizar funciones kernel para proyectar los datos a un espacio donde la separacion sea posible.
+
+Las redes neuronales procesan entradas mediante pesos, sesgos y funciones de activacion. Esto permite capturar relaciones mas complejas y no lineales.
+
+Sin embargo, estos metodos requieren especial cuidado con el entrenamiento, la validacion y el sobreajuste. Un modelo puede ajustarse muy bien a los datos de entrenamiento, pero tener bajo rendimiento frente a datos nuevos.
+
+Por eso, incluso en metodos mas flexibles, la evaluacion estadistica y predictiva sigue siendo fundamental.
+
+------------------------------------------------------------------------
+
+# Nota de tiempo
+
+Para mantener la parte teorica dentro de 10 minutos, se recomienda dedicar aproximadamente:
+
+-   Slides 1 a 4: 2 minutos.
+-   Slide 5: 3 minutos.
+-   Slides 6 y 7: 2 minutos.
+-   Slides 8 a 14: 3 minutos.
+
+La slide 5 debe ser el centro conceptual de la exposicion, porque conecta el caso univariado con el multivariado y permite justificar tecnicamente los metodos posteriores.
+
+------------------------------------------------------------------------
+
+# Notas explicativas
+
+## Nota 1: Por que en MANOVA un unico nivel de significancia permite una decision global
+
+Esta nota complementa la explicacion de MANOVA presentada en la parte teorica.
+
+En MANOVA se utiliza un unico nivel de significancia porque la hipotesis que se contrasta es una hipotesis global sobre vectores de medias. No se esta realizando una prueba separada para cada variable respuesta, sino una unica docima multivariante que evalua el comportamiento conjunto de todas las variables dependientes.
+
+Para $k$ grupos y $p$ variables respuesta, la hipotesis nula se expresa como:
+
+$$
+H_0: \boldsymbol{\mu}_1 = \boldsymbol{\mu}_2 = \cdots = \boldsymbol{\mu}_k
+$$
+
+donde cada $\boldsymbol{\mu}_j$ es un vector de medias:
+
+$$
+\boldsymbol{\mu}_j =
+(\mu_{j1}, \mu_{j2}, \ldots, \mu_{jp})'
+$$
+
+La hipotesis alternativa es:
+
+$$
+H_1: \text{al menos un vector de medias difiere}
+$$
+
+Por lo tanto, la prueba no pregunta si una variable especifica difiere entre grupos, sino si los grupos difieren considerando simultaneamente el conjunto de variables respuesta.
+
+### Paralelo con ANOVA univariado
+
+En ANOVA univariado se trabaja con una sola variable respuesta $Y$. La hipotesis nula es:
+
+$$
+H_0: \mu_1 = \mu_2 = \cdots = \mu_k
+$$
+
+La alternativa es:
+
+$$
+H_1: \text{al menos una media poblacional difiere}
+$$
+
+El estadistico de prueba se construye comparando variabilidad entre grupos contra variabilidad dentro de grupos:
+
+$$
+F =
+\frac{\text{cuadrado medio entre grupos}}
+{\text{cuadrado medio dentro de grupos}}
+$$
+
+Bajo $H_0$, este estadistico sigue una distribucion F con grados de libertad conocidos:
+
+$$
+F \sim F_{k-1, n-k}
+$$
+
+La region critica se define como:
+
+$$
+F_{calculado} > F_{\alpha; k-1, n-k}
+$$
+
+Con un nivel de significancia $\alpha = 0.05$, se rechaza $H_0$ si el estadistico cae en la region critica, o equivalentemente si:
+
+$$
+p\text{-value} < 0.05
+$$
+
+Ese unico nivel de significancia controla la probabilidad de cometer error tipo I en la prueba global del ANOVA:
+
+$$
+P(\text{rechazar } H_0 \mid H_0 \text{ verdadera}) = \alpha
+$$
+
+Es decir, controla la probabilidad de concluir que existen diferencias entre grupos cuando, en realidad, todas las medias poblacionales son iguales.
+
+### Extension a MANOVA
+
+MANOVA mantiene la misma logica, pero generaliza el problema al caso de varias variables respuesta.
+
+En ANOVA, la variabilidad se resume mediante sumas de cuadrados escalares. En MANOVA, la variabilidad se resume mediante matrices de suma de cuadrados y productos cruzados.
+
+Las dos matrices centrales son:
+
+$$
+W: \text{matriz de variabilidad intra-grupos o residual}
+$$
+
+$$
+B: \text{matriz de variabilidad entre grupos o explicada}
+$$
+
+En ANOVA se compara:
+
+$$
+\frac{\text{variabilidad entre grupos}}
+{\text{variabilidad dentro de grupos}}
+$$
+
+En MANOVA se compara la misma idea, pero matricialmente. Por eso se construyen estadisticos multivariantes como Lambda de Wilks:
+
+$$
+\Lambda_{\text{Wilks}} =
+\frac{|W|}{|W+B|}
+$$
+
+La Lambda de Wilks mide que proporcion de la variabilidad total no es explicada por las diferencias entre grupos.
+
+Si $\Lambda_{\text{Wilks}}$ es cercana a 1, significa que la variabilidad entre grupos es pequena respecto de la variabilidad total. En ese caso, hay poca evidencia contra $H_0$.
+
+Si $\Lambda_{\text{Wilks}}$ es pequena, significa que una parte importante de la variabilidad total esta asociada a diferencias entre grupos. En ese caso, hay evidencia para rechazar $H_0$.
+
+Otros estadisticos MANOVA, como la traza de Pillai, la traza de Hotelling-Lawley y la raiz mayor de Roy, responden a la misma pregunta global, aunque ponderan la informacion multivariante de forma distinta.
+
+### Sustento estadistico-matematico
+
+El sustento estadistico es que, bajo $H_0$, y suponiendo normalidad multivariante, independencia y homogeneidad de matrices de covarianza, los estadisticos MANOVA tienen distribuciones conocidas o aproximables mediante una distribucion F.
+
+Por eso se puede calcular un p-value asociado a la prueba global.
+
+El nivel de significancia $\alpha$ se define como:
+
+$$
+P(\text{rechazar } H_0 \mid H_0 \text{ verdadera}) = \alpha
+$$
+
+En palabras simples, $\alpha$ controla la probabilidad de cometer error tipo I en la docima global.
+
+Por ejemplo, si $\alpha = 0.05$, estamos aceptando un riesgo del 5% de rechazar la igualdad de vectores de medias cuando en realidad los vectores de medias poblacionales son iguales.
+
+La decision queda definida como:
+
+$$
+p\text{-value} < \alpha
+\quad \Rightarrow \quad
+\text{se rechaza } H_0
+$$
+
+$$
+p\text{-value} \geq \alpha
+\quad \Rightarrow \quad
+\text{no se rechaza } H_0
+$$
+
+Tecnicamente, no se debe decir que se acepta $H_0$, sino que no se rechaza $H_0$. Esto se debe a que un p-value grande no demuestra que las medias sean exactamente iguales; solo indica que no existe evidencia estadistica suficiente para afirmar que difieren.
+
+### Interpretacion final
+
+El uso de un unico nivel de significancia en MANOVA se justifica porque la prueba construye un solo estadistico multivariante que resume la comparacion conjunta de todos los vectores de medias.
+
+Este estadistico se calibra bajo la hipotesis nula para que la probabilidad de falso rechazo global sea $\alpha$.
+
+Por lo tanto, asi como en ANOVA un unico $\alpha$ permite decidir globalmente si existen diferencias entre medias de grupos para una variable respuesta, en MANOVA un unico $\alpha$ permite decidir globalmente si existen diferencias entre vectores de medias considerando varias variables respuesta simultaneamente.
+
+------------------------------------------------------------------------
+
+## Nota 2: Curva ROC, sustento matematico e interpretacion
+
+Esta nota complementa la parte practica asociada a analisis discriminante lineal, analisis discriminante cuadratico y evaluacion de clasificadores.
+
+La Curva ROC, del ingles *Receiver Operating Characteristic*, es una herramienta para evaluar el rendimiento de un clasificador binario en todos los posibles puntos de corte.
+
+En nuestro caso, el problema de clasificacion consiste en separar dos clases:
+
+-   Clase negativa: no fumador.
+-   Clase positiva: fumador o fumador ocasional.
+
+El modelo, por ejemplo LDA o QDA, no solo entrega una clase final, sino tambien un puntaje o probabilidad estimada de pertenecer a la clase positiva.
+
+Denotemos ese puntaje por:
+
+$$
+s(x)
+$$
+
+donde valores mas altos indican mayor evidencia de pertenecer a la clase positiva.
+
+Para transformar ese puntaje en una clasificacion se escoge un umbral $c$:
+
+$$
+\hat{Y} =
+\begin{cases}
+1, & \text{si } s(x) \geq c \\
+0, & \text{si } s(x) < c
+\end{cases}
+$$
+
+El punto clave es que la clasificacion depende del umbral. Si el umbral cambia, tambien cambian los aciertos y errores del modelo.
+
+### Matriz de confusion
+
+Para un umbral fijo se obtiene una matriz de confusion:
+
+|               |       Predicho positivo |       Predicho negativo |
+|---------------|------------------------:|------------------------:|
+| Real positivo | Verdadero positivo $VP$ |     Falso negativo $FN$ |
+| Real negativo |     Falso positivo $FP$ | Verdadero negativo $VN$ |
+
+A partir de esta matriz se definen dos medidas centrales:
+
+$$
+\text{Sensibilidad} =
+\frac{VP}{VP + FN}
+$$
+
+La sensibilidad mide la proporcion de positivos reales que el modelo detecta correctamente. En nuestro contexto, mide que porcentaje de fumadores reales son clasificados como fumadores.
+
+$$
+\text{Especificidad} =
+\frac{VN}{VN + FP}
+$$
+
+La especificidad mide la proporcion de negativos reales que el modelo identifica correctamente. En nuestro contexto, mide que porcentaje de no fumadores reales son clasificados como no fumadores.
+
+Tambien se utiliza:
+
+$$
+1 - \text{Especificidad} =
+\frac{FP}{FP + VN}
+$$
+
+que corresponde a la tasa de falsos positivos.
+
+### Construccion matematica de la Curva ROC
+
+La Curva ROC se construye variando el umbral $c$ desde valores muy altos hasta valores muy bajos.
+
+Para cada valor de $c$, se calcula:
+
+$$
+\text{Sensibilidad}(c)
+$$
+
+y:
+
+$$
+1 - \text{Especificidad}(c)
+$$
+
+Luego se grafica:
+
+$$
+x = 1 - \text{Especificidad}(c)
+$$
+
+$$
+y = \text{Sensibilidad}(c)
+$$
+
+Por lo tanto, cada punto de la Curva ROC representa el rendimiento del clasificador para un umbral especifico.
+
+La curva no evalua un unico punto de corte, sino la capacidad general del modelo para ordenar correctamente a los individuos positivos por sobre los negativos.
+
+### Interpretacion de la diagonal
+
+En el grafico ROC, la diagonal desde $(0,0)$ hasta $(1,1)$ representa un clasificador sin capacidad discriminante.
+
+En ese caso:
+
+$$
+AUC = 0.5
+$$
+
+Esto significa que el modelo clasifica practicamente al azar. No distingue adecuadamente entre positivos y negativos.
+
+Un clasificador perfecto tendria:
+
+$$
+\text{Sensibilidad} = 1
+$$
+
+$$
+\text{Especificidad} = 1
+$$
+
+y por lo tanto estaria cerca del punto:
+
+$$
+(0,1)
+$$
+
+en el plano ROC. Ese punto representa cero falsos positivos y cien por ciento de verdaderos positivos.
+
+### Area bajo la curva: AUC
+
+El AUC, o area bajo la Curva ROC, resume numericamente la capacidad discriminante del modelo.
+
+Matematicamente:
+
+$$
+AUC =
+P(s(X^+) > s(X^-))
+$$
+
+Es decir, el AUC puede interpretarse como la probabilidad de que el modelo asigne un puntaje mayor a un individuo positivo que a un individuo negativo, escogidos ambos al azar.
+
+Esta interpretacion es muy importante para defender la Curva ROC.
+
+Por ejemplo:
+
+-   $AUC = 0.5$: el modelo no discrimina mejor que el azar.
+-   $AUC = 0.7$: el modelo tiene capacidad discriminante moderada.
+-   $AUC = 0.8$: el modelo tiene buena capacidad discriminante.
+-   $AUC = 0.9$ o superior: el modelo tiene capacidad discriminante muy alta.
+
+En terminos practicos, si un modelo tiene $AUC = 0.700$, significa que existe aproximadamente un 70% de probabilidad de que el modelo asigne mayor puntaje a un fumador real que a un no fumador real.
+
+### Umbral optimo
+
+La Curva ROC permite buscar un umbral optimo de clasificacion. Una forma comun es maximizar el indice de Youden:
+
+$$
+J = \text{Sensibilidad} + \text{Especificidad} - 1
+$$
+
+El umbral que maximiza $J$ busca equilibrar la deteccion de positivos con la correcta identificacion de negativos.
+
+Sin embargo, el umbral optimo no siempre es 0.5.
+
+Esto depende de:
+
+-   La distribucion de los puntajes.
+-   El desbalance entre clases.
+-   El costo de cometer falsos positivos.
+-   El costo de cometer falsos negativos.
+
+Por ejemplo, si detectar fumadores es mas importante que evitar falsas alarmas, se podria preferir un umbral mas bajo para aumentar sensibilidad. En cambio, si se quiere evitar clasificar erroneamente a no fumadores como fumadores, se podria preferir un umbral mas alto para aumentar especificidad.
+
+### Diferencia entre matriz de confusion y Curva ROC
+
+La matriz de confusion evalua el modelo en un punto de corte especifico.
+
+La Curva ROC evalua el comportamiento del modelo para todos los puntos de corte posibles.
+
+Por eso puede ocurrir que la matriz de confusion muestre baja sensibilidad usando el umbral por defecto, pero la Curva ROC indique que existe un umbral alternativo que mejora el balance entre sensibilidad y especificidad.
+
+Esta diferencia es clave:
+
+-   Matriz de confusion: evalua una decision de clasificacion ya fijada.
+-   Curva ROC: evalua la capacidad discriminante global del puntaje.
+
+### Aplicacion al LDA
+
+En el caso del LDA, el modelo busca separar las clases mediante una frontera lineal.
+
+El AUC obtenido fue aproximadamente:
+
+$$
+AUC = 0.628
+$$
+
+Esto indica una capacidad discriminante moderada-baja.
+
+El umbral optimo reportado fue aproximadamente:
+
+$$
+c = 0.380
+$$
+
+con:
+
+$$
+\text{Especificidad} \approx 0.795
+$$
+
+$$
+\text{Sensibilidad} \approx 0.524
+$$
+
+La interpretacion es que, usando ese umbral, el modelo identifica correctamente cerca del 79.5% de los no fumadores y detecta cerca del 52.4% de los fumadores.
+
+Por lo tanto, el LDA distingue razonablemente a los no fumadores, pero tiene limitaciones para detectar fumadores.
+
+### Aplicacion al QDA
+
+En el caso del QDA, el modelo permite fronteras cuadraticas y matrices de covarianza distintas entre clases.
+
+El AUC obtenido fue aproximadamente:
+
+$$
+AUC = 0.700
+$$
+
+Esto indica una capacidad discriminante moderada y superior a la del LDA.
+
+El umbral optimo fue aproximadamente:
+
+$$
+c = 0.419
+$$
+
+con:
+
+$$
+\text{Especificidad} \approx 0.744
+$$
+
+$$
+\text{Sensibilidad} \approx 0.667
+$$
+
+La interpretacion es que QDA logra un mejor equilibrio entre detectar fumadores y reconocer no fumadores. En particular, mejora la sensibilidad respecto al LDA, aunque no alcanza un rendimiento excelente.
+
+### Como defender la Curva ROC en una presentacion
+
+Si se pregunta que mide la Curva ROC, se puede responder:
+
+> La Curva ROC mide la relacion entre sensibilidad y tasa de falsos positivos para todos los posibles umbrales de clasificacion.
+
+Si se pregunta que representa el AUC, se puede responder:
+
+> El AUC representa la probabilidad de que el modelo asigne mayor puntaje a un individuo positivo que a un individuo negativo escogidos al azar.
+
+Si se pregunta por que no basta con la matriz de confusion, se puede responder:
+
+> Porque la matriz de confusion depende de un unico umbral, mientras que la Curva ROC evalua el rendimiento del puntaje clasificador en todos los umbrales posibles.
+
+Si se pregunta por que el umbral optimo no es necesariamente 0.5, se puede responder:
+
+> Porque el umbral optimo depende del balance entre sensibilidad y especificidad, de la proporcion de clases y del costo relativo de falsos positivos y falsos negativos.
+
+Si se pregunta que significa un AUC de 0.700, se puede responder:
+
+> Significa que el modelo tiene capacidad discriminante moderada; aproximadamente en el 70% de los pares formados por un positivo y un negativo, el modelo asigna mayor puntaje al positivo.
+
+### Cierre conceptual
+
+La Curva ROC no mide directamente exactitud global. Mide capacidad discriminante.
+
+Un modelo puede tener una exactitud aparentemente aceptable si la clase negativa es mayoritaria, pero aun asi tener baja sensibilidad para detectar positivos.
+
+Por eso, en problemas de clasificacion, especialmente cuando interesa detectar una clase especifica, la Curva ROC, el AUC, la sensibilidad y la especificidad deben interpretarse conjuntamente.
