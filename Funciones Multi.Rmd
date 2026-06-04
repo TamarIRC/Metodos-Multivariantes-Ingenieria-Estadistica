@@ -1444,6 +1444,109 @@ coords(roc = "Objeto de clase roc",
 
 -   **ret**: Vector de caracteres que especifica exactamente qué métricas extraer para ese punto óptimo. En tu código, extrae el umbral numérico ("threshold"), la proporción de sanos detectados ("specificity") y la proporción de enfermos detectados ("sensitivity").
 
+Esta diapo muestra dos salidas clave del **LDA**:
+
+1.  La **curva ROC**
+
+2.  La **matriz de confusión**
+
+**1. Curva ROC**
+
+El código principal es:
+
+`plot.roc(ROC,          print.thres = "best",          print.auc = TRUE,          main = "Curva ROC LDA",          col = "#00a499",          grid = TRUE,          xlab = "1-Especificidad",          ylab = "Sensibilidad")`
+
+Esto grafica el rendimiento del modelo LDA para distintos puntos de corte.
+
+En el gráfico deberías destacar:
+
+`AUC = 0.628`
+
+y el punto marcado:
+
+`threshold = 0.380 specificity = 0.795 sensitivity = 0.524`
+
+Interpretación:
+
+-   AUC = 0.628: el modelo tiene capacidad discriminante **moderada-baja**.
+
+-   Si el AUC fuera 0.5, sería casi azar.
+
+-   Si fuera cercano a 1, sería excelente.
+
+-   Entonces 0.628 indica que el modelo separa fumadores y no fumadores, pero no con gran fuerza.
+
+El punto 0.380 es el mejor umbral según la curva ROC. Con ese umbral:
+
+-   Detecta aprox. 52.4% de fumadores.
+
+-   Reconoce aprox. 79.5% de no fumadores.
+
+**2. Matriz De Confusión**
+
+El código es:
+
+`table(Base_Multi$fuma_bin,       predict(object = FLD)$class,       dnn = c("reales", "predichos"))`
+
+La salida es:
+
+| **Reales / Predichos** | **0** | **1** |
+|------------------------|-------|-------|
+| 0                      | 37    | 2     |
+| 1                      | 19    | 2     |
+
+Donde:
+
+-   0 = No fumador
+
+-   1 = Fumador o fumador ocasional
+
+Interpretación fila por fila:
+
+-   37: no fumadores correctamente clasificados.
+
+-   2: no fumadores clasificados erróneamente como fumadores.
+
+-   19: fumadores reales clasificados erróneamente como no fumadores.
+
+-   2: fumadores correctamente clasificados.
+
+De aquí salen métricas importantes:
+
+`Exactitud = (37 + 2) / 60 = 65% Sensibilidad = 2 / (19 + 2) = 9.5% Especificidad = 37 / (37 + 2) = 94.9%`
+
+**Ojo Con Algo Importante**
+
+La matriz de confusión usa la clasificación directa de predict(FLD)\$class, probablemente con el umbral interno/default del modelo.
+
+La curva ROC, en cambio, muestra que si usas un umbral óptimo de 0.380, mejora la sensibilidad.
+
+Por eso puedes decir:
+
+> Con la clasificación directa, el modelo reconoce muy bien a los no fumadores, pero casi no detecta fumadores. La curva ROC sugiere que un umbral menor, cercano a 0.38, mejora el equilibrio entre sensibilidad y especificidad.
+
+**Qué Destacar En La Diapo**
+
+Subrayaría en el gráfico:
+
+`AUC = 0.628`
+
+y el punto:
+
+`0.380 (0.795, 0.524)`
+
+En la matriz de confusión subrayaría:
+
+`37 19 2`
+
+Especialmente el 19, porque muestra el problema principal:
+
+> El modelo está clasificando muchos fumadores como no fumadores.
+
+**Conclusión Para Presentar**
+
+> La curva ROC del LDA muestra un AUC de 0.628, lo que indica una capacidad discriminante moderada-baja. El mejor umbral es aproximadamente 0.38, con sensibilidad de 52.4% y especificidad de 79.5%. Sin embargo, la matriz de confusión del modelo clasificado directamente muestra que identifica muy bien a los no fumadores, pero falla en detectar fumadores, ya que 19 de 21 fumadores reales son clasificados como no fumadores. Por lo tanto, el LDA no es un buen clasificador para detectar fumadores con estas variables, aunque sí distingue razonablemente a los no fumadores.
+
 ## Redes Neuronales Artificiales
 
 El objetivo de este bloque es crear un modelo predictivo inspirado en el cerebro humano para detectar si un paciente fuma o no.\
