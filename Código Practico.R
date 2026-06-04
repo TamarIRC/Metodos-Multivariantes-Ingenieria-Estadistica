@@ -212,6 +212,59 @@ summary(pca)         # Resumen de la varianza explicada - Con dos variables se e
 plot(pca, type = "lines") #Gráfico de sedimentación (Scree plot)
 
 
+###Gráfico de Componentes Principales----
+
+# Círculo de correlaciones entre variables originales y componentes principales
+#Coordenadas de las variables en los dos primeros componentes
+coord_var <- cor(vecst, pca$x[, 1:2])
+
+# Dibujamos un gráfico vacío con escala entre -1 y 1
+plot(coord_var[, 1], coord_var[, 2],
+     xlim = c(-1, 1), ylim = c(-1, 1),
+     xlab = "Componente Principal 1",
+     ylab = "Componente Principal 2",
+     main = "Círculo de Correlaciones",
+     asp = 1,
+     pch = 19)
+
+# Agregamos el círculo unitario
+symbols(0, 0, circles = 1, inches = FALSE, add = TRUE)
+
+# Agregamos los ejes
+abline(h = 0, v = 0, col = "gray50")
+
+# Agregamos flechas desde el origen hacia cada variable
+arrows(0, 0,
+       coord_var[, 1], coord_var[, 2],
+       length = 0.1)
+
+# Agregamos los nombres de las variables
+text(coord_var[, 1], coord_var[, 2],
+     labels = rownames(coord_var),
+     pos = 3,
+     cex = 0.8)
+
+###Gráfico 2----
+
+library(factoextra)
+
+fviz_pca_var(pca,
+             col.var = "cos2",
+             repel = TRUE,
+             title = "Círculo de Correlaciones")
+
+###Gráfico 3----
+library(ade4)
+
+s.corcircle(pca$rotation[, 1:2],
+            clabel = 0.8,
+            sub = "Círculo de correlaciones")
+
+
+
+
+
+
 ##Análisis Factorial----
 
 # Ejecutamos el análisis factorial pidiendo 2 factores y sin rotación
