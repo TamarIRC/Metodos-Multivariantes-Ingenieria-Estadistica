@@ -254,6 +254,7 @@ fviz_pca_var(pca,
              title = "Círculo de Correlaciones")
 
 ###Gráfico 3----
+install.packages("ade4")
 library(ade4)
 
 s.corcircle(pca$rotation[, 1:2],
