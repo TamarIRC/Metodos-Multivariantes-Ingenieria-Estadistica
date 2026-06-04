@@ -1326,6 +1326,68 @@ table(... = "Variable Respuesta (Real)" - Vector/Factor,
 
 -   **\$class**: Aísla y extrae exclusivamente el vector categórico (factor) que contiene la **asignación de clase final** (ej. "Fumador" o "No fumador") que el modelo le otorgó a cada paciente. Este vector es el que se cruza directamente contra los datos reales en la función table().
 
+La idea central es:
+
+> Usamos Edad, Peso, IMC y Presión Arterial Sistólica para clasificar a cada persona como No fumador o Fumador/Fumador ocasional.
+
+**Qué Hace Cada Parte**
+
+Primero se crea la variable respuesta:
+
+`Base_Multi$fuma_bin <- ifelse(Base_Multi$fuma == "No fumador", 0, 1)`
+
+Esto transforma fuma en una variable binaria:
+
+-   0 = No fumador
+
+-   1 = Fumador o fumador ocasional
+
+Esto es necesario porque el modelo y la curva ROC necesitan una clasificación binaria.
+
+Luego se ajusta el modelo LDA:
+
+`FLD <- MASS::lda(   fuma_bin ~ Edad + Peso + IMC + Presión_Arterial_Sistólica,   data = Base_Multi )`
+
+Aquí se está diciendo:
+
+> Quiero predecir fuma_bin usando Edad, Peso, IMC y Presión Arterial Sistólica.
+
+Después se obtiene una probabilidad o score:
+
+`predict(object = FLD)$posterior[, 2]`
+
+Eso extrae la probabilidad estimada de pertenecer a la clase positiva, es decir, 1 = Fumador.
+
+Luego se construye la curva ROC:
+
+`ROC <- roc(Base_Multi$fuma_bin, predict(object = FLD)$posterior[, 2])`
+
+La curva ROC evalúa qué tan bien el modelo separa fumadores de no fumadores usando distintos puntos de corte.
+
+Finalmente:
+
+`coords(ROC, "best", ret = c("threshold", "specificity", "sensitivity"))`
+
+busca el **mejor umbral de clasificación**.
+
+**Qué Destacar En La Salida**
+
+En la tablita de la derecha yo subrayaría estos tres valores:
+
+`threshold = 0.3803794 specificity = 0.7948718 sensitivity = 0.5238095`
+
+Interpretación:
+
+-   threshold = 0.3804: el mejor punto de corte no es 0.5, sino aprox. 0.38.
+
+-   specificity = 0.7949: el modelo identifica correctamente cerca del **79.5% de los no fumadores**.
+
+-   sensitivity = 0.5238: el modelo identifica correctamente cerca del **52.4% de los fumadores**.
+
+**Conclusión Para Decir En La Presentación**
+
+> El modelo LDA permite clasificar a los individuos según su condición de fumador usando variables biométricas. La curva ROC indica que el mejor punto de corte es aproximadamente 0.38. Con este umbral, el modelo logra una especificidad cercana al 79.5%, identificando bien a los no fumadores, y una sensibilidad de 52.4%, detectando aproximadamente la mitad de los fumadores. Esto muestra que el modelo tiene una capacidad discriminante moderada, pero no perfecta.
+
 ### Función discriminante de razón de verosimilitud
 
 ``` r
