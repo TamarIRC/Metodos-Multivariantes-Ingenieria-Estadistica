@@ -185,6 +185,10 @@ boxM(vec, Base_Multi$Estado_Nutricional)
 #install.packages("psych")
 library(psych)
 
+cor_vec <- cor(vec, use = "complete.obs")
+#Test de esfericidad de Bartlett:
+cortest.bartlett(cor_vec, n = nrow(na.omit(vec)))
+
 # Calculamos la matriz de correlación y aplicamos el test KMO
 KMO(cor(vec))
 
