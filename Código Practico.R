@@ -244,7 +244,7 @@ text(coord_var[, 1], coord_var[, 2],
      pos = 3,
      cex = 0.8)
 
-###Gráfico 2----
+###Gráfico 2---- el que usamos en la presentación
 
 library(factoextra)
 
@@ -252,6 +252,18 @@ fviz_pca_var(pca,
              col.var = "cos2",
              repel = TRUE,
              title = "Círculo de Correlaciones")
+
+library(factoextra)
+
+fviz_pca_var(X = "Objeto de clase prcomp/PCA",
+             col.var = "Criterio de Coloración" - "cos2", "contrib", "coord", Nombre/Hexadecimal, Vector factor,
+             fill.var = "Color de Relleno" - "cos2", "contrib", "coord", Nombre/Hexadecimal, Vector factor,
+             alpha.var = "Transparencia de Variables" - "cos2", "contrib", "coord", Numérico (0-1),
+             gradient.cols = "Vector de Colores para Gradiente" - c("color1", "color2", ...)/NULL,
+             col.quanti.sup = "Color de Variables Suplementarias" - Nombre/Hexadecimal,
+             select.var = "Selección de Variables a Mostrar" - list(name = ..., cos2 = ..., contrib = ...)/NULL,
+             invisible = "Ocultar Elementos" - "var", "quanti.sup", "none",
+             title = "Título del Gráfico" - Cadena de caracteres/NULL)
 
 ###Gráfico 3----
 install.packages("ade4")

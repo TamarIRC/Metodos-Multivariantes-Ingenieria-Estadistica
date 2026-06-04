@@ -331,7 +331,7 @@ Crear el modelo con manova() no te da los p-values. Para eso usas summary(modelo
 
 **En resumen:** manova() arma el esqueleto del cálculo y summary() le aplica la prueba estadística (Wilks, Pillai, etc.) para decirte si hay o no diferencias significativas.
 
-Tu modelo es:
+**modelo MANOVA:**
 
 ``` r
 modelo_manova <- manova(
@@ -345,7 +345,7 @@ Esto pregunta:
 
 No evalúa cada variable por separado, sino el **conjunto multivariado**.
 
-## Qué significa cada columna
+**Qué significa cada columna**
 
 En las salidas aparece algo como:
 
@@ -355,13 +355,9 @@ Estado_Nutricional 2 0.86676 1.0005    8    108   0.44
 Residuals          57
 ```
 
-### `Estado_Nutricional`
+`Estado_Nutricional` Es el factor o variable agrupadora. Aquí estás comparando grupos nutricionales, por ejemplo: bajo peso, normal, sobrepeso, etc.
 
-Es el factor o variable agrupadora. Aquí estás comparando grupos nutricionales, por ejemplo: bajo peso, normal, sobrepeso, etc.
-
-### `Df`
-
-Son los grados de libertad del factor.
+`Df` Son los grados de libertad del factor.
 
 Aquí aparece:
 
@@ -375,9 +371,7 @@ Eso indica que `Estado_Nutricional` tiene **3 grupos**, porque:
 número de grupos - 1 = 2
 ```
 
-### `Residuals = 57`
-
-Son los grados de libertad residuales, asociados al error del modelo. Con `Df = 2` para el factor y `Residuals = 57`, probablemente tienes alrededor de:
+`Residuals = 57` Son los grados de libertad residuales, asociados al error del modelo. Con `Df = 2` para el factor y `Residuals = 57`, probablemente tienes alrededor de:
 
 ```         
 n = 60 observaciones
@@ -389,21 +383,13 @@ porque:
 60 - 3 grupos = 57
 ```
 
-### `approx F`
+`approx F` Es una aproximación al estadístico F usado para contrastar la hipótesis global del MANOVA.
 
-Es una aproximación al estadístico F usado para contrastar la hipótesis global del MANOVA.
+`num Df` y `den Df` Son los grados de libertad del numerador y denominador usados para calcular esa F aproximada.
 
-### `num Df` y `den Df`
+`Pr(>F)` Es el **p-valor**. Es la columna más importante para decidir si hay diferencias multivariadas significativas entre los grupos.
 
-Son los grados de libertad del numerador y denominador usados para calcular esa F aproximada.
-
-### `Pr(>F)`
-
-Es el **p-valor**.
-
-Es la columna más importante para decidir si hay diferencias multivariadas significativas entre los grupos.
-
-## Hipótesis del MANOVA
+### Hipótesis del MANOVA
 
 La hipótesis nula es:
 
@@ -532,6 +518,57 @@ plot(x = "Objeto de clase prcomp",
 - **plot(pca, type = "lines"):** Te genera un gráfico de líneas ("Scree plot"). Se usa para la regla del codo: buscas el punto donde la línea deja de caer en picada y se vuelve una llanura suave. Ese "codo" te indica visualmente cuántos componentes principales vale la pena conservar en tu estudio.
 
   Al usar "lines", dibuja un "Gráfico de sedimentación" (Scree plot). Muestra una línea que cae, indicando cuánta varianza (información) explica cada componente. Ayuda a decidir con cuántos componentes quedarse.
+
+``` R
+library(factoextra)
+
+fviz_pca_var(X = "Objeto de clase prcomp/PCA",
+             axes = "Dimensiones a Graficar" - Vector numérico c(x, y),
+             geom = "Geometría a Graficar" - "arrow", "text", c("arrow", "text"),
+             repel = "Evitar Solapamiento de Texto" - TRUE, FALSE,
+             col.var = "Criterio de Coloración" - "cos2", "contrib", "coord",                                                       Nombre/Hexadecimal, Vector factor,
+             fill.var = "Color de Relleno" - "cos2", "contrib", "coord", Nombre                                                           /Hexadecimal, Vector factor,
+             alpha.var = "Transparencia de Variables" - "cos2", "contrib", "coord",                                                                     Numérico (0-1),
+             gradient.cols = "Vector de Colores para Gradiente" - c("color1",                                                                     "color2", ...)/NULL,
+             col.quanti.sup = "Color de Variables Suplementarias" - Nombre                                                                          /Hexadecimal,
+             select.var = "Selección de Variables a Mostrar" - list(name = ...,                                                       cos2 = ..., contrib = ...)/NULL,
+             invisible = "Ocultar Elementos" - "var", "quanti.sup", "none",
+             title = "Título del Gráfico" - Cadena de caracteres/NULL)
+```
+
+**Para fviz_pca_var() (paquete factoextra):**
+
+- **X** (en tu código pca): Objeto resultante de un Análisis de Componentes Principales (generado previamente por funciones como prcomp, princomp o PCA).
+
+- **axes**: Vector numérico de longitud 2 que especifica los componentes principales exactos a proyectar en los ejes X e Y (por defecto c(1, 2)).
+
+- **geom**: Define los elementos visuales a renderizar. "arrow" dibuja vectores direccionales desde el origen (0,0); "text" dibuja exclusivamente las etiquetas de los nombres de las variables.
+
+- **repel**: Valor lógico. Si es TRUE, implementa un algoritmo de repulsión (vía el paquete ggrepel) para desplazar automáticamente las etiquetas de texto, evitando que se superpongan entre sí o con los vectores, garantizando la legibilidad.
+
+- **col.var**: Define el mapeo estético del color de las variables (vectores y texto).
+
+  - "cos2" (usado en tu código): Colorea las variables según su Coseno Cuadrado, métrica que representa la calidad de representación de la variable en el plano bidimensional actual (valores cercanos a 1 indican que la variable está perfectamente representada por esos dos componentes).
+
+  - "contrib": Colorea según la contribución porcentual de la variable a la construcción de los componentes principales graficados.
+
+  - "coord": Colorea según las coordenadas matemáticas de la variable.
+
+  - Color estático: Un nombre o código hexadecimal (ej. "blue").
+
+  - Vector factor: Permite colorear las variables agrupándolas según una variable categórica externa.
+
+- **fill.var** / **alpha.var**: Controlan el color de relleno y la opacidad (transparencia) de las variables, respectivamente. Aceptan las mismas métricas analíticas que col.var.
+
+- **gradient.cols**: Vector de caracteres (códigos hexadecimales o nombres) que define la paleta de colores continua. Se activa automáticamente cuando col.var depende de una métrica numérica (como "cos2"), generando un gradiente visual desde valores bajos hasta altos.
+
+- **col.quanti.sup**: Cadena de caracteres que define un color estricto para graficar variables cuantitativas suplementarias (variables proyectadas en el espacio PCA que no participaron en su cálculo original).
+
+- **select.var**: Lista estructurada que permite filtrar qué variables graficar para evitar la saturación visual en modelos con alta dimensionalidad. Permite filtrar por nombre (name), por umbral de calidad (cos2) o por las variables de mayor contribución (contrib = 10 grafica solo las 10 más importantes).
+
+- **invisible**: Cadena de caracteres para ocultar elementos específicos del gráfico. "var" oculta las variables activas, dejando solo las suplementarias; "quanti.sup" oculta las suplementarias.
+
+- **title**: Cadena de caracteres que sobrescribe el título principal del gráfico (en tu código, "Círculo de Correlaciones").
 
 ## Análisis Factorial
 
