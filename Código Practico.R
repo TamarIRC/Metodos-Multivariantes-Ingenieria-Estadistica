@@ -189,6 +189,12 @@ cor_vec <- cor(vec, use = "complete.obs")
 #Test de esfericidad de Bartlett:
 cortest.bartlett(cor_vec, n = nrow(na.omit(vec)))
 
+#library(psych)
+# cortest.bartlett(R = "Matriz de Correlación o Matriz de Datos",
+#                  n = "Tamaño de la Muestra" - Entero/NULL,
+#                  diag = "Diagonal Incluida en R" - TRUE, FALSE)
+
+
 # Calculamos la matriz de correlación y aplicamos el test KMO
 KMO(cor(vec))
 
