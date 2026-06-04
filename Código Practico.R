@@ -336,8 +336,22 @@ fviz_mca_var(acm,
              col.var = "contrib",
              gradient.cols = c("#2C7BB6", "#41AB5D", "#F28E2B", "#B2182B"))
 
+#Gráfico alternativo----
 
+library(factoextra)
+library(ggplot2)
 
+fviz_mca_var(acm,
+             axes = c(1, 2),
+             repel = TRUE,
+             col.var = "contrib",
+             alpha.var = "cos2",
+             gradient.cols = c("#2C7BB6", "#41AB5D", "#F28E2B", "#B2182B"),
+             title = "ACM: mapa de categorías") +
+  coord_fixed(ratio = 1) +
+  geom_hline(yintercept = 0, linetype = "dashed", color = "gray50") +
+  geom_vline(xintercept = 0, linetype = "dashed", color = "gray50") +
+  theme_minimal()
 
 
 
