@@ -331,6 +331,94 @@ Crear el modelo con manova() no te da los p-values. Para eso usas summary(modelo
 
 **En resumen:** manova() arma el esqueleto del cálculo y summary() le aplica la prueba estadística (Wilks, Pillai, etc.) para decirte si hay o no diferencias significativas.
 
+Tu modelo es:
+
+``` r
+modelo_manova <- manova(
+  cbind(Edad, Peso, IMC, Presión_Arterial_Sistólica) ~ Estado_Nutricional,
+  data = Base_Multi)
+```
+
+Esto pregunta:
+
+> ¿Los grupos de `Estado_Nutricional` tienen diferencias globales considerando al mismo tiempo `Edad`, `Peso`, `IMC` y `Presión_Arterial_Sistólica`?
+
+No evalúa cada variable por separado, sino el **conjunto multivariado**.
+
+## Qué significa cada columna
+
+En las salidas aparece algo como:
+
+``` r
+                   Df Wilks approx F num Df den Df Pr(>F)
+Estado_Nutricional 2 0.86676 1.0005    8    108   0.44
+Residuals          57
+```
+
+### `Estado_Nutricional`
+
+Es el factor o variable agrupadora. Aquí estás comparando grupos nutricionales, por ejemplo: bajo peso, normal, sobrepeso, etc.
+
+### `Df`
+
+Son los grados de libertad del factor.
+
+Aquí aparece:
+
+```         
+Df = 2
+```
+
+Eso indica que `Estado_Nutricional` tiene **3 grupos**, porque:
+
+```         
+número de grupos - 1 = 2
+```
+
+### `Residuals = 57`
+
+Son los grados de libertad residuales, asociados al error del modelo. Con `Df = 2` para el factor y `Residuals = 57`, probablemente tienes alrededor de:
+
+```         
+n = 60 observaciones
+```
+
+porque:
+
+```         
+60 - 3 grupos = 57
+```
+
+### `approx F`
+
+Es una aproximación al estadístico F usado para contrastar la hipótesis global del MANOVA.
+
+### `num Df` y `den Df`
+
+Son los grados de libertad del numerador y denominador usados para calcular esa F aproximada.
+
+### `Pr(>F)`
+
+Es el **p-valor**.
+
+Es la columna más importante para decidir si hay diferencias multivariadas significativas entre los grupos.
+
+## Hipótesis del MANOVA
+
+La hipótesis nula es:
+
+> Los grupos de `Estado_Nutricional` tienen el mismo vector de medias en las variables `Edad`, `Peso`, `IMC` y `Presión_Arterial_Sistólica`.
+
+Es decir:
+
+```         
+No hay diferencias globales entre los grupos.
+```
+
+La hipótesis alternativa es:
+
+> Al menos un grupo difiere de otro considerando conjuntamente esas variables.
+
 ## Homogeneidad de matrices de varianza-covarianza (M de Box)
 
 En estadística univariada (cuando analizas una sola variable), usas pruebas como la de Levene para saber si las varianzas de dos o más grupos son iguales.
