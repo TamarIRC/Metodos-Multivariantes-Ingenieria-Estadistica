@@ -1547,6 +1547,137 @@ Especialmente el 19, porque muestra el problema principal:
 
 > La curva ROC del LDA muestra un AUC de 0.628, lo que indica una capacidad discriminante moderada-baja. El mejor umbral es aproximadamente 0.38, con sensibilidad de 52.4% y especificidad de 79.5%. Sin embargo, la matriz de confusión del modelo clasificado directamente muestra que identifica muy bien a los no fumadores, pero falla en detectar fumadores, ya que 19 de 21 fumadores reales son clasificados como no fumadores. Por lo tanto, el LDA no es un buen clasificador para detectar fumadores con estas variables, aunque sí distingue razonablemente a los no fumadores.
 
+Esta diapo corresponde al **Análisis Discriminante Cuadrático**, o **QDA**.
+
+La idea es parecida al LDA: clasificar a los pacientes como Fumador o No fumador usando:
+
+`Edad + Peso + IMC + Presión_Arterial_Sistólica`
+
+Pero QDA es más flexible que LDA.
+
+**Diferencia Con LDA**
+
+-   LDA usa una frontera lineal.
+
+-   QDA usa una frontera cuadrática.
+
+-   LDA asume matrices de covarianza iguales entre grupos.
+
+-   QDA permite matrices de covarianza distintas entre fumadores y no fumadores.
+
+Por eso QDA puede adaptarse mejor cuando los grupos no tienen la misma forma o dispersión.
+
+**Qué Hace El Código**
+
+Primero redefine la variable respuesta como factor:
+
+`Base_Multi$fuma_bin <- factor(   ifelse(Base_Multi$fuma == "No fumador", "No fumador", "Fumador") )`
+
+Esto deja dos clases:
+
+-   No fumador
+
+-   Fumador
+
+Luego ajusta el modelo QDA:
+
+`QDA <- MASS::qda(   fuma_bin ~ Edad + Peso + IMC + Presión_Arterial_Sistólica,   data = Base_Multi )`
+
+Después genera predicciones:
+
+`qda_pred <- predict(QDA)`
+
+Y extrae la probabilidad de pertenecer a la clase Fumador:
+
+`p_event <- qda_pred$posterior[, "Fumador"]`
+
+Eso se usa para la curva ROC:
+
+`ROC <- pROC::roc(   response = Base_Multi$fuma_bin,   predictor = p_event,   levels = c("No fumador", "Fumador") )`
+
+**Qué Destacar De La Curva ROC**
+
+En el gráfico aparece:
+
+`AUC = 0.700`
+
+Este número es muy importante.
+
+Interpretación:
+
+-   AUC = 0.700 indica una capacidad discriminante **moderada**.
+
+-   Es mejor que el LDA, que tenía AUC = 0.628.
+
+-   No es excelente, pero sí muestra mayor capacidad para separar fumadores de no fumadores.
+
+También aparece el mejor punto de corte:
+
+`threshold = 0.419303 specificity = 0.7435897 sensitivity = 0.6666667`
+
+Interpretación:
+
+-   Con un umbral de 0.419, el modelo detecta correctamente aprox. 66.7% de los fumadores.
+
+-   Identifica correctamente aprox. 74.4% de los no fumadores.
+
+-   Tiene un mejor equilibrio que LDA.
+
+**Qué Destacar De La Matriz De Confusión**
+
+La matriz mostrada es:
+
+| **Reales / Predichos** | **Fumador** | **No fumador** |
+|------------------------|-------------|----------------|
+| Fumador                | 5           | 16             |
+| No fumador             | 5           | 34             |
+
+Interpretación:
+
+-   5 fumadores fueron correctamente clasificados como fumadores.
+
+-   16 fumadores fueron clasificados erróneamente como no fumadores.
+
+-   34 no fumadores fueron correctamente clasificados.
+
+-   5 no fumadores fueron clasificados erróneamente como fumadores.
+
+Con esa matriz:
+
+`Exactitud = (5 + 34) / 60 = 65% Sensibilidad = 5 / (5 + 16) = 23.8% Especificidad = 34 / (34 + 5) = 87.2%`
+
+La matriz de confusión directa todavía muestra baja sensibilidad, pero mejora respecto al LDA.
+
+**Qué Subrayaría En La Diapo**
+
+En el código:
+
+`qda(...)`
+
+porque indica que ahora se usa un modelo cuadrático.
+
+`p_event <- qda_pred$posterior[, "Fumador"]`
+
+porque toma la probabilidad de la clase positiva.
+
+`levels = c("No fumador", "Fumador")`
+
+porque define correctamente cuál es la clase negativa y cuál la positiva.
+
+En la salida:
+
+`AUC = 0.700`
+
+`threshold = 0.419303 specificity = 0.7435897 sensitivity = 0.6666667`
+
+Y en la matriz:
+
+`Fumador: 5 correctos, 16 incorrectos No fumador: 34 correctos, 5 incorrectos`
+
+**Conclusión Para Presentar**
+
+> El modelo QDA presenta una mejor capacidad discriminante que el LDA, con un AUC de 0.700 frente a 0.628. El umbral óptimo es aproximadamente 0.419, logrando una sensibilidad de 66.7% y una especificidad de 74.4%. Esto indica un mejor equilibrio entre detectar fumadores y reconocer no fumadores. Sin embargo, la matriz de confusión directa muestra que todavía se clasifican muchos fumadores como no fumadores, por lo que el modelo mejora respecto al LDA, pero sigue teniendo una capacidad predictiva moderada.
+
 ## Redes Neuronales Artificiales
 
 El objetivo de este bloque es crear un modelo predictivo inspirado en el cerebro humano para detectar si un paciente fuma o no.\
