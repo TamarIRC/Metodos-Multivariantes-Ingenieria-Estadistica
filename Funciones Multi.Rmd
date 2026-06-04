@@ -784,7 +784,61 @@ Conclusión:
 
 > El plano factorial del ACM resume cerca del 50% de la asociación entre las categorías. No captura toda la información, pero sí permite visualizar las relaciones principales entre Sexo, Estado Nutricional y Tabaquismo.
 
-**3. Gráfico ACM**
+**3. Gráfico ACM}**
+
+El gráfico:
+
+`fviz_mca_var(acm, col.var = "contrib")`
+
+muestra las categorías como puntos en un plano.
+
+Regla de lectura:
+
+-   Categorías cercanas tienden a aparecer juntas.
+
+-   Categorías alejadas del centro son más diferenciadoras.
+
+-   Categorías cerca del centro aportan menos a la interpretación.
+
+-   Colores más intensos indican mayor contribución a la construcción del plano.
+
+En nuestros resultados, las categorías que más ayudan a formar el plano son:
+
+-   Peso normal
+
+-   Sobrepeso
+
+-   HOMBRE
+
+-   MUJER
+
+-   Fumador
+
+-   Obesidad, sobre todo en la segunda dimensión
+
+**4. Interpretación De Las Dimensiones**
+
+La **Dimensión 1** separa principalmente:
+
+-   Lado positivo: HOMBRE, Sobrepeso, Fumador ocasional.
+
+-   Lado negativo: MUJER, Peso normal.
+
+Entonces Dim 1 parece distinguir perfiles asociados al sexo y estado nutricional.
+
+La **Dimensión 2** separa principalmente:
+
+-   Lado positivo: Fumador, Peso normal.
+
+-   Lado negativo: Obesidad, No fumador, Fumador ocasional.
+
+Entonces Dim 2 parece captar diferencias relacionadas con el patrón de tabaquismo y estado nutricional.
+
+**Conclusión General**
+
+Para tu presentación puedes decir:
+
+> El Análisis de Correspondencias Múltiples permitió representar gráficamente la relación entre Sexo, Estado Nutricional y condición de Tabaquismo. El primer plano factorial explica aproximadamente el 50% de la información. En el gráfico se observa una cercanía entre hombres y sobrepeso, mientras que mujeres se ubican más próximas a peso normal/no fumador. Las categorías más alejadas del centro, como fumador, fumador ocasional y peso normal, son las que más contribuyen a diferenciar perfiles. Sin embargo, como algunas categorías tienen baja frecuencia, especialmente fumador ocasional y peso normal, la interpretación debe hacerse con cautela.
 
 # Agrupación y Clasificación
 
