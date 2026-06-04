@@ -1695,3 +1695,87 @@ A diferencia de los modelos anteriores, aquí hacemos algo fundamental en Machi
 | nrow() | Nativa de R (base) | Cuenta el número total de filas de una base de datos. |
 | neuralnet() | Librería neuralnet | Construye y entrena la Red Neuronal Artificial. |
 | sum() | Nativa de R (base) | Suma los valores de un vector o matriz. |
+
+La idea central es:
+
+> Se entrena una red neuronal para predecir fuma_bin usando variables biométricas: Edad, Peso, IMC, Nivel de Glucosa y Presión Arterial Sistólica.
+
+**Qué Hace El Código**
+
+Primero se estandarizan las variables:
+
+`datos_escalados <- as.data.frame(scale(Base_Multi[, c(   "Edad", "Peso", "IMC", "Nivel_de_Glucosa", "Presión_Arterial_Sistólica" )]))`
+
+Esto es muy importante en redes neuronales.
+
+Como las variables tienen escalas distintas, por ejemplo:
+
+-   Edad en años
+
+-   Peso en kilos
+
+-   IMC en índice
+
+-   Glucosa en mg/dL
+
+-   Presión en mmHg
+
+se usa scale() para que todas queden comparables. Si no se estandarizan, una variable con valores grandes podría dominar el entrenamiento.
+
+Luego se crea la variable objetivo:
+
+`datos_escalados$fuma_bin <- ifelse(Base_Multi$fuma == "No fumador", 0, 1)`
+
+Donde:
+
+-   0 = No fumador
+
+-   1 = Fumador o fumador ocasional
+
+Después se divide la base:
+
+`set.seed(42) sorteo <- sample(1:nrow(datos_escalados), size = 0.7 * nrow(datos_escalados)) datos_entrenamiento <- datos_escalados[sorteo, ] datos_prueba <- datos_escalados[-sorteo, ]`
+
+Aquí se separa:
+
+-   70% entrenamiento: 42 pacientes
+
+-   30% prueba: 18 pacientes
+
+Esto sirve para evaluar si la red aprende patrones generales y no solo memoriza los datos.
+
+Luego se entrena la red:
+
+`modelo_rna_real <- neuralnet(   fuma_bin ~ Edad + Peso + IMC + Nivel_de_Glucosa + Presión_Arterial_Sistólica,   data = datos_entrenamiento,   hidden = 3,   err.fct = "ce",   linear.output = FALSE )`
+
+Lo más importante:
+
+`hidden = 3`
+
+Significa que la red tiene una capa oculta con 3 neuronas.
+
+`err.fct = "ce"`
+
+Usa entropía cruzada, adecuada para clasificación binaria.
+
+`linear.output = FALSE`
+
+Indica que la salida será tipo probabilidad entre 0 y 1.
+
+**Qué Muestra El Diagrama**
+
+El gráfico de la red muestra:
+
+-   A la izquierda: variables de entrada.
+
+-   Al centro: 3 neuronas ocultas.
+
+-   A la derecha: salida fuma_bin.
+
+-   Las líneas: pesos aprendidos por la red.
+
+-   Los nodos con 1: sesgos o interceptos.
+
+Visualmente:
+
+`Edad Peso IMC Nivel de Glucosa Presión Arterial Sistólica         ↓    3 neuronas ocultas         ↓      fuma_bin`
