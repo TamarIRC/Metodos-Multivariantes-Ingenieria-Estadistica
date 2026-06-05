@@ -18,7 +18,7 @@ Se tiene como objetivo explorar visualmente la base de datos considerando múlti
 ### Funciones y librerías utilizadas
 
 |  |  |  |
-|----|----|----|
+|------------------------|------------------------|------------------------|
 | **Función** | **Origen** | **Descripción** |
 | View() | Nativa de R (utils) | Abre una pestaña en RStudio para visualizar la base de datos en formato de tabla (similar a Excel). |
 | library() | Nativa de R (base) | Carga los paquetes necesarios para usar sus funciones. |
@@ -179,7 +179,7 @@ andrews(df = "Data.frame numérico/mixto",
 ### Funciones y librerías utilizadas
 
 |  |  |  |
-|----|----|----|
+|------------------------|------------------------|------------------------|
 | **Función** | **Origen** | **Descripción** |
 | mvn() | Librería MVN | Realiza pruebas de normalidad tanto multivariadas (todas las variables juntas) como univariadas (variable por variable). |
 | HotellingsT2Test() | Librería DescTools | Ejecuta la prueba T-cuadrado de Hotelling. Es la versión multivariada de la prueba T de Student; sirve para comparar las medias de dos grupos usando múltiples variables a la vez. |
@@ -235,7 +235,7 @@ mvn(data = "Matriz o data.frame numérico",
 Aunque no los usas directamente en este bloque, conviene conocerlos:
 
 | Argumento | Valor por defecto | ¿Qué controla? |
-|----|----|----|
+|------------------------|------------------------|------------------------|
 | `scale` | `FALSE` | Si `TRUE`, estandariza las variables antes del análisis |
 | `descriptives` | `TRUE` | Calcula media, desviación estándar, asimetría y curtosis |
 | `transform` | `"none"` | Permite aplicar transformaciones como logaritmo, raíz o cuadrado |
@@ -443,7 +443,7 @@ Segundo, para las **variables categóricas** (texto), se utiliza el Análisis 
 ### Funciones y librerías utilizadas
 
 |  |  |  |
-|----|----|----|
+|------------------------|------------------------|------------------------|
 | **Función** | **Origen** | **Descripción** |
 | cor() | Nativa de R (stats) | Calcula la matriz de correlación entre variables numéricas. |
 | KMO() | Librería psych | Calcula el índice Kaiser-Meyer-Olkin para evaluar si los datos son aptos para hacer un Análisis Factorial o PCA. |
@@ -747,7 +747,7 @@ muestra los cruces entre todas las categorías de Sexo, Estado_Nutricional y fum
 En nuestros datos hay:
 
 | **Variable**       | **Categorías principales**                             |
-|--------------------|--------------------------------------------------------|
+|---------------------|---------------------------------------------------|
 | Sexo               | 27 hombres, 33 mujeres                                 |
 | Estado nutricional | 24 obesidad, 25 sobrepeso, 11 peso normal              |
 | Fuma               | 39 no fumadores, 13 fumadores, 8 fumadores ocasionales |
@@ -850,7 +850,7 @@ Primero, se calcula la distancia matemática entre todos los pacientes. Luego, s
 ### Funciones y librerías utilizadas
 
 |  |  |  |
-|----|----|----|
+|------------------------|------------------------|------------------------|
 | **Función** | **Origen** | **Descripción** |
 | get_dist() | Librería factoextra | Calcula la matriz de distancias entre todas las filas (pacientes). |
 | hclust() | Nativa de R (stats) | Ejecuta el algoritmo de agrupamiento jerárquico (crea la estructura del árbol). |
@@ -1001,7 +1001,7 @@ Lo que cambia es el **criterio de unión**.
 En métodos como:
 
 | Método | ¿Cómo decide unir clusters? |
-|----|----|
+|------------------------------------|------------------------------------|
 | `single` | Une según la menor distancia entre puntos. |
 | `complete` | Une según la mayor distancia entre puntos. |
 | `average` | Une según la distancia promedio. |
@@ -1041,7 +1041,7 @@ Se prueban dos modelos: el **Lineal (LDA)**, que intenta separar a los grupos c
 ### Funciones y librerías utilizadas
 
 |  |  |  |
-|----|----|----|
+|------------------------|------------------------|------------------------|
 | **Función** | **Origen** | **Descripción** |
 | factor() | Nativa de R (base) | Convierte una variable de texto o numérica en una variable categórica formal (factor) con "niveles" definidos. |
 | lda() | Librería MASS | Ejecuta el Análisis Discriminante Lineal (Linear Discriminant Analysis). |
@@ -1390,7 +1390,7 @@ A diferencia de los modelos anteriores, aquí hacemos algo fundamental en Machi
 ### Funciones y librerías utilizadas
 
 |  |  |  |
-|----|----|----|
+|------------------------|------------------------|------------------------|
 | **Función** | **Origen** | **Descripción** |
 | scale() | Nativa de R (base) | Estandariza las variables numéricas (les da media 0 y desviación estándar 1). Esto es **obligatorio** en redes neuronales para que funcionen bien. |
 | as.data.frame() | Nativa de R (base) | Convierte el resultado matemático de scale() de vuelta a un formato de tabla manejable. |
@@ -1399,3 +1399,276 @@ A diferencia de los modelos anteriores, aquí hacemos algo fundamental en Machi
 | nrow() | Nativa de R (base) | Cuenta el número total de filas de una base de datos. |
 | neuralnet() | Librería neuralnet | Construye y entrena la Red Neuronal Artificial. |
 | sum() | Nativa de R (base) | Suma los valores de un vector o matriz. |
+
+**Preprocesamiento matemático estricto** que es obligatorio antes de introducir los datos a un algoritmo de Redes Neuronales.
+
+1\. Estandarización de Predictores Continuos:
+
+``` r
+datos_escalados <- as.data.frame(scale(Base_Multi[, c("Edad", "Peso", "IMC", "Nivel_de_Glucosa", "Presión_Arterial_Sistólica")]))
+```
+
+- **Qué hace:** Extrae exclusivamente las columnas numéricas continuas y les aplica la función scale(). Esto realiza una normalización Z-score $\left(z=\frac{x-\mu}{\sigma}\right)$, forzando a que todas las variables tengan una media exacta de 0 y una desviación estándar de 1. Luego, `as.data.frame()` convierte la matriz matemática resultante de vuelta a una tabla de datos.
+
+- **Por qué es crítico en Redes Neuronales:** Los algoritmos de optimización de pesos (como Backpropagation) son extremadamente sensibles a la escala de los datos. Si no estandarizas, una variable con valores altos (ej. Nivel de Glucosa = 120) generará gradientes masivos que "aplastarán" la influencia de variables con valores pequeños (ej. IMC = 25). Además, valores de entrada muy grandes saturan rápidamente la función de activación sigmoide, paralizando el aprendizaje de la red.
+
+2\. Codificación Binaria de la Variable Respuesta:
+
+``` r
+datos_escalados$fuma_bin <- ifelse(Base_Multi$fuma == "No fumador", 0, 1)
+```
+
+- **Qué hace:** Evalúa la variable categórica original de texto y crea una nueva columna (fuma_bin) estrictamente numérica, asignando un 0 a la clase negativa (No fumador) y un 1 a la clase positiva (Fumador).
+
+- **Por qué es crítico en Redes Neuronales:** A diferencia de otros modelos (como Random Forest o Regresión Logística base) que pueden interpretar factores de texto automáticamente, el paquete neuralnet realiza cálculos de álgebra lineal pura. Al configurar el modelo para clasificación con la función de pérdida de Entropía Cruzada (err.fct = "ce"), el algoritmo exige matemáticamente que el vector objetivo (target) esté codificado como números reales (0 y 1) para poder calcular el error contra las probabilidades de salida de la red.
+
+DETALLADO:
+
+``` r
+scale(x = "Matriz o data.frame numérico",
+      center = "Centrar Datos (Restar Media)" - TRUE, FALSE, Vector numérico,
+      scale = "Escalar Datos (Dividir por Desv. Estándar)" - TRUE, FALSE, Vector                                                                        numérico)
+```
+
+**Para scale() (Transformación Estadística):**
+
+- **x**: Matriz o data frame numérico.
+
+- **center**: Si es TRUE (por defecto), resta la media aritmética de cada columna a sus valores.
+
+- **scale**: Si es TRUE (por defecto), divide los valores centrados por la desviación estándar de la columna. Es un paso matemático **crítico** en Redes Neuronales para evitar que variables con magnitudes grandes (ej. Nivel de Glucosa) dominen el gradiente sobre variables pequeñas (ej. IMC) y saturen la función de activación.
+
+Este bloque de código ejecuta dos de las fases más críticas en el flujo de trabajo de Machine Learning: la **partición de los datos (Hold-out Validation)** y el **entrenamiento de la arquitectura de la red neuronal**.
+
+#### 1. Partición de Datos (Entrenamiento y Prueba)
+
+``` r
+set.seed(seed = "Semilla de Aleatoriedad" - Entero)
+
+sample(x = "Vector de Elementos" - Vector/Entero,
+       size = "Tamaño de la Muestra" - Entero)
+```
+
+- **set.seed(42)**: Fija el estado del generador de números pseudoaleatorios. Es estrictamente necesario para que la selección aleatoria de pacientes sea reproducible. Sin esto, cada vez que corras el código, la red se entrenaría con pacientes distintos y las métricas de evaluación cambiarían.
+
+- **sample(1:nrow(...), size = 0.7 \* nrow(...))**: Genera un vector numérico con una muestra aleatoria de índices (filas).
+
+  - 1:nrow(...) crea una secuencia del 1 hasta el total de pacientes.
+
+  - size = 0.7 \* nrow(...) calcula matemáticamente el 70% de ese total.
+
+- **datos_escalados[sorteo, ]**: Utiliza indexación positiva. Extrae exactamente las filas sorteadas (el 70%) para crear el conjunto de **Entrenamiento**. Con estos datos la red ajustará sus pesos matemáticos.
+
+- **datos_escalados[-sorteo, ]**: Utiliza indexación negativa (el signo -). Excluye las filas sorteadas, guardando el 30% restante en el conjunto de **Prueba (Testeo)**. Estos datos son "invisibles" para el modelo durante el entrenamiento y servirán para evaluar su capacidad de generalización (evitar el sobreajuste).
+
+``` {.R .R}
+set.seed(42)
+sorteo <- sample(1:nrow(datos_escalados), size = 0.7 * nrow(datos_escalados))
+datos_entrenamiento <- datos_escalados[sorteo, ]   
+datos_prueba <- datos_escalados[-sorteo, ]
+```
+
+- **set.seed(42)**: Fija el estado del generador de números pseudoaleatorios. Es estrictamente necesario para que la selección aleatoria de pacientes sea reproducible. Sin esto, cada vez que corras el código, la red se entrenaría con pacientes distintos y las métricas de evaluación cambiarían.
+
+- **sample(..., size = 0.7 \* ...)**: Genera un vector numérico con una muestra aleatoria de índices (filas), calculando matemáticamente el 70% del total de pacientes.
+
+- **datos_entrenamiento (Indexación positiva)**: Extrae exactamente las filas sorteadas. Con este 70% de los datos (in-sample) el algoritmo ajustará y optimizará sus pesos matemáticos.
+
+- **datos_prueba (Indexación negativa con -)**: Excluye las filas sorteadas, guardando el 30% restante. Estos datos son "invisibles" para el modelo durante el entrenamiento y servirán exclusivamente para evaluar su capacidad de generalización y medir el sobreajuste (overfitting).
+
+#### 2. Entrenamiento de la Red Neuronal
+
+``` r
+neuralnet(formula = "Fórmula del Modelo",
+          data = "Data.frame de Entrenamiento",
+          hidden = "Estructura de Capas Ocultas" - Entero,
+          err.fct = "Función de Error/Pérdida" - "ce",
+          linear.output = "Salida Lineal" - FALSE)
+```
+
+- **set.seed(123)**: Se vuelve a fijar una semilla justo antes de la función neuralnet. Esto se debe a que el algoritmo inicializa los pesos sinápticos de la red con valores aleatorios antes de empezar a optimizarlos. Fijar la semilla garantiza que el punto de partida matemático sea siempre el mismo.
+
+- **formula**: Define la topología de entrada y salida. fuma_bin es el nodo de salida (target), y las 5 variables a la derecha de la tilde (\~) representan los 5 nodos de la capa de entrada.
+
+- **data = datos_entrenamiento**: Restringe el algoritmo para que aprenda **exclusivamente** del 70% de los datos separados previamente.
+
+- **hidden = 3**: Define la arquitectura interna (hiperparámetro). Crea exactamente **una capa oculta compuesta por 3 neuronas**.
+
+- **err.fct = "ce" (Cross-Entropy)**: Define la función de costo que el algoritmo de Backpropagation intentará minimizar. La Entropía Cruzada penaliza logarítmicamente las predicciones incorrectas que se hacen con alta confianza. Es el estándar matemático obligatorio para problemas de clasificación binaria.
+
+- **linear.output = FALSE**: Desactiva la salida lineal. Al ser FALSE, fuerza a que el nodo final de la red pase por la función de activación sigmoide, comprimiendo el resultado matemático final a un valor continuo estrictamente entre 0 y 1 (interpretado como la probabilidad de ser fumador).
+
+``` R
+set.seed(123)
+modelo_rna_real <- neuralnet(fuma_bin ~ Edad + Peso + IMC + Nivel_de_Glucosa + Presión_Arterial_Sistólica, 
+                             data = datos_entrenamiento, 
+                             hidden = 3, 
+                             err.fct = "ce", 
+                             linear.output = FALSE)
+```
+
+- **set.seed(123)**: Se vuelve a fijar una semilla justo antes de la función neuralnet. Esto se debe a que el algoritmo inicializa los pesos sinápticos de la red con valores aleatorios antes de empezar a optimizarlos mediante Backpropagation. Fijar la semilla garantiza que el punto de partida matemático sea siempre el mismo.
+
+- **formula (\~)**: Define la topología de los extremos de la red. fuma_bin es el nodo de salida (target), y las 5 variables a la derecha representan los 5 nodos de la capa de entrada.
+
+- **data = datos_entrenamiento**: Restringe el algoritmo para que aprenda **exclusivamente** del 70% de los datos separados previamente.
+
+- **hidden = 3**: Define la arquitectura interna (hiperparámetro). Crea exactamente **una capa oculta compuesta por 3 neuronas**.
+
+- **err.fct = "ce" (Cross-Entropy)**: Define la función de costo/pérdida que el algoritmo intentará minimizar. La Entropía Cruzada penaliza logarítmicamente las predicciones incorrectas que se hacen con alta confianza. Es el estándar matemático obligatorio para problemas de clasificación binaria.
+
+- **linear.output = FALSE**: Desactiva la salida lineal. Al ser FALSE, fuerza a que el nodo final de la red pase por la función de activación (sigmoide por defecto), comprimiendo el resultado matemático a un valor continuo estrictamente entre 0 y 1 (interpretado como la probabilidad de ser fumador).
+
+CODIGO DETALLADO:
+
+``` R
+set.seed(seed = "Semilla de Aleatoriedad" - Entero,
+         kind = "Algoritmo Generador" - "Mersenne-Twister", "Wichmann-Hill",                       "Marsaglia-Multicarry", etc.,
+         normal.kind = "Generador de Distribución Normal" - "Inversion", "Ahrens-Dieter", "Box-Muller")
+
+sample(x = "Vector de Elementos o Límite Superior" - Vector/Entero,
+       size = "Tamaño de la Muestra" - Entero,
+       replace = "Muestreo con Reemplazo" - TRUE, FALSE,
+       prob = "Pesos de Probabilidad" - Vector numérico/NULL)
+
+library(neuralnet)
+
+neuralnet(formula = "Fórmula del Modelo",
+          data = "Data.frame de Entrenamiento",
+          hidden = "Estructura de Capas Ocultas" - Entero, Vector de enteros,
+          threshold = "Umbral de Convergencia (Derivada Parcial)" - Numérico,
+          stepmax = "Máximo de Iteraciones" - Entero,
+          rep = "Número de Repeticiones del Entrenamiento" - Entero,
+          startweights = "Pesos Iniciales" - Vector numérico/NULL,
+          learningrate.limit = "Límites de Tasa de Aprendizaje" - Vector numérico                                                                    c(min, max)/NULL,
+          learningrate.factor = "Factores de Tasa de Aprendizaje" - Vector numérico                                                                c(minus, plus)/NULL,
+          learningrate = "Tasa de Aprendizaje (Solo Backprop)" - Numérico/NULL,
+          lifesign = "Impresión de Progreso" - "none", "minimal", "full",
+          algorithm = "Algoritmo de Optimización" - "rprop+", "rprop-", "slr",                           "sag", "backprop",
+          err.fct = "Función de Error/Pérdida" - "sse", "ce", Función personalizada,
+          act.fct = "Función de Activación" - "logistic", "tanh", Función                                                                            personalizada,
+          linear.output = "Salida Lineal (Sin Activación en Capa Final)" - TRUE,                                                                              FALSE,
+          exclude = "Pesos a Excluir/Fijar en Cero" - Vector/Matriz/NULL,
+          constant.weights = "Pesos Constantes" - Vector/NULL,
+          likelihood = "Cálculo de Métricas AIC/BIC" - TRUE, FALSE)
+```
+
+**Para set.seed() y sample() (Partición de Datos):**
+
+- **set.seed()**: Fija el estado inicial del generador de números pseudoaleatorios. Garantiza que la partición de datos (y la inicialización de pesos de la red) sea exactamente reproducible en futuras ejecuciones.
+
+- **sample()**: Extrae una muestra aleatoria. En tu código, size = 0.7 \* nrow(...) define que se extraerá aleatoriamente el 70% de los índices de las filas para conformar el conjunto de entrenamiento (Train), dejando el 30% restante para validación (Test).
+
+**Para neuralnet() (Entrenamiento del Modelo):**
+
+- **formula**: Objeto de clase formula. Define la variable dependiente binaria (izquierda) y los predictores continuos estandarizados (derecha).
+
+- **data**: Data frame de entrenamiento.
+
+- **hidden**: Define la arquitectura de la red. Un valor entero (ej. 3) crea una única capa oculta con 3 neuronas. Un vector (ej. c(3, 2)) crearía dos capas ocultas secuenciales con 3 y 2 neuronas respectivamente.
+
+- **algorithm**: Algoritmo de optimización de pesos. "rprop+" (Resilient Backpropagation con weight backtracking) es el valor por defecto y suele ser el más rápido y robusto.
+
+- **err.fct**: Función matemática para calcular el error a minimizar. "sse" (Suma de Errores al Cuadrado) se usa para regresión continua; "ce" (Entropía Cruzada / Cross-Entropy) se usa estrictamente para clasificación binaria/multiclase, como en tu código.
+
+- **act.fct**: Función de activación de las neuronas. "logistic" (sigmoide) es la predeterminada y mapea los valores al rango (0,1).
+
+- **linear.output**: Valor lógico. Si es TRUE (por defecto), la capa de salida no aplica la función de activación (ideal para regresión). En tu código se exige FALSE para forzar que la salida pase por la función sigmoide y devuelva probabilidades estrictas entre 0 y 1 (clasificación).
+
+``` R
+plot(x = "Objeto de clase nn (Red Neuronal)",
+     rep = "Repetición a Graficar" - "best", Entero,
+     x.entry = "Coordenada X de Entrada" - Numérico,
+     x.out = "Coordenada X de Salida" - Numérico,
+     radius = "Radio de las Neuronas" - Numérico,
+     arrow.length = "Longitud de Flechas de Sinapsis" - Numérico,
+     intercept = "Mostrar Nodos de Sesgo (Bias)" - TRUE, FALSE,
+     intercept.factor = "Posición X de Nodos de Sesgo" - Numérico,
+     information = "Mostrar Información de Error/Pasos" - TRUE, FALSE,
+     information.pos = "Posición de Información" - "top", "bottom",
+     col.entry = "Color de Neuronas de Entrada" - Nombre/Hexadecimal,
+     col.hidden = "Color de Neuronas Ocultas" - Nombre/Hexadecimal,
+     col.out = "Color de Neuronas de Salida" - Nombre/Hexadecimal,
+     col.intercept = "Color de Nodos de Sesgo" - Nombre/Hexadecimal,
+     show.weights = "Imprimir Valor de Pesos en Sinapsis" - TRUE, FALSE,
+     main = "Título del Gráfico" - Cadena de caracteres/NULL)
+```
+
+Este bloque ejecuta el método gráfico específico para objetos de la clase nn (generados por el paquete neuralnet). Su función es renderizar un grafo topológico bidimensional que mapea visualmente la arquitectura completa de la red neuronal que acaba de ser entrenada.
+
+**Para plot() (Método para objetos nn):**
+
+- **x** (en tu código modelo_rna_real): El modelo de red neuronal ajustado.
+
+- **rep**: Si el modelo se entrenó con múltiples repeticiones (rep \> 1 en neuralnet), "best" grafica automáticamente la topología de la repetición que alcanzó el menor error global.
+
+- **intercept**: Controla la visualización de los nodos de sesgo (bias, equivalentes a la constante en una regresión), los cuales se conectan a cada neurona oculta y de salida.
+
+- **show.weights**: Si es TRUE (por defecto), imprime el valor numérico exacto del peso sináptico calculado sobre cada flecha de conexión.
+
+(Argumentos adicionales de personalización visual que la función ejecuta por defecto si no se especifican):
+
+- **intercept**: Valor lógico. Por defecto es TRUE, lo que grafica los nodos de sesgo (bias, representados usualmente con un 1 en color azul) conectados a cada neurona de las capas ocultas y de salida. Actúan como la constante matemática en la función de activación.
+
+- **show.weights**: Valor lógico. Por defecto es TRUE, lo que imprime el valor numérico exacto del peso sináptico optimizado sobre cada flecha (sinapsis) que conecta a las neuronas.
+
+- **information**: Valor lógico. Por defecto es TRUE, lo que imprime en la parte inferior del gráfico (information.pos = "bottom") un resumen técnico con el Error final alcanzado (Entropía Cruzada) y la cantidad de Pasos (Steps) o iteraciones que le tomó al algoritmo converger.
+
+- **radius** / **arrow.length**: Valores numéricos que controlan el tamaño geométrico de los círculos (neuronas) y la longitud de las cabezas de las flechas direccionales.
+
+- **col.\***: Familia de argumentos que permite modificar el color del borde de las neuronas según su capa (entrada, oculta, salida o sesgo).
+
+#### **Fase de Testeo y Evaluación**
+
+``` r
+predict(object = "Objeto de clase nn (Red Neuronal)",
+        newdata = "Nuevos Datos para Predicción" - Data.frame/Matriz,
+        rep = "Repetición a Utilizar" - Entero, "all",
+        all.units = "Retornar Salidas de Capas Ocultas" - TRUE, FALSE)
+```
+
+**Para predict() (Método para objetos nn):**
+
+- **object**: El modelo de red neuronal ajustado.
+
+- **newdata**: Data frame con las observaciones de prueba (datos_prueba). Debe contener exactamente las mismas columnas predictoras utilizadas en el entrenamiento.
+
+- **all.units**: Si es FALSE (por defecto), devuelve únicamente una matriz con las predicciones finales de la capa de salida (probabilidades). Si es TRUE, devuelve una lista detallada que incluye las activaciones intermedias de cada neurona en las capas ocultas.
+
+**Explicación técnica del bloque de código (Fase de Testeo y Evaluación):**
+
+Este bloque representa la fase final del ciclo de Machine Learning: la **evaluación del rendimiento y capacidad de generalización** del modelo sobre datos no observados. Se divide en los siguientes pasos lógicos:
+
+**1. Predicción (Inferencia sobre el conjunto de Prueba):**
+
+- **predict(modelo_rna_real, datos_prueba)**: La función toma la matriz de pesos sinápticos ya optimizados y hace pasar los datos del 30% oculto (datos_prueba) a través de la red (proceso de Forward Propagation). Al haber configurado el modelo con linear.output = FALSE, el resultado devuelto es un vector de valores continuos entre 0 y 1, que representan la **probabilidad matemática** de que cada paciente pertenezca a la clase positiva (Fumador).
+
+**2. Binarización (Aplicación del Umbral de Decisión):**
+
+- Dado que la red devuelve probabilidades continuas, se aplica un corte estricto (umbral del 0.5 o 50%). Todo paciente con una probabilidad calculada \>0.5 es clasificado como 1 (Fumador predicho), y el resto como 0 (No fumador predicho).
+
+**3. Descomposición de la Matriz de Confusión:**
+
+- Se cruzan las etiquetas reales vs. las predichas para extraer los cuatro componentes fundamentales del rendimiento diagnóstico mediante indexación matricial [fila, columna]:
+
+  - **VN (Verdaderos Negativos)**: Pacientes sanos correctamente identificados.
+
+  - **FP (Falsos Positivos)**: Error Tipo I. Pacientes sanos clasificados erróneamente como fumadores.
+
+  - **FN (Falsos Negativos)**: Error Tipo II. Pacientes fumadores clasificados erróneamente como sanos.
+
+  - **VP (Verdaderos Positivos)**: Pacientes fumadores correctamente identificados.
+
+**4. Cálculo de Métricas de Rendimiento:**
+
+- **Exactitud (Accuracy)**: Proporción global de aciertos del modelo sobre el total de la muestra.
+
+- **Sensibilidad (Recall / True Positive Rate)**: Capacidad estricta del modelo para no dejar escapar a los pacientes que realmente son fumadores.
+
+- **Especificidad (True Negative Rate)**: Capacidad estricta del modelo para identificar correctamente a los pacientes sanos sin generar falsas alarmas.
+
+**5. Diagnóstico de Sobreajuste (Overfitting):**
+
+- Para saber si la red neuronal simplemente "memorizó" los datos en lugar de aprender patrones reales, se repite el proceso de predicción y cálculo de exactitud, pero esta vez sobre los datos que la red ya conoce (datos_entrenamiento).
+
+- **Sobreajuste = exactitud_entrenamiento - Exactitud**: Calcula la caída o degradación del rendimiento. Si la red tiene una exactitud del 90% en entrenamiento pero cae al 69% en prueba (una diferencia del 20.6%), indica un alto nivel de sobreajuste: el modelo es demasiado complejo y no logra generalizar ante pacientes nuevos.
