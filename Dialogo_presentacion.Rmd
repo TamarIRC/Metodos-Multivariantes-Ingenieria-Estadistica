@@ -715,61 +715,67 @@ La interpretacion se mantiene: el mapa final permite observar proximidades, opos
 
 ## Slide 12: Analisis de conglomerados
 
-El analisis de conglomerados es una tecnica no supervisada. A diferencia de los metodos anteriores, aqui no existe una variable respuesta ni grupos definidos previamente; el objetivo es descubrir agrupaciones naturales en los datos.
+**Bloque 1: idea general.**
 
-La idea estadistica es formar grupos internamente homogeneos y externamente heterogeneos. En la slide se ordenan los procedimientos en tres bloques: metodos basados en distancia, metodos no basados directamente en distancia y procedimientos no jerarquicos.
+El analisis de conglomerados es una tecnica no supervisada. A diferencia de los metodos de clasificacion, aqui no existe una variable respuesta ni grupos definidos previamente; el objetivo es descubrir agrupaciones naturales en los datos.
 
-Primero, en los metodos **basados en distancia**, se construye una matriz de distancias $D$, que contiene la disimilitud entre cada par de observaciones:
+La idea estadistica es formar grupos internamente homogeneos y externamente heterogeneos: baja variabilidad dentro de los grupos y alta separacion entre grupos.
 
-$\\mathbf{D} =
-\left(d_{ij}\right)$$
+**Bloque 2: procedimientos jerarquicos.**
 
-donde cada elemento $d_{ij}$ mide que tan distintas son las observaciones $i$ y $j$. Por ejemplo, usando distancia euclidiana:
+Los procedimientos jerarquicos construyen una secuencia anidada de agrupaciones. En el caso aglomerativo, se parte con cada observacion como un conglomerado separado y luego se fusionan grupos paso a paso.
 
-$$d(i,j) =
+El resultado es un dendrograma. El numero final de grupos se decide cortando el arbol, no fijandolo desde el inicio.
+
+**Bloque 3: metodos basados en distancia.**
+
+Primero se construye una matriz de distancias $\mathbf{D}$, que contiene la disimilitud entre cada par de observaciones:
+
+$$\mathbf{D}=\left(d_{ij}\right)$$
+
+Por ejemplo, con distancia euclidiana:
+
+$$d(i,j)=
 \sqrt{\sum_{r=1}^{p}(x_{ir}-x_{jr})^2}$$
 
-Con esta matriz $D$, el algoritmo jerarquico parte con cada observacion como un conglomerado separado y luego va fusionando grupos segun un criterio de proximidad.
+Luego se define como medir la distancia entre grupos.
 
-Por ejemplo, el vecino mas cercano usa la menor distancia entre elementos de dos grupos:
+El vecino mas cercano usa:
 
-$$d(A,B) = \min_{i \in A, j \in B} d(i,j)$$
+$$d(A,B)=\min_{i \in A, j \in B} d(i,j)$$
 
-El vecino mas lejano usa la mayor distancia:
+El vecino mas lejano usa:
 
-$$d(A,B) = \max_{i \in A, j \in B} d(i,j)$$
+$$d(A,B)=\max_{i \in A, j \in B} d(i,j)$$
 
-Luego aparece el bloque **no basado directamente en distancia**, donde se ubica el metodo de Ward. Aunque puede implementarse a partir de distancias euclidianas, su fundamento no es simplemente elegir el par mas cercano, sino minimizar el aumento de dispersion interna al fusionar dos grupos.
+**Bloque 4: metodo de Ward.**
 
-El criterio de Ward puede expresarse como:
+Ward tambien es un procedimiento jerarquico, pero no se basa solo en elegir el par mas cercano. Su criterio es fusionar los grupos que producen el menor aumento de dispersion interna.
 
-$$\Delta(A,B) =
+El incremento de variabilidad puede expresarse como:
+
+$$\Delta(A,B)=
 \frac{n_A n_B}{n_A+n_B}
 \|\bar{x}_A-\bar{x}_B\|^2$$
 
-Es decir, se fusionan los grupos cuya union produce el menor incremento en la suma de cuadrados intra-grupo. Por eso Ward tiende a formar conglomerados compactos y relativamente homogeneos. El resultado sigue siendo un dendrograma, pero el criterio estadistico se basa en perdida de homogeneidad interna.
+Por eso Ward tiende a formar conglomerados compactos y relativamente homogeneos.
 
-Finalmente, la slide pasa al **procedimiento no jerarquico**. Aqui ya no se construye un dendrograma; se fija previamente el numero de grupos $k$ y se optimiza una particion.
+**Bloque 5: procedimientos no jerarquicos.**
 
-Para entenderlo, primero se considera la matriz de dispersion total. La variabilidad total puede descomponerse como:
+Los procedimientos no jerarquicos no construyen dendrogramas. Se fija previamente el numero de grupos $k$ y se busca directamente una particion optima.
 
-$$\mathbf{T} = \mathbf{W} + \mathbf{B}$$
-
-donde $\mathbf{T}$ es la dispersion total, $\mathbf{W}$ es la dispersion dentro de los grupos y $\mathbf{B}$ es la dispersion entre grupos.
-
-En K-medias, el objetivo es minimizar la dispersion intra-grupo, es decir, minimizar $\mathbf{W}$:
+En K-medias, el objetivo es minimizar la dispersion intra-grupo:
 
 $$\min
 \sum_{g=1}^{k}
 \sum_{i \in C_g}
 \|x_i-\bar{x}_g\|^2$$
 
-El algoritmo alterna dos pasos: asignar cada observacion al centroide mas cercano y luego actualizar los centroides de cada grupo. El proceso se repite hasta que las asignaciones se estabilizan.
+El algoritmo alterna dos pasos: asignar cada observacion al centroide mas cercano y actualizar los centroides. Se repite hasta que las asignaciones se estabilizan.
 
-La relacion con Ward es importante: ambos buscan grupos compactos minimizando variabilidad interna. La diferencia es que Ward lo hace de forma jerarquica, fusionando grupos paso a paso, mientras que K-medias lo hace de forma no jerarquica, reasignando observaciones a centroides hasta optimizar la particion final.
+**Cierre comparativo.**
 
-------------------------------------------------------------------------
-
+Ward y K-medias se parecen en que ambos buscan grupos compactos. La diferencia es operativa: Ward fusiona grupos paso a paso y entrega un dendrograma; K-medias exige definir $k$ antes y reasigna observaciones hasta optimizar una particion final.
 ## Slide 13: Funciones discriminantes
 
 En esta slide pasamos a tecnicas de clasificacion. A diferencia del analisis de conglomerados, aqui los grupos ya son conocidos y el objetivo es construir una regla para asignar una nueva observacion $x$ a una poblacion o clase $\Pi_h$.
