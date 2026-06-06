@@ -774,78 +774,68 @@ La relacion con Ward es importante: ambos buscan grupos compactos minimizando va
 
 En esta slide pasamos a tecnicas de clasificacion. A diferencia del analisis de conglomerados, aqui los grupos ya son conocidos y el objetivo es construir una regla para asignar una nueva observacion $x$ a una poblacion o clase $\Pi_h$.
 
-Primero aparece la **funcion lineal discriminante de Fisher**. La idea es transformar el vector multivariante $x$ en un puntaje lineal:
+Para leer la slide con claridad, conviene separar los metodos de discriminacion en bloques.
+
+**Primer metodo: funcion lineal discriminante de Fisher.**
+
+Fisher propone transformar el vector multivariante $x$ en un puntaje lineal:
 
 $$L(x) = \beta_1x_1 + \cdots + \beta_px_p$$
 
-El vector $\beta$ se estima buscando la direccion que maximiza la separacion entre grupos respecto de la variabilidad dentro de los grupos:
+El vector $\beta$ se elige para maximizar separacion entre grupos y minimizar dispersion interna:
 
 $$\max_{\beta}
 \frac{\boldsymbol{\beta}'\mathbf{B}\boldsymbol{\beta}}{\boldsymbol{\beta}'\mathbf{W}\boldsymbol{\beta}}$$
 
-donde $\mathbf{B}$ representa variabilidad entre grupos y $\mathbf{W}$ variabilidad intra-grupo. En palabras simples, Fisher busca una proyeccion donde los grupos queden lo mas separados posible, pero manteniendo baja dispersion interna.
+donde $\mathbf{B}$ representa variabilidad entre grupos y $\mathbf{W}$ variabilidad intra-grupo. En palabras simples, Fisher busca la direccion donde los grupos se separan mejor al proyectar los datos.
 
-El criterio de decision es asignar $x$ al grupo cuyo centro proyectado quede mas cercano:
+Este enfoque es principalmente geometrico: no parte necesariamente desde una densidad probabilistica, sino desde un criterio de separacion.
 
-$$x \in \Pi_h
-\Longleftrightarrow
-d(L(x),L(\bar{x}_h))
-=
-\min_i d(L(x),L(\bar{x}_i))$$
+**Segundo metodo: discriminacion bayesiana.**
 
-Este enfoque se presenta como libre de supuestos distribucionales estrictos, porque se basa principalmente en una regla geometrica de separacion.
-
-Luego aparece el **metodo Bayesiano**. Aqui la regla de clasificacion se construye a partir de probabilidades a posteriori:
+Aqui la clasificacion se basa en probabilidades a posteriori:
 
 $$P(\Pi_h|x) =
 \frac{p_h f_h(x)}
 {\sum_i p_i f_i(x)}$$
 
-donde $p_h$ es la probabilidad a priori del grupo $h$ y $f_h(x)$ es la densidad condicional de $x$ dado ese grupo. El criterio de asignacion es:
+donde $p_h$ es la probabilidad a priori del grupo $h$ y $f_h(x)$ es la densidad condicional de $x$ en ese grupo.
 
-$$x \in \Pi_h
-\Longleftrightarrow
-p_h f_h(x)
-=
-\max_i\{p_i f_i(x)\}$$
+La regla asigna $x$ al grupo con mayor probabilidad posterior, o equivalentemente al grupo que maximiza:
 
-Por eso este metodo requiere densidades conocidas o estimadas y probabilidades a priori definidas.
+$$p_h f_h(x)$$
 
-En el centro de la slide esta la **funcion discriminante de razon de verosimilitud**. La razon basica compara que tan probable es observar $x$ bajo una poblacion respecto de otra:
+Este metodo necesita especificar o estimar densidades y probabilidades a priori.
+
+**Tercer metodo: razon de verosimilitud.**
+
+La razon de verosimilitud compara que tan probable es observar $x$ bajo una poblacion respecto de otra:
 
 $$\frac{f_1(x)}{f_2(x)} > k$$
 
-Si se asume normalidad multivariante, la forma de la frontera depende de las matrices de varianza-covarianza.
+Si se supera el umbral $k$, se asigna a una clase; si no, a la otra. La forma de la frontera depende de las densidades asumidas.
 
-En el **caso heterocedastico**, donde:
+**Cuarto metodo: LDA y QDA bajo normalidad multivariante.**
 
-$$\boldsymbol{\Sigma}_1 \ne \boldsymbol{\Sigma}_2$$
+Si las poblaciones son normales multivariantes, la regla anterior se vuelve mas explicita.
 
-cada grupo tiene su propia matriz de covarianza. Por eso aparece una distancia cuadratica de Mahalanobis especifica por grupo:
-
-$$x \in \Pi_h
-\Longleftrightarrow
-(x-\bar{x}_h)'\mathbf{S}_h^{-1}(x-\bar{x}_h)$$
-
-Como la matriz de covarianza cambia entre grupos, la frontera de decision es cuadratica.
-
-En el **caso homocedastico**, donde:
+En el **caso homocedastico**:
 
 $$\boldsymbol{\Sigma}_1 = \boldsymbol{\Sigma}_2 = \boldsymbol{\Sigma}$$
 
-se utiliza una matriz de covarianza comun $S_{pool}$. En ese caso, la regla se simplifica y la frontera pasa a ser lineal:
+las covarianzas son iguales. Los terminos cuadraticos se cancelan y la frontera es lineal. Este es el caso del **analisis discriminante lineal**, o LDA.
 
-$$x \in \Pi_1
-\Longleftrightarrow
-\left(x-\frac{\bar{x}_1+\bar{x}_2}{2}\right)'
-S_{pool}^{-1}
-(\bar{x}_1-\bar{x}_2)
->
-\ln k$$
+En el **caso heterocedastico**:
 
-Por eso, con covarianzas iguales hablamos de discriminante lineal, y con covarianzas distintas hablamos de discriminante cuadratico. El objetivo general es encontrar una frontera que separe adecuadamente los grupos, especialmente cuando uno de ellos es mas disperso.
+$$\boldsymbol{\Sigma}_1 \ne \boldsymbol{\Sigma}_2$$
 
-Finalmente, la slide incluye **regresion logistica** como tecnica de clasificacion. En este caso se modela directamente la probabilidad de pertenecer a una clase:
+cada grupo tiene su propia matriz de covarianza. Los terminos cuadraticos no se cancelan y la frontera es cuadratica. Este es el caso del **analisis discriminante cuadratico**, o QDA.
+
+Por eso la diferencia clave es: covarianzas iguales producen una regla lineal; covarianzas distintas producen una regla cuadratica.
+
+**Quinto metodo: regresion logistica.**
+
+La regresion logistica no modela directamente densidades normales por grupo. Modela la probabilidad de pertenecer a una clase:
 
 $$logit(p)
 =
@@ -853,15 +843,17 @@ $$logit(p)
 =
 \beta_0+\beta_1x_1+\cdots+\beta_kx_k$$
 
-El criterio de decision consiste en comparar la probabilidad estimada con un umbral:
+Luego clasifica comparando la probabilidad estimada con un umbral, por ejemplo 0.5:
 
 $$\hat{Y}=1
 \Longleftrightarrow
 \frac{1}{1+e^{-(\beta_0+\beta'x)}} > 0.5$$
 
-Para evaluar el clasificador se utiliza la **tabla de confusion**, que resume aciertos y errores: verdaderos positivos, verdaderos negativos, falsos positivos y falsos negativos.
+**Evaluacion de los metodos.**
 
-La **curva ROC** complementa esa evaluacion, porque muestra como cambia el balance entre sensibilidad y especificidad al mover el umbral de clasificacion. Mientras mas cercana este la curva al extremo superior izquierdo, mejor es la capacidad discriminante del modelo.
+Todos estos metodos pueden evaluarse mediante matriz de confusion, sensibilidad, especificidad y curva ROC.
+
+La matriz de confusion evalua un umbral fijo. La curva ROC complementa esa evaluacion porque muestra como cambia el balance entre sensibilidad y especificidad al mover el umbral de clasificacion. Mientras mas cercana este la curva al extremo superior izquierdo, mejor es la capacidad discriminante del modelo.
 
 ------------------------------------------------------------------------
 
