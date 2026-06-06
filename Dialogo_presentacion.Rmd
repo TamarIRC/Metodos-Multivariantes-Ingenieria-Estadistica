@@ -350,7 +350,7 @@ Si las matrices de covarianza son similares, los determinantes de las matrices g
 
 Como $M$ no se compara directamente, se aplica una correccion para obtener una aproximacion chi-cuadrado. Una forma usual de la correccion es:
 
-$$c =
+$$G^{-1} =
 \left[
 \sum_{i=1}^{k}\frac{1}{n_i-1}
 -
@@ -361,7 +361,7 @@ $$c =
 Entonces el estadistico corregido es:
 
 $$\chi^2 =
-(1-c)M$$
+(1-G^{-1})M$$
 
 Bajo $H_0$, este estadistico sigue aproximadamente una distribucion chi-cuadrado con:
 

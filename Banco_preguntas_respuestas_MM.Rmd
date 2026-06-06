@@ -2,7 +2,9 @@
 title: "Banco de Preguntas y Respuestas - Metodos Multivariantes"
 author: "Taller I - Metodos Multivariantes"
 date: "2026-06-05"
-output: html_document
+output:
+  pdf_document: default
+  html_document: default
 ---
 
 # Banco de defensa oral
