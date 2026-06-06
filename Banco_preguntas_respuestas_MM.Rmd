@@ -15,7 +15,7 @@ Respuestas breves, tecnicas y defendibles, basadas en los contenidos de **MM Fig
 
 # 1. Conceptos base y supuestos
 
-## 1.1. Ã‚Â¿Diferencia entre tecnica y metodo estadistico?
+## 1.1. ¿Diferencia entre tecnica y metodo estadistico?
 
 Una **tecnica** es una herramienta operativa puntual: graficar, rotar, clasificar, medir distancia o evaluar rendimiento.
 
@@ -28,11 +28,11 @@ Ejemplos:
 -   MANOVA, PCA, analisis factorial y LDA son metodos, porque tienen estructura matematica y condiciones de aplicacion.
 
 **Respuesta oral:**\
-Ã¢â‚¬Å“Una tecnica es una herramienta especifica; un metodo es un marco estadistico con supuestos, modelo, criterio y regla de decision.Ã¢â‚¬Â
+"Una tecnica es una herramienta especifica; un metodo es un marco estadistico con supuestos, modelo, criterio y regla de decision."
 
 ------------------------------------------------------------------------
 
-## 1.2. Test de Mardia: Ã‚Â¿por que separa asimetria y curtosis?
+## 1.2. Test de Mardia: ¿por que separa asimetria y curtosis?
 
 La normalidad multivariante exige condiciones sobre momentos de distinto orden:
 
@@ -44,26 +44,36 @@ Se separan porque una distribucion puede fallar por asimetria, por curtosis o po
 Si uno de los dos componentes rechaza normalidad, no se debe asumir normalidad multivariante completa.
 
 **Respuesta oral:**\
-Ã¢â‚¬Å“Mardia separa asimetria y curtosis porque son formas distintas de desviarse de la normalidad. Si una falla, existe evidencia contra normalidad multivariante.Ã¢â‚¬Â
+"Mardia separa asimetria y curtosis porque son formas distintas de desviarse de la normalidad. Si una falla, existe evidencia contra normalidad multivariante."
 
 ------------------------------------------------------------------------
 
-## 1.3. Ã‚Â¿Por que Mardia se evalua aislado de otras docimas?
+## 1.3. ¿Por que Mardia se evalua aislado de otras docimas?
 
-Porque Mardia contrasta **normalidad multivariante**, no homogeneidad de covarianzas ni correlacion.
+Porque Mardia no evalua normalidad **variable por variable**, sino normalidad del **vector aleatorio completo**.
 
-Distincion:
+En normalidad multivariante, el objeto de interes es:
 
--   Mardia: forma distribucional conjunta.
--   Box M: igualdad de matrices de covarianza entre grupos.
--   Bartlett: estructura de correlacion para reduccion de dimensionalidad.
+$$
+X=(X_1,X_2,\ldots,X_p)'
+$$
+
+No basta con verificar que cada marginal $X_j$ sea normal. Eso solo revisa las variables por separado, pero no garantiza que la dependencia conjunta tenga estructura normal multivariante.
+
+El criterio teorico fuerte es que toda combinacion lineal:
+
+$$
+a'X
+$$
+
+debe ser normal univariada para cualquier vector $a$. Es decir, tambien deben ser normales las combinaciones lineales de las variables. Mardia resume esta normalidad conjunta mediante asimetria y curtosis multivariantes.
 
 **Respuesta oral:**\
-Ã¢â‚¬Å“Mardia se evalua aparte porque responde a una pregunta especifica: si la nube multivariante es compatible con normalidad.Ã¢â‚¬Â
+"Mardia se evalua aparte porque no prueba normalidad variable por variable. Evalua si el vector completo tiene normalidad conjunta; las marginales normales no bastan, porque tambien deben ser normales las combinaciones lineales y la dependencia entre variables."
 
 ------------------------------------------------------------------------
 
-## 1.4. Ã‚Â¿Por que no usar automaticamente 5% en pruebas de supuestos?
+## 1.4. ¿Por que no usar automaticamente 5% en pruebas de supuestos?
 
 El 5% es una convencion. En pruebas de supuestos muchas veces se busca **no rechazar**:
 
@@ -76,11 +86,11 @@ Si se usa siempre $\alpha=0.05$, la prueba puede ser poco sensible para detectar
 No debe decidirse solo por p-value: tambien se consideran graficos, tamano muestral y robustez del metodo.
 
 **Respuesta oral:**\
-Ã¢â‚¬Å“En diagnostico de supuestos conviene ser mas exigente; usar 10% o 15% reduce el riesgo de pasar por alto un supuesto problematico.Ã¢â‚¬Â
+"En diagnostico de supuestos conviene ser mas exigente; usar 10% o 15% reduce el riesgo de pasar por alto un supuesto problematico."
 
 ------------------------------------------------------------------------
 
-## 1.5. Ã‚Â¿Por que maxima verosimilitud exige normalidad y minimos cuadrados no necesariamente?
+## 1.5. ¿Por que maxima verosimilitud exige normalidad y minimos cuadrados no necesariamente?
 
 Maxima verosimilitud requiere especificar una densidad:
 
@@ -99,13 +109,13 @@ $$
 Para estimar por MCO no se necesita normalidad; para inferencia exacta en muestras pequenas, si.
 
 **Respuesta oral:**\
-Ã¢â‚¬Å“La verosimilitud depende de una distribucion especificada. MCO no necesita normalidad para estimar, pero si para pruebas exactas t y F en muestras pequenas.Ã¢â‚¬Â
+"La verosimilitud depende de una distribucion especificada. MCO no necesita normalidad para estimar, pero si para pruebas exactas t y F en muestras pequenas."
 
 ------------------------------------------------------------------------
 
 # 2. MANOVA e inferencia multivariante
 
-## 2.1. Ã‚Â¿Cual es el modelo en MANOVA?
+## 2.1. ¿Cual es el modelo en MANOVA?
 
 MANOVA es el modelo lineal con respuesta vectorial:
 
@@ -130,11 +140,11 @@ $$
 donde $B$ es variabilidad entre grupos y $W$ variabilidad intra-grupos.
 
 **Respuesta oral:**\
-Ã¢â‚¬Å“MANOVA es un modelo lineal multivariante: la respuesta es un vector y la comparacion se hace mediante matrices de variabilidad entre y dentro de grupos.Ã¢â‚¬Â
+"MANOVA es un modelo lineal multivariante: la respuesta es un vector y la comparacion se hace mediante matrices de variabilidad entre y dentro de grupos."
 
 ------------------------------------------------------------------------
 
-## 2.2. Ã‚Â¿Por que MANOVA usa un unico nivel de significancia global?
+## 2.2. ¿Por que MANOVA usa un unico nivel de significancia global?
 
 Porque la hipotesis es global:
 
@@ -157,11 +167,11 @@ P(\text{rechazar }H_0 \mid H_0\text{ verdadera})=\alpha
 $$
 
 **Respuesta oral:**\
-Ã¢â‚¬Å“Un unico $\alpha$ sirve porque MANOVA contrasta una sola hipotesis global sobre vectores de medias, no varias pruebas univariadas independientes.Ã¢â‚¬Â
+"Un unico $\alpha$ sirve porque MANOVA contrasta una sola hipotesis global sobre vectores de medias, no varias pruebas univariadas independientes."
 
 ------------------------------------------------------------------------
 
-## 2.3. Â¿Cuales son los tres supuestos o problemas que debe enfrentar MANOVA?
+## 2.3. ¿Cuales son los tres supuestos o problemas que debe enfrentar MANOVA?
 
 MANOVA contrasta igualdad de vectores de medias entre grupos, pero su validez depende de tres condiciones principales.
 
@@ -194,7 +204,7 @@ Las observaciones deben ser independientes dentro y entre grupos. Si hay depende
 
 ------------------------------------------------------------------------
 
-## 2.4. Ã‚Â¿Que pasa con muestras pareadas?
+## 2.4. ¿Que pasa con muestras pareadas?
 
 No se tratan como muestras independientes. Se construyen diferencias:
 
@@ -211,13 +221,13 @@ $$
 mediante $T^2$ de Hotelling para una muestra.
 
 **Respuesta oral:**\
-Ã¢â‚¬Å“La muestra pareada se reduce a un problema de una muestra sobre vectores de diferencias.Ã¢â‚¬Â
+"La muestra pareada se reduce a un problema de una muestra sobre vectores de diferencias."
 
 ------------------------------------------------------------------------
 
 # 3. Reduccion de dimensionalidad
 
-## 3.1. Ã‚Â¿Por que implementar reduccion de dimensionalidad?
+## 3.1. ¿Por que implementar reduccion de dimensionalidad?
 
 Para representar muchas variables mediante pocas dimensiones, conservando la mayor informacion posible.
 
@@ -230,7 +240,7 @@ Justificaciones:
 -   Construir variables sinteticas.
 
 **Respuesta oral:**\
-Ã¢â‚¬Å“Se reduce dimension cuando varias variables contienen informacion redundante y queremos resumir la estructura principal con perdida minima de informacion.Ã¢â‚¬Â
+"Se reduce dimension cuando varias variables contienen informacion redundante y queremos resumir la estructura principal con perdida minima de informacion."
 
 ------------------------------------------------------------------------
 
@@ -257,7 +267,7 @@ $$
 **Correspondencias:** trabaja con variables categoricas y tablas de contingencia. Usa perfiles y distancia chi-cuadrado.
 
 **Respuesta oral:**\
-Ã¢â‚¬Å“PCA resume varianza total; analisis factorial modela factores latentes; correspondencias representa asociaciones entre categorias.Ã¢â‚¬Â
+"PCA resume varianza total; analisis factorial modela factores latentes; correspondencias representa asociaciones entre categorias."
 
 ------------------------------------------------------------------------
 
@@ -280,11 +290,11 @@ Los siguientes componentes maximizan varianza bajo restriccion de ortogonalidad 
 La solucion son autovectores de la matriz de covarianzas o correlaciones. Los autovalores indican la varianza explicada.
 
 **Respuesta oral:**\
-Ã¢â‚¬Å“PCA busca direcciones ortogonales que maximizan varianza; matematicamente se resuelve por autovalores y autovectores.Ã¢â‚¬Â
+"PCA busca direcciones ortogonales que maximizan varianza; matematicamente se resuelve por autovalores y autovectores."
 
 ------------------------------------------------------------------------
 
-## 3.4. Ã‚Â¿Que representan autovalores y cargas?
+## 3.4. ¿Que representan autovalores y cargas?
 
 En PCA, el autovalor $\lambda_j$ es la varianza explicada por el componente $j$.
 
@@ -304,7 +314,7 @@ La interpretacion depende de la escala:
 Por eso, si las variables tienen escalas distintas, se prefiere matriz de correlaciones.
 
 **Respuesta oral:**\
-Ã¢â‚¬Å“Los autovalores miden varianza explicada; las cargas muestran que variables pesan o se asocian con cada componente. Su lectura depende de si se uso covarianza o correlacion.Ã¢â‚¬Â
+"Los autovalores miden varianza explicada; las cargas muestran que variables pesan o se asocian con cada componente. Su lectura depende de si se uso covarianza o correlacion."
 
 ------------------------------------------------------------------------
 
@@ -335,11 +345,11 @@ $$
 Por eso rechazar Bartlett indica que existe estructura de correlacion suficiente para PCA o analisis factorial.
 
 **Respuesta oral:**\
-Ã¢â‚¬Å“Bartlett prueba si la matriz de correlacion es identidad. Si se rechaza, hay correlaciones utiles para reducir dimension.Ã¢â‚¬Â
+"Bartlett prueba si la matriz de correlacion es identidad. Si se rechaza, hay correlaciones utiles para reducir dimension."
 
 ------------------------------------------------------------------------
 
-## 3.6. Ã‚Â¿Por que Bartlett usa logaritmo negativo?
+## 3.6. ¿Por que Bartlett usa logaritmo negativo?
 
 El estadistico es:
 
@@ -357,7 +367,7 @@ $$
 El signo negativo hace que el estadistico sea positivo y crezca cuando $|R|$ se aleja de 1.
 
 **Respuesta oral:**\
-Ã¢â‚¬Å“Se usa logaritmo negativo porque $\ln|R|$ es no positivo; el signo menos convierte esa evidencia en un estadistico chi-cuadrado positivo.Ã¢â‚¬Â
+"Se usa logaritmo negativo porque $\ln|R|$ es no positivo; el signo menos convierte esa evidencia en un estadistico chi-cuadrado positivo."
 
 ------------------------------------------------------------------------
 
@@ -375,13 +385,13 @@ Riesgo:
 -   Usar Promax sin fundamento puede complicar innecesariamente la interpretacion.
 
 **Respuesta oral:**\
-Ã¢â‚¬Å“La rotacion depende de la teoria: Varimax si los factores son independientes; Promax si pueden correlacionarse.Ã¢â‚¬Â
+"La rotacion depende de la teoria: Varimax si los factores son independientes; Promax si pueden correlacionarse."
 
 ------------------------------------------------------------------------
 
 # 4. Discriminacion, ROC y clasificacion
 
-## 4.1. Ã‚Â¿De donde aparece la funcion lineal discriminante?
+## 4.1. ¿De donde aparece la funcion lineal discriminante?
 
 En Fisher, se busca una proyeccion:
 
@@ -404,11 +414,11 @@ $$
 Tambien aparece desde maxima verosimilitud bajo normalidad multivariante con covarianza comun. En ese caso, la frontera de decision es lineal.
 
 **Respuesta oral:**\
-Ã¢â‚¬Å“Es discriminante porque proyecta los datos en la direccion que maximiza separacion entre grupos respecto a la variabilidad interna.Ã¢â‚¬Â
+"Es discriminante porque proyecta los datos en la direccion que maximiza separacion entre grupos respecto a la variabilidad interna."
 
 ------------------------------------------------------------------------
 
-## 4.2. Ã‚Â¿Cuando verosimilitud entrega regla lineal o no lineal?
+## 4.2. ¿Cuando verosimilitud entrega regla lineal o no lineal?
 
 Si:
 
@@ -427,7 +437,7 @@ $$
 con covarianzas distintas, los terminos cuadraticos no se cancelan. Resultado: **QDA**, frontera cuadratica.
 
 **Respuesta oral:**\
-Ã¢â‚¬Å“Covarianza comun produce regla lineal; covarianzas distintas producen regla cuadratica.Ã¢â‚¬Â
+"Covarianza comun produce regla lineal; covarianzas distintas producen regla cuadratica."
 
 ------------------------------------------------------------------------
 
@@ -444,11 +454,11 @@ Clasifica comparando esa probabilidad con un umbral $c$.
 Es discriminante porque asigna observaciones a clases segun probabilidad posterior estimada.
 
 **Respuesta oral:**\
-Ã¢â‚¬Å“La logistica discrimina porque estima la probabilidad de clase y clasifica segun un umbral.Ã¢â‚¬Â
+"La logistica discrimina porque estima la probabilidad de clase y clasifica segun un umbral."
 
 ------------------------------------------------------------------------
 
-## 4.4. Ã‚Â¿Por que ROC sirve para comparar metodos discriminantes?
+## 4.4. ¿Por que ROC sirve para comparar metodos discriminantes?
 
 Porque ROC solo requiere un score continuo: probabilidad, funcion discriminante o puntaje.
 
@@ -477,7 +487,7 @@ AUC=P(s(X^+)>s(X^-))
 $$
 
 **Respuesta oral:**\
-Ã¢â‚¬Å“ROC compara la capacidad discriminante del score, independiente del modelo que lo genero.Ã¢â‚¬Â
+"ROC compara la capacidad discriminante del score, independiente del modelo que lo genero."
 
 ------------------------------------------------------------------------
 
@@ -490,13 +500,13 @@ La ROC evalua todos los umbrales posibles.
 Por eso un modelo puede tener mala sensibilidad con umbral 0.5, pero mejor balance con otro umbral.
 
 **Respuesta oral:**\
-Ã¢â‚¬Å“La matriz de confusion depende de un punto de corte; la ROC evalua el comportamiento del score en todos los puntos de corte.Ã¢â‚¬Â
+"La matriz de confusion depende de un punto de corte; la ROC evalua el comportamiento del score en todos los puntos de corte."
 
 ------------------------------------------------------------------------
 
 # 5. Conglomerados y distancias
 
-## 5.1. Ã‚Â¿Como verificar que los clusters sean distintos?
+## 5.1. ¿Como verificar que los clusters sean distintos?
 
 Si las variables son cuantitativas y los supuestos son razonables, se puede usar MANOVA sobre los clusters:
 
@@ -509,7 +519,7 @@ Si se rechaza, hay evidencia de diferencias multivariadas entre grupos.
 Si no se cumplen supuestos, usar alternativas por distancia o permutacion: PERMANOVA, silueta, Dunn, distancias intra/inter grupo.
 
 **Respuesta oral:**\
-Ã¢â‚¬Å“Se puede validar con MANOVA si los supuestos lo permiten; si no, con criterios no parametricos o basados en distancias.Ã¢â‚¬Â
+"Se puede validar con MANOVA si los supuestos lo permiten; si no, con criterios no parametricos o basados en distancias."
 
 ------------------------------------------------------------------------
 
@@ -532,11 +542,11 @@ $$
 Las diferencias numericas deben tener significado real.
 
 **Respuesta oral:**\
-Ã¢â‚¬Å“Euclidiana y Mahalanobis se justifican con variables cuantitativas, porque operan sobre diferencias numericas.Ã¢â‚¬Â
+"Euclidiana y Mahalanobis se justifican con variables cuantitativas, porque operan sobre diferencias numericas."
 
 ------------------------------------------------------------------------
 
-## 5.3. Ã‚Â¿Se pueden usar clusters con variables categoricas u ordinales?
+## 5.3. ¿Se pueden usar clusters con variables categoricas u ordinales?
 
 Si, pero no directamente con Euclidiana o Mahalanobis sin justificar transformacion.
 
@@ -549,13 +559,13 @@ Alternativas:
 -   ACM previo y luego clustering sobre coordenadas factoriales.
 
 **Respuesta oral:**\
-Ã¢â‚¬Å“Si hay categoricas u ordinales, se debe cambiar la distancia o transformar adecuadamente; no basta codificarlas como numeros arbitrarios.Ã¢â‚¬Â
+"Si hay categoricas u ordinales, se debe cambiar la distancia o transformar adecuadamente; no basta codificarlas como numeros arbitrarios."
 
 ------------------------------------------------------------------------
 
 # 6. Modelos, interacciones y regiones criticas
 
-## 6.1. Ã‚Â¿Que condicion deben cumplir dos modelos para compararse?
+## 6.1. ¿Que condicion deben cumplir dos modelos para compararse?
 
 Deben explicar la misma respuesta y estar ajustados sobre datos comparables.
 
@@ -568,11 +578,11 @@ $$
 Para AIC/BIC no necesitan ser anidados, pero la verosimilitud debe ser comparable.
 
 **Respuesta oral:**\
-Ã¢â‚¬Å“Deben modelar la misma respuesta y tener likelihood comparable; para LRT, ademas, deben ser anidados.Ã¢â‚¬Â
+"Deben modelar la misma respuesta y tener likelihood comparable; para LRT, ademas, deben ser anidados."
 
 ------------------------------------------------------------------------
 
-## 6.2. Ã‚Â¿Interaccion implica multicolinealidad?
+## 6.2. ¿Interaccion implica multicolinealidad?
 
 No necesariamente.
 
@@ -589,11 +599,11 @@ Multicolinealidad es dependencia lineal entre regresores.
 La interaccion puede aumentar correlacion con terminos principales, pero no implica automaticamente colinealidad severa. Centrar variables ayuda.
 
 **Respuesta oral:**\
-Ã¢â‚¬Å“La interaccion representa modificacion de efecto; la multicolinealidad es dependencia lineal entre predictores. No son equivalentes.Ã¢â‚¬Â
+"La interaccion representa modificacion de efecto; la multicolinealidad es dependencia lineal entre predictores. No son equivalentes."
 
 ------------------------------------------------------------------------
 
-## 6.3. Ã‚Â¿Por que algunas docimas tienen una cola y otras dos?
+## 6.3. ¿Por que algunas docimas tienen una cola y otras dos?
 
 Depende del estadistico y de la alternativa.
 
@@ -608,7 +618,7 @@ $$
 En Wilks, valores pequenos de $\Lambda$ rechazan, pero al transformarlo a F se expresa como cola superior.
 
 **Respuesta oral:**\
-Ã¢â‚¬Å“La region critica depende de como el estadistico acumula evidencia contra $H_0$. Si la discrepancia solo aumenta el estadistico, es una cola.Ã¢â‚¬Â
+"La region critica depende de como el estadistico acumula evidencia contra $H_0$. Si la discrepancia solo aumenta el estadistico, es una cola."
 
 ------------------------------------------------------------------------
 
@@ -650,4 +660,4 @@ Responder siempre en tres pasos:
 
 Ejemplo:
 
-Ã¢â‚¬Å“En MANOVA contrastamos igualdad de vectores de medias. Matematicamente comparamos matrices de variabilidad entre y dentro de grupos mediante Wilks, Pillai u otros estadisticos. Si el p-value es menor que $\alpha$, rechazamos la igualdad global de vectores de medias.Ã¢â‚¬Â
+"En MANOVA contrastamos igualdad de vectores de medias. Matematicamente comparamos matrices de variabilidad entre y dentro de grupos mediante Wilks, Pillai u otros estadisticos. Si el p-value es menor que $\alpha$, rechazamos la igualdad global de vectores de medias."
