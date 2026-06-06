@@ -1042,233 +1042,40 @@ Por lo tanto, asi como en ANOVA un unico $\alpha$ permite decidir globalmente si
 
 ------------------------------------------------------------------------
 
-## Nota 2: Curva ROC, sustento matematico e interpretacion
+## Nota 2: Curva ROC, interpretacion esencial
 
-Esta nota complementa la parte practica asociada a analisis discriminante lineal, analisis discriminante cuadratico y evaluacion de clasificadores.
+La Curva ROC evalua la capacidad discriminante de un clasificador binario al variar el umbral de decision. No mira solo una clasificacion fija, sino como cambia el rendimiento del modelo para distintos puntos de corte.
 
-La Curva ROC, del ingles *Receiver Operating Characteristic*, es una herramienta para evaluar el rendimiento de un clasificador binario en todos los posibles puntos de corte.
+Para cada umbral se calculan dos medidas:
 
-En nuestro caso, el problema de clasificacion consiste en separar dos clases:
+$$
+\text{Sensibilidad}=\frac{VP}{VP+FN}
+$$
 
-- Clase negativa: no fumador.
-- Clase positiva: fumador o fumador ocasional.
+que mide la proporcion de positivos reales detectados, y:
 
-El modelo, por ejemplo LDA o QDA, no solo entrega una clase final, sino tambien un puntaje o probabilidad estimada de pertenecer a la clase positiva.
+$$
+\text{Especificidad}=\frac{VN}{VN+FP}
+$$
 
-Denotemos ese puntaje por:
+que mide la proporcion de negativos reales correctamente identificados.
 
-$$s(x)$$
+La ROC grafica:
 
-donde valores mas altos indican mayor evidencia de pertenecer a la clase positiva.
+$$
+\text{Sensibilidad} \quad \text{vs} \quad 1-\text{Especificidad}
+$$
 
-Para transformar ese puntaje en una clasificacion se escoge un umbral $c$:
+El AUC resume la capacidad discriminante global:
 
-$$\hat{Y} =
-\begin{cases}
-1, & \text{si } s(x) \geq c \\
-0, & \text{si } s(x) < c
-\end{cases}$$
+$$
+AUC=P(s(X^+) > s(X^-))
+$$
 
-El punto clave es que la clasificacion depende del umbral. Si el umbral cambia, tambien cambian los aciertos y errores del modelo.
+Es decir, representa la probabilidad de que el modelo asigne mayor puntaje a un positivo real que a un negativo real. Un $AUC=0.5$ equivale al azar; valores cercanos a 0.7 indican discriminacion moderada; desde 0.8 se considera buena.
 
-### Matriz de confusion
+En nuestro caso, LDA obtuvo aproximadamente $AUC=0.628$, por lo que su capacidad discriminante es moderada-baja. QDA obtuvo aproximadamente $AUC=0.700$, mostrando mejor discriminacion porque permite fronteras cuadraticas y matrices de covarianza distintas entre clases.
 
-Para un umbral fijo se obtiene una matriz de confusion:
+**Respuesta breve para defensa:**  
+"La Curva ROC muestra el equilibrio entre sensibilidad y especificidad al mover el umbral. El AUC resume esa capacidad: es la probabilidad de que el modelo puntue mas alto a un positivo que a un negativo. En el trabajo, QDA discrimina mejor que LDA porque tiene mayor AUC, aunque ambos modelos siguen siendo moderados."
 
-|               |       Predicho positivo |       Predicho negativo |
-|---------------|------------------------:|------------------------:|
-| Real positivo | Verdadero positivo $VP$ |     Falso negativo $FN$ |
-| Real negativo |     Falso positivo $FP$ | Verdadero negativo $VN$ |
-
-A partir de esta matriz se definen dos medidas centrales:
-
-$$\text{Sensibilidad} =
-\frac{VP}{VP + FN}$$
-
-La sensibilidad mide la proporcion de positivos reales que el modelo detecta correctamente. En nuestro contexto, mide que porcentaje de fumadores reales son clasificados como fumadores.
-
-$$\text{Especificidad} =
-\frac{VN}{VN + FP}$$
-
-La especificidad mide la proporcion de negativos reales que el modelo identifica correctamente. En nuestro contexto, mide que porcentaje de no fumadores reales son clasificados como no fumadores.
-
-Tambien se utiliza:
-
-$$1 - \text{Especificidad} =
-\frac{FP}{FP + VN}$$
-
-que corresponde a la tasa de falsos positivos.
-
-### Construccion matematica de la Curva ROC
-
-La Curva ROC se construye variando el umbral $c$ desde valores muy altos hasta valores muy bajos.
-
-Para cada valor de $c$, se calcula:
-
-$$\text{Sensibilidad}(c)$$
-
-y:
-
-$$1 - \text{Especificidad}(c)$$
-
-Luego se grafica:
-
-$$x = 1 - \text{Especificidad}(c)$$
-
-$$y = \text{Sensibilidad}(c)$$
-
-Por lo tanto, cada punto de la Curva ROC representa el rendimiento del clasificador para un umbral especifico.
-
-La curva no evalua un unico punto de corte, sino la capacidad general del modelo para ordenar correctamente a los individuos positivos por sobre los negativos.
-
-### Interpretacion de la diagonal
-
-En el grafico ROC, la diagonal desde $(0,0)$ hasta $(1,1)$ representa un clasificador sin capacidad discriminante.
-
-En ese caso:
-
-$$AUC = 0.5$$
-
-Esto significa que el modelo clasifica practicamente al azar. No distingue adecuadamente entre positivos y negativos.
-
-Un clasificador perfecto tendria:
-
-$$\text{Sensibilidad} = 1$$
-
-$$\text{Especificidad} = 1$$
-
-y por lo tanto estaria cerca del punto:
-
-$$(0,1)$$
-
-en el plano ROC. Ese punto representa cero falsos positivos y cien por ciento de verdaderos positivos.
-
-### Area bajo la curva: AUC
-
-El AUC, o area bajo la Curva ROC, resume numericamente la capacidad discriminante del modelo.
-
-Matematicamente:
-
-$$AUC =
-P(s(X^+) > s(X^-))$$
-
-Es decir, el AUC puede interpretarse como la probabilidad de que el modelo asigne un puntaje mayor a un individuo positivo que a un individuo negativo, escogidos ambos al azar.
-
-Esta interpretacion es muy importante para defender la Curva ROC.
-
-Por ejemplo:
-
-- $AUC = 0.5$: el modelo no discrimina mejor que el azar.
-- $AUC = 0.7$: el modelo tiene capacidad discriminante moderada.
-- $AUC = 0.8$: el modelo tiene buena capacidad discriminante.
-- $AUC = 0.9$ o superior: el modelo tiene capacidad discriminante muy alta.
-
-En terminos practicos, si un modelo tiene $AUC = 0.700$, significa que existe aproximadamente un 70% de probabilidad de que el modelo asigne mayor puntaje a un fumador real que a un no fumador real.
-
-### Umbral optimo
-
-La Curva ROC permite buscar un umbral optimo de clasificacion. Una forma comun es maximizar el indice de Youden:
-
-$$J = \text{Sensibilidad} + \text{Especificidad} - 1$$
-
-El umbral que maximiza $J$ busca equilibrar la deteccion de positivos con la correcta identificacion de negativos.
-
-Sin embargo, el umbral optimo no siempre es 0.5.
-
-Esto depende de:
-
-- La distribucion de los puntajes.
-- El desbalance entre clases.
-- El costo de cometer falsos positivos.
-- El costo de cometer falsos negativos.
-
-Por ejemplo, si detectar fumadores es mas importante que evitar falsas alarmas, se podria preferir un umbral mas bajo para aumentar sensibilidad. En cambio, si se quiere evitar clasificar erroneamente a no fumadores como fumadores, se podria preferir un umbral mas alto para aumentar especificidad.
-
-### Diferencia entre matriz de confusion y Curva ROC
-
-La matriz de confusion evalua el modelo en un punto de corte especifico.
-
-La Curva ROC evalua el comportamiento del modelo para todos los puntos de corte posibles.
-
-Por eso puede ocurrir que la matriz de confusion muestre baja sensibilidad usando el umbral por defecto, pero la Curva ROC indique que existe un umbral alternativo que mejora el balance entre sensibilidad y especificidad.
-
-Esta diferencia es clave:
-
-- Matriz de confusion: evalua una decision de clasificacion ya fijada.
-- Curva ROC: evalua la capacidad discriminante global del puntaje.
-
-### Aplicacion al LDA
-
-En el caso del LDA, el modelo busca separar las clases mediante una frontera lineal.
-
-El AUC obtenido fue aproximadamente:
-
-$$AUC = 0.628$$
-
-Esto indica una capacidad discriminante moderada-baja.
-
-El umbral optimo reportado fue aproximadamente:
-
-$$c = 0.380$$
-
-con:
-
-$$\text{Especificidad} \approx 0.795$$
-
-$$\text{Sensibilidad} \approx 0.524$$
-
-La interpretacion es que, usando ese umbral, el modelo identifica correctamente cerca del 79.5% de los no fumadores y detecta cerca del 52.4% de los fumadores.
-
-Por lo tanto, el LDA distingue razonablemente a los no fumadores, pero tiene limitaciones para detectar fumadores.
-
-### Aplicacion al QDA
-
-En el caso del QDA, el modelo permite fronteras cuadraticas y matrices de covarianza distintas entre clases.
-
-El AUC obtenido fue aproximadamente:
-
-$$AUC = 0.700$$
-
-Esto indica una capacidad discriminante moderada y superior a la del LDA.
-
-El umbral optimo fue aproximadamente:
-
-$$c = 0.419$$
-
-con:
-
-$$\text{Especificidad} \approx 0.744$$
-
-$$\text{Sensibilidad} \approx 0.667$$
-
-La interpretacion es que QDA logra un mejor equilibrio entre detectar fumadores y reconocer no fumadores. En particular, mejora la sensibilidad respecto al LDA, aunque no alcanza un rendimiento excelente.
-
-### Como defender la Curva ROC en una presentacion
-
-Si se pregunta que mide la Curva ROC, se puede responder:
-
-> La Curva ROC mide la relacion entre sensibilidad y tasa de falsos positivos para todos los posibles umbrales de clasificacion.
-
-Si se pregunta que representa el AUC, se puede responder:
-
-> El AUC representa la probabilidad de que el modelo asigne mayor puntaje a un individuo positivo que a un individuo negativo escogidos al azar.
-
-Si se pregunta por que no basta con la matriz de confusion, se puede responder:
-
-> Porque la matriz de confusion depende de un unico umbral, mientras que la Curva ROC evalua el rendimiento del puntaje clasificador en todos los umbrales posibles.
-
-Si se pregunta por que el umbral optimo no es necesariamente 0.5, se puede responder:
-
-> Porque el umbral optimo depende del balance entre sensibilidad y especificidad, de la proporcion de clases y del costo relativo de falsos positivos y falsos negativos.
-
-Si se pregunta que significa un AUC de 0.700, se puede responder:
-
-> Significa que el modelo tiene capacidad discriminante moderada; aproximadamente en el 70% de los pares formados por un positivo y un negativo, el modelo asigna mayor puntaje al positivo.
-
-### Cierre conceptual
-
-La Curva ROC no mide directamente exactitud global. Mide capacidad discriminante.
-
-Un modelo puede tener una exactitud aparentemente aceptable si la clase negativa es mayoritaria, pero aun asi tener baja sensibilidad para detectar positivos.
-
-Por eso, en problemas de clasificacion, especialmente cuando interesa detectar una clase especifica, la Curva ROC, el AUC, la sensibilidad y la especificidad deben interpretarse conjuntamente.
