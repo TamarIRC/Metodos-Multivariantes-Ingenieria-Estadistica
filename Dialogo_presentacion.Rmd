@@ -1,4 +1,4 @@
----
+﻿---
 title: "Guion de Presentacion - Taller I"
 author: "Metodos Multivariantes"
 date: "2026-06-04"
@@ -73,7 +73,7 @@ $$\mu = (\mu_1, \mu_2, \ldots, \mu_p)'$$
 
 y la dispersion ya no se representa mediante una varianza, sino mediante una matriz de varianza-covarianza:
 
-$$\Sigma$$
+$$\boldsymbol{\Sigma}$$
 
 Esta matriz contiene en la diagonal las varianzas individuales de cada variable, y fuera de la diagonal las covarianzas entre pares de variables.
 
@@ -83,13 +83,13 @@ Por lo tanto, en multivariado no basta con estudiar cada variable por separado. 
 
 En el caso univariado, muchos procedimientos inferenciales se construyen bajo el supuesto:
 
-$$X \sim N(\mu, \sigma^2)$$
+$$X \sim N(\mu, \boldsymbol{\Sigma}^2)$$
 
 En el caso multivariado, esto se generaliza a:
 
-$$X \sim N_p(\mu, \Sigma)$$
+$$X \sim N_p(\mu, \boldsymbol{\Sigma})$$
 
-Es decir, una normal multivariante de dimension $p$, con vector de medias $\mu$ y matriz de covarianzas $\Sigma$.
+Es decir, una normal multivariante de dimension $p$, con vector de medias $\mu$ y matriz de covarianzas $\boldsymbol{\Sigma}$.
 
 La diferencia central es que en una dimension la dispersion se resume con un solo numero, $\sigma^2$. En varias dimensiones, en cambio, la dispersion se resume con una matriz completa, porque ademas de la variabilidad de cada variable debemos considerar la asociacion entre ellas.
 
@@ -97,11 +97,11 @@ La diferencia central es que en una dimension la dispersion se resume con un sol
 
 En el caso univariado, para medir que tan lejos esta una observacion respecto de su media usamos una distancia estandarizada:
 
-$$z = \frac{x - \mu}{\sigma}$$
+$$z = \frac{x - \mu}{\boldsymbol{\Sigma}}$$
 
 Su cuadrado es:
 
-$$z^2 = \frac{(x - \mu)^2}{\sigma^2}$$
+$$z^2 = \frac{(x - \mu)^2}{\boldsymbol{\Sigma}^2}$$
 
 Si $X$ es normal, entonces:
 
@@ -109,19 +109,19 @@ $$z^2 \sim \chi^2_1$$
 
 En el caso multivariado, esta idea se generaliza mediante la distancia de Mahalanobis:
 
-$$D^2 = (x - \mu)' \Sigma^{-1} (x - \mu)$$
+$$D^2 = (x - \mu)' \boldsymbol{\Sigma}^{-1} (x - \mu)$$
 
 Esta distancia mide que tan lejos esta una observacion respecto del centro multivariante, pero corrigiendo por escala y por correlacion entre variables.
 
 La analogia es directa:
 
-$$\frac{(x - \mu)^2}{\sigma^2}
+$$\frac{(x - \mu)^2}{\boldsymbol{\Sigma}^2}
 \quad \longrightarrow \quad
-(x - \mu)' \Sigma^{-1} (x - \mu)$$
+(x - \mu)' \boldsymbol{\Sigma}^{-1} (x - \mu)$$
 
 Si:
 
-$$X \sim N_p(\mu, \Sigma)$$
+$$X \sim N_p(\mu, \boldsymbol{\Sigma})$$
 
 entonces:
 
@@ -137,11 +137,11 @@ $$\frac{(n - 1)S^2}{\sigma^2} \sim \chi^2_{n-1}$$
 
 Esto permite hacer inferencia sobre la varianza poblacional $\sigma^2$.
 
-En el caso multivariado, la varianza deja de ser un numero y pasa a ser una matriz $\Sigma$. Por lo tanto, la varianza muestral $S^2$ se generaliza a la matriz de covarianzas muestral $S$.
+En el caso multivariado, la varianza deja de ser un numero y pasa a ser una matriz $\boldsymbol{\Sigma}$. Por lo tanto, la varianza muestral $S^2$ se generaliza a la matriz de covarianzas muestral $\mathbf{S}$.
 
 La distribucion que generaliza a la chi-cuadrado en este contexto es la distribucion de Wishart:
 
-$$(n - 1)S \sim W_p(\Sigma, n - 1)$$
+$$(n - 1)\mathbf{S} \sim W_p(\boldsymbol{\Sigma}, n - 1)$$
 
 La interpretacion es que Wishart describe el comportamiento probabilistico de matrices de covarianza muestrales, asi como la chi-cuadrado describe el comportamiento de una varianza muestral en el caso univariado.
 
@@ -174,7 +174,7 @@ pero ahora $\mu$ y $\mu_0$ son vectores de dimension $p$.
 
 La generalizacion natural de la t de Student es la estadistica $T^2$ de Hotelling:
 
-$$T^2 = n(\bar{x} - \mu_0)'S^{-1}(\bar{x} - \mu_0)$$
+$$T^2 = n(\bar{x} - \mu_0)'\mathbf{S}^{-1}(\bar{x} - \mu_0)$$
 
 La logica es la misma: medir que tan lejos esta la media muestral de la media hipotetica. Pero ahora esa distancia considera simultaneamente todas las variables y sus covarianzas.
 
@@ -232,9 +232,9 @@ pero ahora cada $\mu_j$ es un vector de medias.
 
 En ANOVA se analizan sumas de cuadrados. En MANOVA se analizan matrices de suma de cuadrados y productos cruzados. Por eso aparecen matrices como:
 
-- $W$: variabilidad intra-grupos o residual.
-- $B$: variabilidad entre-grupos o explicada.
-- $T$: variabilidad total.
+- $\mathbf{W}$: variabilidad intra-grupos o residual.
+- $\mathbf{B}$: variabilidad entre-grupos o explicada.
+- $\mathbf{T}$: variabilidad total.
 
 La logica se mantiene: comparar variabilidad explicada por los grupos contra variabilidad residual. Lo que cambia es que la variabilidad ya no es un numero, sino una matriz.
 
@@ -248,7 +248,7 @@ Para que las pruebas multivariantes sean validas, se deben revisar ciertos supue
 
 **1)** El primero es la normalidad multivariante. Aqui no basta con revisar cada variable por separado, porque el supuesto multivariante exige que el vector aleatorio completo siga una normal multivariante:
 
-$$X \sim N_p(\mu, \Sigma)$$
+$$X \sim N_p(\mu, \boldsymbol{\Sigma})$$
 
 Una docima comun para evaluar este supuesto es el **test de Mardia**, que revisa dos aspectos de la distribucion conjunta: la asimetria multivariada y la curtosis multivariada.
 
@@ -260,7 +260,7 @@ $$H_1: \text{los datos no provienen de una distribucion normal multivariante}$$
 
 Para definir los estadisticos, primero se utiliza la distancia de Mahalanobis entre observaciones:
 
-$$d_{ij} = (x_i - \bar{x})'S^{-1}(x_j - \bar{x})$$
+$$d_{ij} = (x_i - \bar{x})'\mathbf{S}^{-1}(x_j - \bar{x})$$
 
 ***Para asimetria***, Mardia mide si existe falta de simetria en la nube multivariante de puntos. El estadistico de asimetria es:
 
@@ -269,7 +269,7 @@ $$b_{1,p} =
 \sum_{i=1}^{n}
 \sum_{j=1}^{n}
 \left[
-(x_i - \bar{x})'S^{-1}(x_j - \bar{x})
+(x_i - \bar{x})'\mathbf{S}^{-1}(x_j - \bar{x})
 \right]^3$$
 
 Bajo $H_0$, se utiliza la transformacion:
@@ -290,7 +290,7 @@ $$b_{2,p} =
 \frac{1}{n}
 \sum_{i=1}^{n}
 \left[
-(x_i - \bar{x})'S^{-1}(x_i - \bar{x})
+(x_i - \bar{x})'\mathbf{S}^{-1}(x_i - \bar{x})
 \right]^2$$
 
 Si los datos siguen una normal multivariante, entonces se espera que:
@@ -321,7 +321,7 @@ Sin embargo, lo contrario no necesariamente se cumple. **Que todas las variables
 
 La docima es:
 
-$$H_0: \Sigma_1 = \Sigma_2 = \cdots = \Sigma_k$$
+$$H_0: \boldsymbol{\Sigma}_1 = \boldsymbol{\Sigma}_2 = \cdots = \boldsymbol{\Sigma}_k$$
 
 $$H_1: \text{al menos una matriz de covarianza difiere}$$
 
@@ -393,35 +393,35 @@ Para reduccion de dimensionalidad, como componentes principales o analisis facto
 
 El test de esfericidad de Bartlett contrasta:
 
-$$H_0: R = I$$
+$$H_0: \mathbf{R} = \mathbf{I}$$
 
 es decir, la matriz de correlacion poblacional es igual a la matriz identidad. Esto implica que las variables no estan correlacionadas.
 
 La hipotesis alternativa es:
 
-$$H_1: R \ne I$$
+$$H_1: \mathbf{R} \ne \mathbf{I}$$
 
 es decir, existe al menos una correlacion distinta de cero.
 
 El estadistico se basa especificamente en el **determinante de la matriz de correlaciones muestral**, denotado por:
 
-$$|R|$$
+$$|\mathbf{R}|$$
 
-donde $R$ es la matriz de correlaciones entre las $p$ variables.
+donde $\mathbf{R}$ es la matriz de correlaciones entre las $p$ variables.
 
 La idea es la siguiente: si las variables no estan correlacionadas, la matriz de correlaciones se parece a la matriz identidad:
 
-$$R \approx I$$
+$$\mathbf{R} \approx \mathbf{I}$$
 
 y el determinante de la identidad es:
 
-$$|I| = 1$$
+$$|\mathbf{I}| = 1$$
 
 Por lo tanto, bajo ausencia de correlacion, se espera que:
 
-$$|R| \approx 1$$
+$$|\mathbf{R}| \approx 1$$
 
-En cambio, cuando existen correlaciones entre variables, el determinante de $R$ disminuye. Mientras mas dependientes o redundantes sean las variables, mas pequeno tiende a ser $|R|$. Por eso el determinante resume cuanta estructura de asociacion existe en la matriz.
+En cambio, cuando existen correlaciones entre variables, el determinante de $\mathbf{R}$ disminuye. Mientras mas dependientes o redundantes sean las variables, mas pequeno tiende a ser $|\mathbf{R}|$. Por eso el determinante resume cuanta estructura de asociacion existe en la matriz.
 
 El estadistico de Bartlett se define como:
 
@@ -429,13 +429,13 @@ $$\chi^2 =
 -\left[
 n - 1 - \frac{2p + 5}{6}
 \right]
-\ln|R|$$
+\ln|\mathbf{R}|$$
 
-El signo negativo aparece porque, cuando hay correlacion, $|R| < 1$ y por lo tanto:
+El signo negativo aparece porque, cuando hay correlacion, $|\mathbf{R}| < 1$ y por lo tanto:
 
-$$\ln|R| < 0$$
+$$\ln|\mathbf{R}| < 0$$
 
-Al multiplicar por el signo negativo, el estadistico queda positivo. Asi, mientras mas pequeno sea el determinante de $R$, mas grande sera el valor del estadistico $\chi^2$.
+Al multiplicar por el signo negativo, el estadistico queda positivo. Asi, mientras mas pequeno sea el determinante de $\mathbf{R}$, mas grande sera el valor del estadistico $\chi^2$.
 
 Bajo $H_0$, este estadistico sigue aproximadamente una distribucion chi-cuadrado con:
 
@@ -479,7 +479,7 @@ Primero consideramos el caso de una sola muestra aleatoria multivariante:
 
 $$x_1, x_2, \ldots, x_n
 \sim
-N_p(\mu, \Sigma)$$
+N_p(\mu, \boldsymbol{\Sigma})$$
 
 El objetivo es contrastar si el vector de medias poblacional es igual a un vector teorico o de referencia:
 
@@ -490,9 +490,9 @@ $$H_1: \mu \ne \mu_0$$
 Esta es la **docima del vector de medias**. El estadistico utilizado es el $T^2$ de Hotelling para una muestra:
 
 $$T^2 =
-n(\bar{x}-\mu_0)'S^{-1}(\bar{x}-\mu_0)$$
+n(\bar{x}-\mu_0)'\mathbf{S}^{-1}(\bar{x}-\mu_0)$$
 
-donde $\bar{x}$ es el vector de medias muestral, $S$ es la matriz de covarianzas muestral y $p$ es el numero de variables.
+donde $\bar{x}$ es el vector de medias muestral, $\mathbf{S}$ es la matriz de covarianzas muestral y $p$ es el numero de variables.
 
 Para tomar la decision, se transforma a una distribucion F:
 
@@ -529,7 +529,7 @@ Esta logica se extiende naturalmente al **diseno y analisis de experimentos**, p
 
 Luego pasamos al caso de **dos muestras independientes y homogeneas**, es decir, dos grupos independientes que comparten una misma matriz de varianza-covarianza poblacional:
 
-$$\Sigma_1 = \Sigma_2$$
+$$\boldsymbol{\Sigma}_1 = \boldsymbol{\Sigma}_2$$
 
 La docima de comparacion de medias es:
 
@@ -541,7 +541,7 @@ Aqui se utiliza el $T^2$ de Hotelling para dos muestras independientes:
 
 $$T^2 =
 \frac{n_1n_2}{n_1+n_2}
-(\bar{x}_1-\bar{x}_2)'S_p^{-1}(\bar{x}_1-\bar{x}_2)$$
+(\bar{x}_1-\bar{x}_2)'\mathbf{S}_p^{-1}(\bar{x}_1-\bar{x}_2)$$
 
 donde $S_p$ es la matriz de covarianza combinada:
 
@@ -572,7 +572,7 @@ Contrastar $H_0: \beta_1 = 0$ equivale a contrastar igualdad de medias entre dos
 
 Finalmente, cuando existen $k$ muestras o grupos independientes, el primer paso es revisar si las matrices de varianza-covarianza son comparables entre grupos. Para eso se utiliza la **docima de comparacion de matrices de varianza-covarianza**, mediante el test M de Box:
 
-$$H_0: \Sigma_1 = \Sigma_2 = \cdots = \Sigma_k$$
+$$H_0: \boldsymbol{\Sigma}_1 = \boldsymbol{\Sigma}_2 = \cdots = \boldsymbol{\Sigma}_k$$
 
 No es necesario volver a desarrollar aqui el estadistico, porque ya fue explicado en los supuestos de viabilidad. Lo importante es recordar que este paso justifica si es razonable trabajar bajo homogeneidad de covarianzas.
 
@@ -592,9 +592,9 @@ donde se contrasta si los efectos de grupo son iguales a cero, o equivalentement
 
 Para esto se descompone la variabilidad total en matrices:
 
-- $W$: variabilidad intra-grupos o residual.
-- $B$: variabilidad entre-grupos o explicada.
-- $T$: variabilidad total.
+- $\mathbf{W}$: variabilidad intra-grupos o residual.
+- $\mathbf{B}$: variabilidad entre-grupos o explicada.
+- $\mathbf{T}$: variabilidad total.
 
 Los estadisticos multivariantes, como Lambda de Wilks, traza de Pillai, traza de Hotelling-Lawley y raiz mayor de Roy, comparan la variabilidad explicada por los grupos con la variabilidad residual.
 
@@ -612,7 +612,7 @@ $$Y_j = a_j'X$$
 
 El criterio estadistico es escoger direcciones que maximicen la varianza. Por eso el problema se resuelve mediante autovalores y autovectores:
 
-$$\Sigma a_j = \lambda_j a_j$$
+$$\boldsymbol{\Sigma} a_j = \lambda_j a_j$$
 
 Aqui, el autovector $a_j$ define la direccion del componente y el autovalor $\lambda_j$ indica cuanta varianza explica. Por eso se retienen los primeros componentes, aquellos asociados a los mayores autovalores.
 
@@ -624,11 +624,11 @@ Con esto se decide cuantas dimensiones conservar: si pocos componentes explican 
 
 El **analisis factorial**, en cambio, no busca solo resumir varianza total, sino explicar la estructura comun entre las variables mediante factores latentes. Su modelo central es:
 
-$$X = \mu + \Lambda F + \varepsilon$$
+$$\mathbf{X} = \boldsymbol{\mu} + \boldsymbol{\Lambda}\mathbf{F} + \boldsymbol{\varepsilon}$$
 
 La consecuencia estadistica principal es la descomposicion de la matriz de covarianzas:
 
-$$\Sigma = \Lambda\Lambda' + \Psi$$
+$$\boldsymbol{\Sigma} = \boldsymbol{\Lambda}\boldsymbol{\Lambda}' + \boldsymbol{\Psi}$$
 
 Aqui, $\Lambda\Lambda'$ representa la varianza comun explicada por los factores, mientras que $\Psi$ representa la varianza especifica o unica de cada variable.
 
@@ -703,7 +703,7 @@ $$X_{ij} = (X_{ih_j})$$
 
 Luego se construye la matriz de Burt:
 
-$$B = X'X$$
+$$\mathbf{B} = \mathbf{X}'\mathbf{X}$$
 
 donde $X$ representa la tabla disyuntiva. Esta matriz cruza todas las categorias con todas las categorias; por eso contiene todas las tablas de contingencia entre pares de variables.
 
@@ -721,7 +721,7 @@ La idea estadistica es formar grupos internamente homogeneos y externamente hete
 
 Primero, en los metodos **basados en distancia**, se construye una matriz de distancias $D$, que contiene la disimilitud entre cada par de observaciones:
 
-$$D =
+$\\mathbf{D} =
 \left(d_{ij}\right)$$
 
 donde cada elemento $d_{ij}$ mide que tan distintas son las observaciones $i$ y $j$. Por ejemplo, usando distancia euclidiana:
@@ -753,11 +753,11 @@ Finalmente, la slide pasa al **procedimiento no jerarquico**. Aqui ya no se cons
 
 Para entenderlo, primero se considera la matriz de dispersion total. La variabilidad total puede descomponerse como:
 
-$$T = W + B$$
+$$\mathbf{T} = \mathbf{W} + \mathbf{B}$$
 
-donde $T$ es la dispersion total, $W$ es la dispersion dentro de los grupos y $B$ es la dispersion entre grupos.
+donde $\mathbf{T}$ es la dispersion total, $\mathbf{W}$ es la dispersion dentro de los grupos y $\mathbf{B}$ es la dispersion entre grupos.
 
-En K-medias, el objetivo es minimizar la dispersion intra-grupo, es decir, minimizar $W$:
+En K-medias, el objetivo es minimizar la dispersion intra-grupo, es decir, minimizar $\mathbf{W}$:
 
 $$\min
 \sum_{g=1}^{k}
@@ -781,9 +781,9 @@ $$L(x) = \beta_1x_1 + \cdots + \beta_px_p$$
 El vector $\beta$ se estima buscando la direccion que maximiza la separacion entre grupos respecto de la variabilidad dentro de los grupos:
 
 $$\max_{\beta}
-\frac{\beta'B\beta}{\beta'W\beta}$$
+\frac{\boldsymbol{\beta}'\mathbf{B}\boldsymbol{\beta}}{\boldsymbol{\beta}'\mathbf{W}\boldsymbol{\beta}}$$
 
-donde $B$ representa variabilidad entre grupos y $W$ variabilidad intra-grupo. En palabras simples, Fisher busca una proyeccion donde los grupos queden lo mas separados posible, pero manteniendo baja dispersion interna.
+donde $\mathbf{B}$ representa variabilidad entre grupos y $\mathbf{W}$ variabilidad intra-grupo. En palabras simples, Fisher busca una proyeccion donde los grupos queden lo mas separados posible, pero manteniendo baja dispersion interna.
 
 El criterio de decision es asignar $x$ al grupo cuyo centro proyectado quede mas cercano:
 
@@ -819,19 +819,19 @@ Si se asume normalidad multivariante, la forma de la frontera depende de las mat
 
 En el **caso heterocedastico**, donde:
 
-$$\Sigma_1 \ne \Sigma_2$$
+$$\boldsymbol{\Sigma}_1 \ne \boldsymbol{\Sigma}_2$$
 
 cada grupo tiene su propia matriz de covarianza. Por eso aparece una distancia cuadratica de Mahalanobis especifica por grupo:
 
 $$x \in \Pi_h
 \Longleftrightarrow
-(x-\bar{x}_h)'S_h^{-1}(x-\bar{x}_h)$$
+(x-\bar{x}_h)'\mathbf{S}_h^{-1}(x-\bar{x}_h)$$
 
 Como la matriz de covarianza cambia entre grupos, la frontera de decision es cuadratica.
 
 En el **caso homocedastico**, donde:
 
-$$\Sigma_1 = \Sigma_2 = \Sigma$$
+$$\boldsymbol{\Sigma}_1 = \boldsymbol{\Sigma}_2 = \boldsymbol{\Sigma}$$
 
 se utiliza una matriz de covarianza comun $S_{pool}$. En ese caso, la regla se simplifica y la frontera pasa a ser lineal:
 
@@ -992,9 +992,9 @@ En ANOVA, la variabilidad se resume mediante sumas de cuadrados escalares. En MA
 
 Las dos matrices centrales son:
 
-$$W: \text{matriz de variabilidad intra-grupos o residual}$$
+$$\mathbf{W}: \\text{matriz de variabilidad intra-grupos o residual}$$
 
-$$B: \text{matriz de variabilidad entre grupos o explicada}$$
+$$\mathbf{B}: \\text{matriz de variabilidad entre grupos o explicada}$$
 
 En ANOVA se compara:
 
@@ -1004,7 +1004,7 @@ $$\frac{\text{variabilidad entre grupos}}
 En MANOVA se compara la misma idea, pero matricialmente. Por eso se construyen estadisticos multivariantes como Lambda de Wilks:
 
 $$\Lambda_{\text{Wilks}} =
-\frac{|W|}{|W+B|}$$
+\\frac{|\mathbf{W}|}{|\mathbf{W}+\mathbf{B}|}$$
 
 La Lambda de Wilks mide que proporcion de la variabilidad total no es explicada por las diferencias entre grupos.
 
