@@ -118,7 +118,7 @@ andrews(df,            #data frame que se va a graficar
         clr = NULL,    #indica la columna usada para colorear
         step = 100,    #controla la suavidad
         ymax = 10,     #define el máximo del eje Y, ymax = 10 valor por defecto
-        alpha = NULL,  
+        alpha = NULL,
         palcol = NULL,
         lwd = 1,       #controla el grosor de línea
         lty = "solid", #tipo de línea
@@ -200,9 +200,9 @@ Aquí se usa la función `mvn()` del paquete `MVN`.
 library(MVN)
 
 mvn(data = "Matriz o data.frame numérico",
-    mvn_test = "Prueba de Normalidad Multivariada" - 
+    mvn_test = "Prueba de Normalidad Multivariada" -
              "mardia", "hz", "royston", "dh", "energy",
-    univariate_test = "Prueba de Normalidad Univariada" - 
+    univariate_test = "Prueba de Normalidad Univariada" -
              "SW", "Lillie", "AD", "CVM", "SF", NULL)
 ```
 
@@ -293,7 +293,7 @@ manova(formula = "Fórmula del Modelo Multivariado",
        data = "Data.frame de Origen")
 
 summary(object = "Objeto MANOVA",
-        test = "Estadístico de Contraste" - 
+        test = "Estadístico de Contraste" -
                  "Pillai", "Wilks", "Hotelling-Lawley", "Roy")
 ```
 
@@ -361,25 +361,25 @@ Residuals          57
 
 Aquí aparece:
 
-```         
+```
 Df = 2
 ```
 
 Eso indica que `Estado_Nutricional` tiene **3 grupos**, porque:
 
-```         
+```
 número de grupos - 1 = 2
 ```
 
 `Residuals = 57` Son los grados de libertad residuales, asociados al error del modelo. Con `Df = 2` para el factor y `Residuals = 57`, probablemente tienes alrededor de:
 
-```         
+```
 n = 60 observaciones
 ```
 
 porque:
 
-```         
+```
 60 - 3 grupos = 57
 ```
 
@@ -397,7 +397,7 @@ La hipótesis nula es:
 
 Es decir:
 
-```         
+```
 No hay diferencias globales entre los grupos.
 ```
 
@@ -694,7 +694,7 @@ library(factoextra)
 
 fviz_mca_var(X = "Objeto de clase MCA",
              repel = "Evitar Solapamiento de Texto" - TRUE, FALSE,
-             col.var = "Criterio de Coloración" - "contrib", "cos2", "coord", 
+             col.var = "Criterio de Coloración" - "contrib", "cos2", "coord",
                          color estático,
              gradient.cols = "Vector de Colores para Gradiente" - c("color1",                                     "color2", ...)/NULL)
 ```
@@ -1464,7 +1464,7 @@ sample(x = "Vector de Elementos" - Vector/Entero,
 ``` {.R .R}
 set.seed(42)
 sorteo <- sample(1:nrow(datos_escalados), size = 0.7 * nrow(datos_escalados))
-datos_entrenamiento <- datos_escalados[sorteo, ]   
+datos_entrenamiento <- datos_escalados[sorteo, ]
 datos_prueba <- datos_escalados[-sorteo, ]
 ```
 
@@ -1500,10 +1500,10 @@ neuralnet(formula = "Fórmula del Modelo",
 
 ``` R
 set.seed(123)
-modelo_rna_real <- neuralnet(fuma_bin ~ Edad + Peso + IMC + Nivel_de_Glucosa + Presión_Arterial_Sistólica, 
-                             data = datos_entrenamiento, 
-                             hidden = 3, 
-                             err.fct = "ce", 
+modelo_rna_real <- neuralnet(fuma_bin ~ Edad + Peso + IMC + Nivel_de_Glucosa + Presión_Arterial_Sistólica,
+                             data = datos_entrenamiento,
+                             hidden = 3,
+                             err.fct = "ce",
                              linear.output = FALSE)
 ```
 
