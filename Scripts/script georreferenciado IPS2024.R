@@ -10,6 +10,7 @@ library(ggplot2)
 library(dplyr)
 library(viridis)
 library(scales)
+library(here)
 #install.packages(c(
 #"sf",
 #"ggplot2",
@@ -21,7 +22,7 @@ library(scales)
 # 2. Definir ruta del archivo SHP
 # IMPORTANTE:
 # El .shp debe estar en la misma carpeta que sus archivos .shx, .dbf y .cpg
-ruta_shp <- "D:/cotee/Desktop/git multi/Implementaci-n-M-todos-Multivariantes/IPS 2024/IPS_RM_2024_con_IPS.shp"
+ruta_shp <- here("Bases de Datos", "IPS 2024", "IPS_RM_2024_con_IPS.shp")
 
 # 3. Leer la capa vectorial
 IPS_RM <- st_read(ruta_shp, quiet = TRUE)

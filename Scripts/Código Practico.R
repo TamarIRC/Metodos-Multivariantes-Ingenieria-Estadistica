@@ -1,5 +1,9 @@
 
 
+library(here)
+
+ruta_base_multi <- here("Bases de Datos", "Base Multi", "Base_Multi.csv")
+Base_Multi <- read.csv2(ruta_base_multi)
 
 View(Base_Multi)
 

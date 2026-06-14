@@ -13,9 +13,14 @@ library(tm)
 library(wordcloud)
 library(RColorBrewer)
 library(dplyr)
+library(here)
 
 # 2. CARGAR EL LIBRO
-ruta_libro <- "C:/Users/Tamar/OneDrive/Escritorio/Taller 1 - MM/Implementaci-n-M-todos-Multivariantes/Libro Nube de Palabras/El nombre del viento - Patrick Rothfuss.epub"
+ruta_libro <- here(
+  "Bases de Datos",
+  "Libro Nube de Palabras",
+  "El nombre del viento - Patrick Rothfuss.epub"
+)
 libro_raw <- epub(ruta_libro)
 texto <- paste(libro_raw$data[[1]]$text, collapse = " ")
 
