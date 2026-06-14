@@ -37,6 +37,12 @@ contenidos desde dos perspectivas:
   explicativo.
 - `Scripts/`: implementaciones en R de los ejercicios prácticos de la asignatura.
 
+## Presentación final
+
+La presentación final del proyecto puede revisarse en el siguiente enlace:
+
+[Ver presentación en PDF](./Métodos%20Multivariantes%20-%20Tetrametrics.pdf)
+
 ## Reproducibilidad
 
 El proyecto está organizado para ser abierto desde el archivo
