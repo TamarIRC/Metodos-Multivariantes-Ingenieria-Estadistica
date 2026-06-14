@@ -47,13 +47,22 @@ presentación de sus principales contenidos desde dos perspectivas:
 -   `Scripts/`: implementaciones en R de los ejercicios prácticos de la
     asignatura.
 
+## Presentación final
+
+La presentación final del proyecto puede revisarse en el siguiente
+enlace:
+
+[Ver presentación en
+PDF](./Métodos%20Multivariantes%20-%20Tetrametrics.pdf)
+
 ## Repositorio relacionado
 
 Este proyecto cuenta con un repositorio complementario enfocado en una
-explicación didáctica del mapa georreferenciado del Índice de Prioridad
-Social de la Región Metropolitana 2024:
+implementación didáctica del mapa georreferenciado del Índice de
+Prioridad Social de la Región Metropolitana 2024:
 
-[Mapa Georreferencial IPS RM 2024](https://github.com/TamarIRC/Mapa-Georreferencial-IPS-RM-2024-)
+[Mapa Georreferencial IPS RM
+2024](https://github.com/TamarIRC/Mapa-Georreferencial-IPS-RM-2024-)
 
 ## Reproducibilidad
 
